@@ -1,0 +1,8 @@
+.ingredient {
+  display: flex;
+  align-items: center;
+  @media (min-width: 1281px) {
+    justify-content: space-between;
+    max-width: 568px;
+  }
+}

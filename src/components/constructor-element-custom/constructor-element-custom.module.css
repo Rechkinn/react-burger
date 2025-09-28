@@ -1,0 +1,22 @@
+.constructorElement {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 1fr;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+}
+
+.constructorElement > :nth-child(n) {
+  text-align: center;
+  justify-self: center;
+}
+
+.price {
+  display: flex;
+}

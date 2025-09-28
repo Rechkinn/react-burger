@@ -1,0 +1,114 @@
+.header {
+  background-color: #1c1c21;
+}
+
+.headerInner {
+  position: relative;
+  margin: auto;
+  max-width: 1240px;
+  @media (max-width: 1024px) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.nav {
+  width: 100%;
+  @media (max-width: 1024px) {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    height: 100vh;
+    background-color: #1c1c21;
+  }
+}
+.show {
+  display: block;
+}
+
+.navHeader {
+  display: none;
+  @media (max-width: 1024px) {
+    display: block;
+  }
+}
+
+.ul {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  list-style-type: none;
+  width: 100%;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    align-items: start;
+    height: 100vh;
+  }
+}
+
+.li {
+  border-radius: 40px;
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
+}
+.li:first-child {
+  position: relative;
+  margin-left: auto;
+  @media (max-width: 1024px) {
+    margin-left: 0;
+  }
+}
+.li:first-child > :last-child {
+  display: none;
+  @media (max-width: 1024px) {
+    display: block;
+    position: absolute;
+    top: 16px;
+    right: 20px;
+  }
+}
+
+.menuPersonalAccount {
+  padding: 0;
+  display: none;
+  @media (max-width: 1024px) {
+    display: block;
+    list-style-type: none;
+  }
+}
+
+.logo {
+  position: absolute;
+  top: 0;
+  left: 40%;
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  @media (max-width: 1024px) {
+    position: static;
+  }
+}
+
+.burgerMenu {
+  display: none;
+  @media (max-width: 1024px) {
+    display: block;
+    position: absolute;
+    right: 20px;
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    width: 24px;
+    height: 24px;
+    z-index: 300;
+  }
+}
