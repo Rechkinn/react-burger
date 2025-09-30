@@ -5,6 +5,7 @@ import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients
 import ConfirmOrder from "../confirm-order/confirm-order";
 import { BUN, MAIN, SAUCE } from "../../utils/consts";
 import PropTypes from "prop-types";
+import { IngredientType } from "../../utils/types";
 
 function BurgerIngredients({ ...props }) {
   const [current, setCurrent] = useState("Булки");
@@ -74,21 +75,6 @@ function BurgerIngredients({ ...props }) {
 export default BurgerIngredients;
 
 BurgerIngredients.propTypes = {
-  arrayOfIngredients: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string,
-      name: PropTypes.string,
-      type: PropTypes.string,
-      proteins: PropTypes.number,
-      fat: PropTypes.number,
-      carbohydrates: PropTypes.number,
-      calories: PropTypes.number,
-      price: PropTypes.number,
-      image: PropTypes.string,
-      image_mobile: PropTypes.string,
-      image_large: PropTypes.string,
-      __v: PropTypes.number,
-    })
-  ).isRequired,
-  openBurgerConstructor: PropTypes.func.isRequired,
+  arrayOfIngredients: PropTypes.arrayOf(IngredientType).isRequired,
+  openBurgerConstructor: PropTypes.func,
 };

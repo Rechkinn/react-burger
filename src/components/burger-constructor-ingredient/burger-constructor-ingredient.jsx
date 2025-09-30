@@ -5,6 +5,7 @@ import {
   ConstructorElement,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
+import { IngredientType } from "../../utils/types";
 
 function BurgerConstructorIngredient({ ...props }) {
   function isBun() {
@@ -38,20 +39,7 @@ export default BurgerConstructorIngredient;
 
 BurgerConstructorIngredient.propTypes = {
   isDesctop: PropTypes.bool.isRequired,
-  ingredient: PropTypes.shape({
-    _id: PropTypes.string,
-    name: PropTypes.string,
-    type: PropTypes.string,
-    proteins: PropTypes.number,
-    fat: PropTypes.number,
-    carbohydrates: PropTypes.number,
-    calories: PropTypes.number,
-    price: PropTypes.number,
-    image: PropTypes.string,
-    image_mobile: PropTypes.string,
-    image_large: PropTypes.string,
-    __v: PropTypes.number,
-  }).isRequired,
+  ingredient: IngredientType.isRequired,
   typeBun: PropTypes.string,
   indents: PropTypes.string.isRequired,
 };

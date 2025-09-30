@@ -2,6 +2,7 @@ import BurgerIngredientsCard from "../burger-ingredients-card/burger-ingredients
 import styles from "./burger-ingredients-item.module.css";
 import { BUN, MAIN, SAUCE } from "../../utils/consts";
 import PropTypes from "prop-types";
+import { IngredientType } from "../../utils/types";
 
 function BurgerIngredientsItem({ ...props }) {
   function translateTypeToRussianLanguage(type) {
@@ -32,21 +33,6 @@ function BurgerIngredientsItem({ ...props }) {
 export default BurgerIngredientsItem;
 
 BurgerIngredientsItem.propTypes = {
-  ingridients: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string,
-      name: PropTypes.string,
-      type: PropTypes.string,
-      proteins: PropTypes.number,
-      fat: PropTypes.number,
-      carbohydrates: PropTypes.number,
-      calories: PropTypes.number,
-      price: PropTypes.number,
-      image: PropTypes.string,
-      image_mobile: PropTypes.string,
-      image_large: PropTypes.string,
-      __v: PropTypes.number,
-    })
-  ).isRequired,
+  ingridients: PropTypes.arrayOf(IngredientType).isRequired,
   type: PropTypes.string.isRequired,
 };
