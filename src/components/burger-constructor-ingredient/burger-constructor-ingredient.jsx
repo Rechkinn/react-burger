@@ -6,10 +6,11 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
 import { IngredientType } from "../../utils/types";
+import { BUN } from "../../utils/consts";
 
 function BurgerConstructorIngredient({ ...props }) {
   function isBun() {
-    return props.ingredient.type === "bun";
+    return props.ingredient.type === BUN;
   }
 
   return (
