@@ -4,6 +4,8 @@ import ConfirmOrder from "../confirm-order/confirm-order";
 import styles from "./burger-constructor.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
+import { IngredientType } from "../../utils/types";
+import { BUN } from "../../utils/consts";
 
 class BurgerConstructor extends React.Component {
   state = {
@@ -32,19 +34,19 @@ class BurgerConstructor extends React.Component {
     return window.innerWidth > 1280 ? true : false;
   }
 
-  updateState() {
+  updateState = () => {
     this.setState({
       widthScreen: window.innerWidth,
       isDesctop: this.isDesctop(),
       heightBlok: window.innerHeight,
     });
-  }
+  };
 
   componentDidMount() {
-    window.addEventListener("resize", () => this.updateState());
+    window.addEventListener("resize", this.updateState);
   }
   componentWillUnmount() {
-    window.removeEventListener("resize", () => this.updateState());
+    window.removeEventListener("resize", this.updateState);
   }
 
   setMaxHeight() {
@@ -80,7 +82,10 @@ class BurgerConstructor extends React.Component {
 
         <BurgerConstructorIngredient
           isDesctop={this.state.isDesctop}
-          ingredient={this.props.arrayOfIngredients[0]}
+          ingredient={{
+            ...this.props.arrayOfIngredients[0],
+            name: `${this.props.arrayOfIngredients[0].name} (верх)`,
+          }}
           typeBun="top"
           indents={this.getIndents({
             type: this.props.arrayOfIngredients[0].type,
@@ -89,28 +94,34 @@ class BurgerConstructor extends React.Component {
         />
 
         <div style={this.setMaxHeight()} className={styles.ingredients}>
-          {this.props.arrayOfIngredients.map((ingredient, index) => {
-            return (
-              <BurgerConstructorIngredient
-                isDesctop={this.state.isDesctop}
-                key={ingredient._id}
-                ingredient={ingredient}
-                indents={
-                  index !== this.props.arrayOfIngredients.length - 1
-                    ? this.getIndents({
-                        type: ingredient.type,
-                        place: null,
-                      })
-                    : ""
-                }
-              />
-            );
-          })}
+          {[...this.props.arrayOfIngredients]
+            .filter((ingredient) => {
+              if (ingredient.type !== BUN) return ingredient;
+            })
+            .map((ingredient, index, array) => {
+              return (
+                <BurgerConstructorIngredient
+                  isDesctop={this.state.isDesctop}
+                  key={ingredient._id}
+                  ingredient={ingredient}
+                  indents={
+                    index !== array.length - 1
+                      ? this.getIndents({
+                          type: ingredient.type,
+                          place: null,
+                        })
+                      : ""
+                  }
+                />
+              );
+            })}
         </div>
-
         <BurgerConstructorIngredient
           isDesctop={this.state.isDesctop}
-          ingredient={this.props.arrayOfIngredients[0]}
+          ingredient={{
+            ...this.props.arrayOfIngredients[0],
+            name: `${this.props.arrayOfIngredients[0].name} (низ)`,
+          }}
           typeBun="bottom"
           indents={this.getIndents({
             type: this.props.arrayOfIngredients[0].type,
@@ -141,21 +152,6 @@ class BurgerConstructor extends React.Component {
 export default BurgerConstructor;
 
 BurgerConstructor.propTypes = {
-  arrayOfIngredients: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string,
-      name: PropTypes.string,
-      type: PropTypes.string,
-      proteins: PropTypes.number,
-      fat: PropTypes.number,
-      carbohydrates: PropTypes.number,
-      calories: PropTypes.number,
-      price: PropTypes.number,
-      image: PropTypes.string,
-      image_mobile: PropTypes.string,
-      image_large: PropTypes.string,
-      __v: PropTypes.number,
-    })
-  ).isRequired,
+  arrayOfIngredients: PropTypes.arrayOf(IngredientType).isRequired,
   closeBurgerConstructor: PropTypes.func.isRequired,
 };
