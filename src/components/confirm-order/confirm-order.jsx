@@ -39,5 +39,5 @@ ConfirmOrder.propTypes = {
   size: PropTypes.string.isRequired,
   textButton: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired,
-  openBurgerConstructor: PropTypes.func.isRequired,
+  openBurgerConstructor: PropTypes.func,
 };
