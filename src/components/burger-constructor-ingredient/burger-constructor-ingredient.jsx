@@ -7,32 +7,60 @@ import {
 import PropTypes from "prop-types";
 import { IngredientType } from "../../utils/types";
 import { BUN } from "../../utils/consts";
+import { useState } from "react";
+import Modal from "../modal/modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
 
-function BurgerConstructorIngredient({ ...props }) {
+function BurgerConstructorIngredient({
+  ingredient,
+  indents,
+  isDesctop,
+  ...props
+}) {
+  const [isOpeningModal, setIsOpeningModal] = useState(false);
+
+  const openModal = () => {
+    setIsOpeningModal(true);
+  };
+  const closeModal = () => {
+    setIsOpeningModal(false);
+  };
+
   function isBun() {
-    return props.ingredient.type === BUN;
+    return ingredient.type === BUN;
   }
 
   return (
-    <article className={`${props.indents} ${styles.ingredient}`}>
-      {!isBun() && <DragIcon />}
-      {props.isDesctop ? (
-        <ConstructorElement
-          type={props?.typeBun}
-          isLocked={isBun()}
-          text={props.ingredient.name}
-          price={props.ingredient.price}
-          thumbnail={props.ingredient.image_mobile}
-        />
-      ) : (
-        <ConstructorElementCustom
-          isLocked={isBun()}
-          text={props.ingredient.name}
-          price={props.ingredient.price}
-          thumbnail={props.ingredient.image_mobile}
-        />
+    <>
+      {isOpeningModal && (
+        <Modal type={"IngredientDetails"} functionToClose={closeModal}>
+          <IngredientDetails ingredient={ingredient} />
+        </Modal>
       )}
-    </article>
+
+      <article
+        className={`${indents} ${styles.ingredient}`}
+        onClick={openModal}
+      >
+        {!isBun() && <DragIcon />}
+        {isDesctop ? (
+          <ConstructorElement
+            type={props?.typeBun}
+            isLocked={isBun()}
+            text={ingredient.name}
+            price={ingredient.price}
+            thumbnail={ingredient.image_mobile}
+          />
+        ) : (
+          <ConstructorElementCustom
+            isLocked={isBun()}
+            text={ingredient.name}
+            price={ingredient.price}
+            thumbnail={ingredient.image_mobile}
+          />
+        )}
+      </article>
+    </>
   );
 }
 
