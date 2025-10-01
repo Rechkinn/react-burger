@@ -132,6 +132,10 @@ function BurgerConstructor({ arrayOfIngredients, closeBurgerConstructor }) {
           textButton={"Оформить заказ"}
           className={styles.confirmOrder}
           ingredients={arrayOfIngredients}
+          objectToOpenSectionBurgerConstructor={{
+            currentSection: "BurgerConstructor",
+            func: null,
+          }}
         />
       ) : (
         <ConfirmOrder
@@ -139,6 +143,10 @@ function BurgerConstructor({ arrayOfIngredients, closeBurgerConstructor }) {
           textButton={"Заказать"}
           className={styles.confirmOrder}
           ingredients={arrayOfIngredients}
+          objectToOpenSectionBurgerConstructor={{
+            currentSection: "BurgerConstructor",
+            func: null,
+          }}
         />
       )}
     </>
