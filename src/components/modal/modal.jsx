@@ -1,0 +1,64 @@
+import { createPortal } from "react-dom";
+import styles from "./modal.module.css";
+import ModalOverlay from "../modal-overlay/modal-overlay";
+import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useEffect } from "react";
+import PropTypes from "prop-types";
+
+const elementForRenderModal = document.getElementById("react-modals");
+
+function Modal({ type, functionToClose, children }) {
+  useEffect(() => {
+    document.addEventListener("keydown", closeModal);
+    return () => document.removeEventListener("keydown", closeModal);
+  }, []);
+
+  function closeModal(e) {
+    if (e.key === "Escape") {
+      functionToClose();
+    }
+  }
+
+  return createPortal(
+    <ModalOverlay functionToClose={functionToClose}>
+      <div
+        className={styles.modal}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        <header
+          className={
+            type === "OrderDetails"
+              ? `mt-5 mb-4 ${styles.title}`
+              : `${styles.title}`
+          }
+        >
+          {type === "IngredientDetails" && (
+            <h1 className={`text text_type_main-large ${styles.h1}`}>
+              Детали ингредиента
+            </h1>
+          )}
+
+          <button
+            type="button"
+            className={styles.button}
+            onClick={() => functionToClose()}
+          >
+            <CloseIcon />
+          </button>
+        </header>
+        {children}
+      </div>
+    </ModalOverlay>,
+    elementForRenderModal
+  );
+}
+
+export default Modal;
+
+Modal.propTypes = {
+  type: PropTypes.string.isRequired,
+  functionToClose: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
+};
