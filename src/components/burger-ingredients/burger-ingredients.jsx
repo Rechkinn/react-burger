@@ -5,15 +5,19 @@ import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients
 import ConfirmOrder from "../confirm-order/confirm-order";
 import { BUN, MAIN, SAUCE } from "../../utils/consts";
 import PropTypes from "prop-types";
-import { IngredientType } from "../../utils/types";
+import {
+  IngredientType,
+  ObjectToOpenSectionBurgerConstructorType,
+} from "../../utils/types";
 
-function BurgerIngredients({ ...props }) {
+function BurgerIngredients({
+  arrayOfIngredients,
+  objectToOpenSectionBurgerConstructor,
+}) {
   const [current, setCurrent] = useState("Булки");
 
   function getIngredientsFromType(type) {
-    return props.arrayOfIngredients.filter(
-      (ingredient) => ingredient.type === type
-    );
+    return arrayOfIngredients.filter((ingredient) => ingredient.type === type);
   }
 
   return (
@@ -66,7 +70,9 @@ function BurgerIngredients({ ...props }) {
         size={"small"}
         textButton={"Смотреть заказ"}
         className={styles.confirmOrder}
-        openBurgerConstructor={props.openBurgerConstructor}
+        objectToOpenSectionBurgerConstructor={
+          objectToOpenSectionBurgerConstructor
+        }
       />
     </>
   );
@@ -76,5 +82,6 @@ export default BurgerIngredients;
 
 BurgerIngredients.propTypes = {
   arrayOfIngredients: PropTypes.arrayOf(IngredientType).isRequired,
-  openBurgerConstructor: PropTypes.func,
+  objectToOpenSectionBurgerConstructor:
+    ObjectToOpenSectionBurgerConstructorType.isRequired,
 };
