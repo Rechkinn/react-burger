@@ -1,0 +1,9 @@
+.confirmOrder {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.price {
+  display: inline-block;
+}

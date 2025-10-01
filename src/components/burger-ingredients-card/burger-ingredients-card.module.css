@@ -1,0 +1,41 @@
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.card {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  max-width: 272px;
+  @media (max-width: 768px) {
+    max-width: 150px;
+  }
+}
+
+/* Counter */
+.card > :last-child {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.card > :nth-child(-4n + 8) {
+  scale: 0;
+  position: absolute;
+  @media (max-width: 1280px) {
+    position: static;
+    scale: 1;
+  }
+}
+
+.image {
+  margin: auto;
+  display: block;
+}
+
+.price {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

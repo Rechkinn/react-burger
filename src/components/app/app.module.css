@@ -1,0 +1,42 @@
+.main {
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  max-width: 1240px;
+  @media (max-width: 1280px) {
+    width: 100%;
+    display: block;
+  }
+}
+
+.sectionIngredients {
+  max-width: 600px;
+  width: 100%;
+  @media (max-width: 1280px) {
+    max-width: max-content;
+  }
+}
+
+.sectionConstructor {
+  padding-top: 100px;
+  @media (min-width: 1281px) {
+    max-width: 600px;
+    width: 100%;
+  }
+
+  @media (max-width: 1280px) {
+    padding-top: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #1c1c21;
+    z-index: 400;
+    height: 100%;
+  }
+}
+
+.hidden1280 {
+  @media (max-width: 1280px) {
+    display: none;
+  }
+}

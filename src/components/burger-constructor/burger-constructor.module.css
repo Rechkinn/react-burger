@@ -1,0 +1,42 @@
+.headerOrder {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.headerButtonClose {
+  background-color: transparent;
+  border: 0;
+}
+
+.ingredients {
+  overflow-y: auto;
+  height: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: #8585ad #2f2f37;
+  scrollbar-gutter: stable;
+  @media (min-width: 1281px) {
+    max-height: 400px;
+  }
+  @media (max-width: 1280px) {
+    width: 100%;
+  }
+}
+
+.hidden {
+  @media (max-width: 1280px) {
+    display: none;
+  }
+}
+
+.confirmOrder {
+  @media (max-width: 1280px) {
+    padding: 12px;
+    margin: 0;
+    display: flex;
+    background-color: #1c1c21;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+  }
+}
