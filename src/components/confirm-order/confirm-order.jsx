@@ -4,31 +4,55 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
+import { useState } from "react";
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
+import { ObjectToOpenSectionBurgerConstructorType } from "../../utils/types";
 
 function ConfirmOrder({ ...props }) {
+  const [isOpeningModal, setIsOpeningModal] = useState(false);
+
+  const openModal = () => {
+    setIsOpeningModal(true);
+  };
+  const closeModal = () => {
+    setIsOpeningModal(false);
+  };
+
   return (
-    <div className={`mt-10 ${styles.confirmOrder} ${props.className}`}>
-      {!props.onlyButton && (
-        <div className={`mr-10 ${styles.price}`}>
-          <span className={`mr-2 text text_type_digits-medium`}>
-            {props.ingredients
-              ? props.ingredients.reduce((sum, ingredient) => {
-                  return (sum += ingredient.price);
-                }, 0)
-              : "610"}
-          </span>
-          <CurrencyIcon />
-        </div>
+    <>
+      {isOpeningModal && (
+        <Modal type={"OrderDetails"} functionToClose={closeModal}>
+          <OrderDetails />
+        </Modal>
       )}
-      <Button
-        htmlType="button"
-        type="primary"
-        size={props.size}
-        onClick={props.openBurgerConstructor}
-      >
-        {props?.textButton ? props?.textButton : "Кнопка"}
-      </Button>
-    </div>
+
+      <div className={`mt-10 ${styles.confirmOrder} ${props.className}`}>
+        {!props.onlyButton && (
+          <div className={`mr-10 ${styles.price}`}>
+            <span className={`mr-2 text text_type_digits-medium`}>
+              {props.ingredients.reduce((sum, ingredient) => {
+                return (sum += ingredient.price);
+              }, 0)}
+            </span>
+            <CurrencyIcon />
+          </div>
+        )}
+        <Button
+          htmlType="button"
+          type="primary"
+          size={props.size}
+          onClick={
+            props.objectToOpenSectionBurgerConstructor.currentSection ===
+            "BurgerConstructor"
+              ? openModal
+              : props.objectToOpenSectionBurgerConstructor.func
+          }
+        >
+          {props.textButton}
+        </Button>
+      </div>
+    </>
   );
 }
 
@@ -39,5 +63,6 @@ ConfirmOrder.propTypes = {
   size: PropTypes.string.isRequired,
   textButton: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired,
-  openBurgerConstructor: PropTypes.func,
+  objectToOpenSectionBurgerConstructor:
+    ObjectToOpenSectionBurgerConstructorType.isRequired,
 };
