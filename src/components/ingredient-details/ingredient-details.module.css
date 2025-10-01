@@ -1,0 +1,17 @@
+.ingredientDetails {
+  text-align: center;
+}
+
+.characteristics {
+  margin: auto;
+  max-width: 520px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.image {
+  @media (max-width: 600px) {
+    max-width: 250px;
+  }
+}
