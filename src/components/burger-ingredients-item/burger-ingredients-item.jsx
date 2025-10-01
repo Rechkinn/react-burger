@@ -4,7 +4,7 @@ import { BUN, MAIN, SAUCE } from "../../utils/consts";
 import PropTypes from "prop-types";
 import { IngredientType } from "../../utils/types";
 
-function BurgerIngredientsItem({ ...props }) {
+function BurgerIngredientsItem({ ingridients, type }) {
   function translateTypeToRussianLanguage(type) {
     if (type === BUN) return "Булки";
     else if (type === SAUCE) return "Соусы";
@@ -14,10 +14,10 @@ function BurgerIngredientsItem({ ...props }) {
   return (
     <section className={`mt-10 ${styles.item}`}>
       <h2 className="pl-5 pr-5 text text_type_main-medium">
-        {translateTypeToRussianLanguage(props.type)}
+        {translateTypeToRussianLanguage(type)}
       </h2>
       <div className={`pt-6 ${styles.cards}`}>
-        {props.ingridients.map((ingredient) => {
+        {ingridients.map((ingredient) => {
           return (
             <BurgerIngredientsCard
               key={ingredient._id}
