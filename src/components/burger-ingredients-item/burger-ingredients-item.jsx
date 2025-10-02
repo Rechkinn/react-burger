@@ -4,7 +4,11 @@ import { BUN, MAIN, SAUCE } from "../../utils/consts";
 import PropTypes from "prop-types";
 import { IngredientType } from "../../utils/types";
 
-function BurgerIngredientsItem({ ingridients, type }) {
+function BurgerIngredientsItem({
+  ingridients,
+  type,
+  openModalWithIngredientDetails,
+}) {
   function translateTypeToRussianLanguage(type) {
     if (type === BUN) return "Булки";
     else if (type === SAUCE) return "Соусы";
@@ -22,6 +26,7 @@ function BurgerIngredientsItem({ ingridients, type }) {
             <BurgerIngredientsCard
               key={ingredient._id}
               ingredient={ingredient}
+              openModalWithIngredientDetails={openModalWithIngredientDetails}
             />
           );
         })}
@@ -35,4 +40,5 @@ export default BurgerIngredientsItem;
 BurgerIngredientsItem.propTypes = {
   ingridients: PropTypes.arrayOf(IngredientType).isRequired,
   type: PropTypes.string.isRequired,
+  openModalWithIngredientDetails: PropTypes.func.isRequired,
 };
