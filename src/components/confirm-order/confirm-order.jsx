@@ -22,7 +22,11 @@ function ConfirmOrder({ ...props }) {
   return (
     <>
       {isOpeningModal && (
-        <Modal type={"OrderDetails"} functionToClose={closeModal}>
+        <Modal
+          type={"OrderDetails"}
+          functionToClose={closeModal}
+          indents={"mt-5 mb-4"}
+        >
           <OrderDetails />
         </Modal>
       )}

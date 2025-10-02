@@ -37,7 +37,7 @@ function BurgerIngredientsCard({ ingredient }) {
   return (
     <>
       {isOpeningModal && (
-        <Modal type={"IngredientDetails"} functionToClose={closeModal}>
+        <Modal functionToClose={closeModal} title={"Детали ингредиента"}>
           <IngredientDetails ingredient={ingredient} />
         </Modal>
       )}
