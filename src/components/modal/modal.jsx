@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 
 const elementForRenderModal = document.getElementById("react-modals");
 
-function Modal({ type, functionToClose, children }) {
+function Modal({ type, functionToClose, children, title, indents = "" }) {
   useEffect(() => {
     function handleEscape(e) {
       if (e.key === "Escape") {
@@ -27,16 +27,10 @@ function Modal({ type, functionToClose, children }) {
           e.stopPropagation();
         }}
       >
-        <header
-          className={
-            type === "OrderDetails"
-              ? `mt-5 mb-4 ${styles.title}`
-              : `${styles.title}`
-          }
-        >
-          {type === "IngredientDetails" && (
+        <header className={`${indents} ${styles.title}`}>
+          {title && (
             <h1 className={`text text_type_main-large ${styles.h1}`}>
-              Детали ингредиента
+              {title}
             </h1>
           )}
 
@@ -58,7 +52,8 @@ function Modal({ type, functionToClose, children }) {
 export default Modal;
 
 Modal.propTypes = {
-  type: PropTypes.string.isRequired,
   functionToClose: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
+  title: PropTypes.string,
+  indents: PropTypes.string,
 };
