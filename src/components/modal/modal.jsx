@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 
 const elementForRenderModal = document.getElementById("react-modals");
 
-function Modal({ type, functionToClose, children, title, indents = "" }) {
+function Modal({ functionToClose, children, title, indents = "" }) {
   useEffect(() => {
     function handleEscape(e) {
       if (e.key === "Escape") {
