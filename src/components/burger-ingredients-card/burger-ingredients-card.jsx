@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import styles from "./burger-ingredients-card.module.css";
 import {
   Counter,
@@ -7,21 +7,11 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
 import { IngredientType } from "../../utils/types";
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
 
-function BurgerIngredientsCard({ ingredient }) {
+function BurgerIngredientsCard({ ingredient, openModalWithIngredientDetails }) {
   const [currentDevice, setCurrentDevice] = useState(
     window.innerWidth > 768 ? "notMobile" : "mobile"
   );
-  const [isOpeningModal, setIsOpeningModal] = useState(false);
-
-  const openModal = () => {
-    setIsOpeningModal(true);
-  };
-  const closeModal = () => {
-    setIsOpeningModal(false);
-  };
 
   function updateImageCard() {
     window.innerWidth > 768
@@ -36,12 +26,10 @@ function BurgerIngredientsCard({ ingredient }) {
 
   return (
     <>
-      {isOpeningModal && (
-        <Modal functionToClose={closeModal} title={"Детали ингредиента"}>
-          <IngredientDetails ingredient={ingredient} />
-        </Modal>
-      )}
-      <article className={`mb-8 ${styles.card}`} onClick={openModal}>
+      <article
+        className={`mb-8 ${styles.card}`}
+        onClick={() => openModalWithIngredientDetails(ingredient)}
+      >
         <img
           src={
             currentDevice === "mobile"
@@ -71,4 +59,5 @@ export default BurgerIngredientsCard;
 
 BurgerIngredientsCard.propTypes = {
   ingredient: IngredientType.isRequired,
+  openModalWithIngredientDetails: PropTypes.func.isRequired,
 };
