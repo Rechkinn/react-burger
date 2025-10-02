@@ -9,15 +9,15 @@ const elementForRenderModal = document.getElementById("react-modals");
 
 function Modal({ type, functionToClose, children }) {
   useEffect(() => {
-    document.addEventListener("keydown", closeModal);
-    return () => document.removeEventListener("keydown", closeModal);
-  }, []);
-
-  function closeModal(e) {
-    if (e.key === "Escape") {
-      functionToClose();
+    function handleEscape(e) {
+      if (e.key === "Escape") {
+        functionToClose();
+      }
     }
-  }
+
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, []);
 
   return createPortal(
     <ModalOverlay functionToClose={functionToClose}>
