@@ -14,3 +14,8 @@ export const IngredientType = PropTypes.shape({
   image_large: PropTypes.string,
   __v: PropTypes.number,
 });
+
+export const ObjectToOpenSectionBurgerConstructorType = PropTypes.shape({
+  currentSection: PropTypes.string,
+  func: PropTypes.func,
+});

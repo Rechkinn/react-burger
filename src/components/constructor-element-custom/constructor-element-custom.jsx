@@ -6,19 +6,17 @@ import {
 import styles from "./constructor-element-custom.module.css";
 import PropTypes from "prop-types";
 
-function ConstructorElementCustom({ ...props }) {
+function ConstructorElementCustom({ thumbnail, text, price, isLocked }) {
   return (
     <div className={styles.constructorElement}>
-      <img src={props.thumbnail} alt={props.text} />
-      <h3 className="text text_type_main-small">{props.text}</h3>
+      <img src={thumbnail} alt={text} />
+      <h3 className="text text_type_main-small">{text}</h3>
       <div className={styles.price}>
-        <span className="mr-2 text text_type_digits-default">
-          {props.price}
-        </span>
+        <span className="mr-2 text text_type_digits-default">{price}</span>
         <CurrencyIcon />
       </div>
 
-      {props.isLocked ? <LockIcon /> : <DeleteIcon />}
+      {isLocked ? <LockIcon /> : <DeleteIcon />}
     </div>
   );
 }

@@ -6,29 +6,35 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
 import { IngredientType } from "../../utils/types";
+import { BUN } from "../../utils/consts";
 
-function BurgerConstructorIngredient({ ...props }) {
+function BurgerConstructorIngredient({
+  ingredient,
+  indents,
+  isDesctop,
+  ...props
+}) {
   function isBun() {
-    return props.ingredient.type === "bun";
+    return ingredient.type === BUN;
   }
 
   return (
-    <article className={`${props.indents} ${styles.ingredient}`}>
+    <article className={`${indents} ${styles.ingredient}`}>
       {!isBun() && <DragIcon />}
-      {props.isDesctop ? (
+      {isDesctop ? (
         <ConstructorElement
           type={props?.typeBun}
           isLocked={isBun()}
-          text={props.ingredient.name}
-          price={props.ingredient.price}
-          thumbnail={props.ingredient.image_mobile}
+          text={ingredient.name}
+          price={ingredient.price}
+          thumbnail={ingredient.image_mobile}
         />
       ) : (
         <ConstructorElementCustom
           isLocked={isBun()}
-          text={props.ingredient.name}
-          price={props.ingredient.price}
-          thumbnail={props.ingredient.image_mobile}
+          text={ingredient.name}
+          price={ingredient.price}
+          thumbnail={ingredient.image_mobile}
         />
       )}
     </article>

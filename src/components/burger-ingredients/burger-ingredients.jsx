@@ -5,19 +5,38 @@ import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients
 import ConfirmOrder from "../confirm-order/confirm-order";
 import { BUN, MAIN, SAUCE } from "../../utils/consts";
 import PropTypes from "prop-types";
-import { IngredientType } from "../../utils/types";
+import {
+  IngredientType,
+  ObjectToOpenSectionBurgerConstructorType,
+} from "../../utils/types";
+import { useModal } from "../../hooks/useModal";
+import Modal from "../modal/modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
 
-function BurgerIngredients({ ...props }) {
+function BurgerIngredients({
+  arrayOfIngredients,
+  objectToOpenSectionBurgerConstructor,
+}) {
   const [current, setCurrent] = useState("Булки");
+  const { isModalOpen, openModal, closeModal } = useModal();
+  const [ingredientDetails, setIngredientDetails] = useState();
 
   function getIngredientsFromType(type) {
-    return props.arrayOfIngredients.filter(
-      (ingredient) => ingredient.type === type
-    );
+    return arrayOfIngredients.filter((ingredient) => ingredient.type === type);
+  }
+
+  function openModalWithIngredientDetails(ingredient) {
+    setIngredientDetails(ingredient);
+    openModal();
   }
 
   return (
     <>
+      {isModalOpen && (
+        <Modal functionToClose={closeModal} title={"Детали ингредиента"}>
+          <IngredientDetails ingredient={ingredientDetails} />
+        </Modal>
+      )}
       <div>
         <h1 className="mb-5 pl-5 pr-5 text text_type_main-large">
           Соберите бургер
@@ -50,14 +69,17 @@ function BurgerIngredients({ ...props }) {
         <BurgerIngredientsItem
           ingridients={getIngredientsFromType(BUN)}
           type={BUN}
+          openModalWithIngredientDetails={openModalWithIngredientDetails}
         />
         <BurgerIngredientsItem
           ingridients={getIngredientsFromType(SAUCE)}
           type={SAUCE}
+          openModalWithIngredientDetails={openModalWithIngredientDetails}
         />
         <BurgerIngredientsItem
           ingridients={getIngredientsFromType(MAIN)}
           type={MAIN}
+          openModalWithIngredientDetails={openModalWithIngredientDetails}
         />
       </div>
 
@@ -66,7 +88,9 @@ function BurgerIngredients({ ...props }) {
         size={"small"}
         textButton={"Смотреть заказ"}
         className={styles.confirmOrder}
-        openBurgerConstructor={props.openBurgerConstructor}
+        objectToOpenSectionBurgerConstructor={
+          objectToOpenSectionBurgerConstructor
+        }
       />
     </>
   );
@@ -76,5 +100,6 @@ export default BurgerIngredients;
 
 BurgerIngredients.propTypes = {
   arrayOfIngredients: PropTypes.arrayOf(IngredientType).isRequired,
-  openBurgerConstructor: PropTypes.func,
+  objectToOpenSectionBurgerConstructor:
+    ObjectToOpenSectionBurgerConstructorType.isRequired,
 };

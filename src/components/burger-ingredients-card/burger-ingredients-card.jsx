@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import styles from "./burger-ingredients-card.module.css";
 import {
   Counter,
@@ -8,59 +8,56 @@ import {
 import PropTypes from "prop-types";
 import { IngredientType } from "../../utils/types";
 
-class BurgerIngredientsCard extends React.Component {
-  state = {
-    currentDevice: window.innerWidth > 768 ? "notMobile" : "mobile",
-  };
+function BurgerIngredientsCard({ ingredient, openModalWithIngredientDetails }) {
+  const [currentDevice, setCurrentDevice] = useState(
+    window.innerWidth > 768 ? "notMobile" : "mobile"
+  );
 
-  updateImageCard = () => {
-    if (window.innerWidth > 768) {
-      this.setState({ currentDevice: "notMobile" });
-    } else {
-      this.setState({ currentDevice: "mobile" });
-    }
-  };
-
-  componentDidMount() {
-    window.addEventListener("resize", this.updateImageCard);
+  function updateImageCard() {
+    window.innerWidth > 768
+      ? setCurrentDevice("notMobile")
+      : setCurrentDevice("mobile");
   }
 
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.updateImageCard);
-  }
+  useEffect(() => {
+    window.addEventListener("resize", updateImageCard);
+    return () => window.removeEventListener("resize", updateImageCard);
+  }, []);
 
-  render() {
-    return (
-      <article className={`mb-8 ${styles.card}`}>
+  return (
+    <>
+      <article
+        className={`mb-8 ${styles.card}`}
+        onClick={() => openModalWithIngredientDetails(ingredient)}
+      >
         <img
           src={
-            this.state.currentDevice === "mobile"
-              ? this.props.ingredient.image_mobile
-              : this.props.ingredient.image
+            currentDevice === "mobile"
+              ? ingredient.image_mobile
+              : ingredient.image
           }
-          alt={this.props.ingredient.name}
+          alt={ingredient.name}
           className={`mb-1 ${styles.image}`}
         />
         <p className={`mb-1 ${styles.price}`}>
           <span className="mr-2 text text_type_digits-default">
-            {this.props.ingredient.price}
+            {ingredient.price}
           </span>
           <CurrencyIcon />
         </p>
-        <h3 className="mb-5 text text_type_main-small">
-          {this.props.ingredient.name}
-        </h3>
+        <h3 className="mb-5 text text_type_main-small">{ingredient.name}</h3>
         <Button htmlType="button" type="secondary" size="small">
           Добавить
         </Button>
         <Counter />
       </article>
-    );
-  }
+    </>
+  );
 }
 
 export default BurgerIngredientsCard;
 
 BurgerIngredientsCard.propTypes = {
   ingredient: IngredientType.isRequired,
+  openModalWithIngredientDetails: PropTypes.func.isRequired,
 };
