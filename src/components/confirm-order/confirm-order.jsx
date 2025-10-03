@@ -4,24 +4,17 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
-import { useState } from "react";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { ObjectToOpenSectionBurgerConstructorType } from "../../utils/types";
+import { useModal } from "../../hooks/useModal";
 
 function ConfirmOrder({ ...props }) {
-  const [isOpeningModal, setIsOpeningModal] = useState(false);
-
-  const openModal = () => {
-    setIsOpeningModal(true);
-  };
-  const closeModal = () => {
-    setIsOpeningModal(false);
-  };
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   return (
     <>
-      {isOpeningModal && (
+      {isModalOpen && (
         <Modal
           type={"OrderDetails"}
           functionToClose={closeModal}
