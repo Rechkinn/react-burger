@@ -3,20 +3,18 @@ import BurgerConstructorIngredient from "../burger-constructor-ingredient/burger
 import ConfirmOrder from "../confirm-order/confirm-order";
 import styles from "./burger-constructor.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes, { func } from "prop-types";
-import { IngredientType } from "../../utils/types";
+import PropTypes from "prop-types";
 import { BUN } from "../../utils/consts";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_ACTIVE_SECTION } from "../../services/actions/active-section";
 import { useDrop } from "react-dnd";
 import {
   ADD_INGREDIENT_TO_CONSTRUCTOR,
   SET_BUN,
 } from "../../services/actions/burger-constructor";
+import BurgerConstructorIngredientAlternate from "../burger-constructor-ingredient-alternate/burger-constructor-ingredient-alternate";
 
-function BurgerConstructor() {
+function BurgerConstructor({ closeBurgerConstructor }) {
   const dispatch = useDispatch();
-
   const [{ isHoverAllIngredients }, dropTargetAllIngredients] = useDrop({
     accept: "ingredient",
     collect: (monitor) => ({
@@ -29,54 +27,30 @@ function BurgerConstructor() {
       });
     },
   });
-
-  // const [{ isHoverBun }, dropTargetBun] = useDrop({
-  //   accept: BUN,
-  //   drop(ingredient) {
-  //     dispatch({
-  //       type: SET_BUN,
-  //       bun: ingredient,
-  //     });
-  //   },
-  //   collect: (monitor) => ({
-  //     isHoverBun: monitor.isOver(),
-  //   }),
-  // });
-
+  const [{ isHoverBun }, dropTargetBun] = useDrop({
+    accept: BUN,
+    drop(ingredient) {
+      dispatch({
+        type: SET_BUN,
+        bun: ingredient,
+      });
+    },
+    collect: (monitor) => ({
+      isHoverBun: monitor.isOver(),
+    }),
+  });
   const [state, setState] = useState({
     widthScreen: window.innerWidth,
     isDesctop: isDesctop(),
     heightBlok: window.innerHeight,
   });
-
   const { bun, burgerConstructor } = useSelector(
     (store) => store.burgerConstructor
   );
-  const { burgerIngredients } = useSelector((store) => store.burgerIngredients);
-  // console.log("burgerConstructor", burgerConstructor);
-  // const { activeSection } = useSelector((store) => store.activeSection);
-
   useEffect(() => {
-    // for (let i = 0; i < burgerIngredients.length; i++) {
-    //   if (burgerIngredients[i].type === BUN) {
-    //     console.log("montirovanie");
-    //     dispatch({
-    //       type: SET_BUN,
-    //       bun: burgerIngredients[i],
-    //     });
-    //   }
-    // }
-
     window.addEventListener("resize", updateState);
     return () => window.removeEventListener("resize", updateState);
   }, []);
-
-  function setActiveSection(section) {
-    dispatch({
-      type: SET_ACTIVE_SECTION,
-      activeSection: section,
-    });
-  }
 
   function getIndents(ingredient) {
     let indents = "";
@@ -93,11 +67,9 @@ function BurgerConstructor() {
     }
     return indents;
   }
-
   function isDesctop() {
     return window.innerWidth > 1280 ? true : false;
   }
-
   function updateState() {
     setState({
       widthScreen: window.innerWidth,
@@ -105,7 +77,6 @@ function BurgerConstructor() {
       heightBlok: window.innerHeight,
     });
   }
-
   function setMaxHeight() {
     if (state.widthScreen < 1268) {
       if (state.widthScreen > 768) {
@@ -122,31 +93,6 @@ function BurgerConstructor() {
     }
   }
 
-  function getIngredientsWithoutBuns() {
-    const array = [
-      ...burgerConstructor.filter((ingredient) => {
-        if (ingredient.ingredient.type !== BUN) return ingredient.ingredient;
-      }),
-    ];
-    // console.log("перед рендером -- ", array);
-    return array;
-  }
-
-  function setInitialBun() {
-    for (let i = 0; i < burgerIngredients.length; i++) {
-      if (burgerIngredients[i].type === BUN) {
-        console.log("montirovanie");
-        dispatch({
-          type: SET_BUN,
-          bun: burgerIngredients[i],
-        });
-      }
-    }
-  }
-
-  // const stylesContainerBun = {
-  //   border: isHoverBun ? "2px solid #4c4cff" : "2px solid transparent",
-  // };
   const stylesContainerAllIngredients = {
     ...setMaxHeight(),
     border: isHoverAllIngredients
@@ -161,7 +107,7 @@ function BurgerConstructor() {
           <h1 className="mt-4 text text_type_main-large">Заказ</h1>
           <button
             className={styles.headerButtonClose}
-            onClick={setActiveSection("BurgerIngredients")}
+            onClick={closeBurgerConstructor}
           >
             <CloseIcon />
           </button>
@@ -169,14 +115,19 @@ function BurgerConstructor() {
       )}
 
       <div
-        // ref={dropTargetBun}
-        // style={stylesContainerBun}
+        ref={dropTargetBun}
+        style={{
+          border: isHoverBun ? "2px solid #4c4cff" : "2px solid transparent",
+        }}
         className={styles.containerToBun}
       >
-        {/* {bun ? (
+        {bun?.ingredient ? (
           <BurgerConstructorIngredient
             isDesctop={state.isDesctop}
-            ingredient={{ ...bun, name: `${bun.name} (верх)` }}
+            ingredient={{
+              ...bun?.ingredient,
+              name: `${bun?.ingredient.name} (верх)`,
+            }}
             typeBun="top"
             indents={getIndents({
               type: BUN,
@@ -184,8 +135,10 @@ function BurgerConstructor() {
             })}
           />
         ) : (
-          setInitialBun()
-        )} */}
+          <BurgerConstructorIngredientAlternate place={"top"}>
+            Перенесите булку для заказа сюда
+          </BurgerConstructorIngredientAlternate>
+        )}
       </div>
 
       <div
@@ -193,11 +146,11 @@ function BurgerConstructor() {
         style={stylesContainerAllIngredients}
         className={styles.ingredients}
       >
-        {/* {burgerConstructor.map((ingredient, index, array) => { */}
-        {getIngredientsWithoutBuns().map((ingredient, index, array) => {
+        {burgerConstructor.map((ingredient, index, array) => {
           return (
             <BurgerConstructorIngredient
               key={`${ingredient.ingredient._id}${index}`}
+              positionList={index}
               isDesctop={state.isDesctop}
               ingredient={ingredient.ingredient}
               indents={
@@ -213,15 +166,14 @@ function BurgerConstructor() {
         })}
       </div>
 
-      <div
-        // ref={dropTargetBun}
-        // style={stylesContainerBun}
-        className={styles.containerToBun}
-      >
-        {/* {bun ? (
+      <div className={styles.containerToBun}>
+        {bun?.ingredient ? (
           <BurgerConstructorIngredient
             isDesctop={state.isDesctop}
-            ingredient={{ ...bun, name: `${bun.name} (низ)` }}
+            ingredient={{
+              ...bun?.ingredient,
+              name: `${bun?.ingredient.name} (низ)`,
+            }}
             typeBun="bottom"
             indents={getIndents({
               type: BUN,
@@ -229,8 +181,10 @@ function BurgerConstructor() {
             })}
           />
         ) : (
-          setInitialBun()
-        )} */}
+          <BurgerConstructorIngredientAlternate place={"bottom"}>
+            Здесь будет нижняя булка
+          </BurgerConstructorIngredientAlternate>
+        )}
       </div>
 
       <ConfirmOrder
@@ -238,11 +192,6 @@ function BurgerConstructor() {
         textButton={state.isDesctop ? "Оформить заказ" : "Заказать"}
         className={styles.confirmOrder}
         section={"BurgerConstructor"}
-        // ingredients={arrayOfIngredients}
-        // objectToOpenSectionBurgerConstructor={{
-        //   currentSection: "BurgerConstructor",
-        //   func: null,
-        // }}
       />
     </>
   );
@@ -251,6 +200,5 @@ function BurgerConstructor() {
 export default BurgerConstructor;
 
 BurgerConstructor.propTypes = {
-  arrayOfIngredients: PropTypes.arrayOf(IngredientType).isRequired,
   closeBurgerConstructor: PropTypes.func.isRequired,
 };
