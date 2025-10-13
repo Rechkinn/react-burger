@@ -1,41 +1,46 @@
+import { useSelector } from "react-redux";
 import { IngredientType } from "../../utils/types";
 import styles from "./ingredient-details.module.css";
 
-function IngredientDetails({ ingredient }) {
+function IngredientDetails() {
+  const { ingredientDetails } = useSelector((store) => store.ingredientDetails);
+
   return (
     <div className={styles.ingredientDetails}>
       <img
-        src={ingredient.image_large}
-        alt={ingredient.name}
+        src={ingredientDetails.image_large}
+        alt={ingredientDetails.name}
         className={`mb-4 ${styles.image}`}
       />
 
-      <h2 className="mb-8 text text_type_main-medium">{ingredient.name}</h2>
+      <h2 className="mb-8 text text_type_main-medium">
+        {ingredientDetails.name}
+      </h2>
       <div
         className={`text text_type_main-small text_color_inactive ${styles.characteristics}`}
       >
         <div>
           <p>Калории,ккал</p>
           <p className="text_type_digits-default text_color_inactive">
-            {ingredient.calories}
+            {ingredientDetails.calories}
           </p>
         </div>
         <div>
           <p>Белки, г</p>
           <p className="text_type_digits-default text_color_inactive">
-            {ingredient.proteins}
+            {ingredientDetails.proteins}
           </p>
         </div>
         <div>
           <p>Жиры, г</p>
           <p className="text_type_digits-default text_color_inactive">
-            {ingredient.fat}
+            {ingredientDetails.fat}
           </p>
         </div>
         <div>
           <p>Углеводы, г</p>
           <p className="text_type_digits-default text_color_inactive">
-            {ingredient.carbohydrates}
+            {ingredientDetails.carbohydrates}
           </p>
         </div>
       </div>
