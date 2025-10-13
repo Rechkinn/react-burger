@@ -16,76 +16,73 @@ function BurgerIngredientsCard({
   typeDrag,
   openModalWithIngredientDetails,
 }) {
-  // console.log(ingredient._id);
-
-  const { _id } = ingredient;
-
   const [{ isDrag }, dragRef] = useDrag({
     type: typeDrag,
-
     item: { ingredient },
     collect: (monitor) => ({
       isDrag: monitor.isDragging(),
     }),
   });
-
-  const { burgerConstructor } = useSelector((store) => store.burgerConstructor);
-
+  const { bun, burgerConstructor } = useSelector(
+    (store) => store.burgerConstructor
+  );
   const [currentDevice, setCurrentDevice] = useState(
     window.innerWidth > 768 ? "notMobile" : "mobile"
   );
+  useEffect(() => {
+    window.addEventListener("resize", updateImageCard);
+    return () => window.removeEventListener("resize", updateImageCard);
+  }, []);
 
-  function getIngredientCount(ingredientId) {
-    // for (let i = 0; i < burgerConstructor.length; i++) {
-    //   if (burgerConstructor[i]._id === ingredientId) {
-    //     return burgerConstructor[i].count;
-    //   }
-    // }
-    return 0;
+  function getIngredientCount(ingredientId, ingredientType) {
+    let count = 0;
+    if (ingredientType !== BUN) {
+      for (let i = 0; i < burgerConstructor.length; i++) {
+        if (burgerConstructor[i].ingredient._id === ingredientId) {
+          count++;
+        }
+      }
+    } else {
+      if (bun?.ingredient._id === ingredientId) {
+        count = 2;
+      }
+    }
+    return count;
   }
-
   function updateImageCard() {
     window.innerWidth > 768
       ? setCurrentDevice("notMobile")
       : setCurrentDevice("mobile");
   }
 
-  useEffect(() => {
-    window.addEventListener("resize", updateImageCard);
-    return () => window.removeEventListener("resize", updateImageCard);
-  }, []);
-
   return (
-    <>
-      <article
-        style={{ opacity: isDrag ? 0.3 : 1 }}
+    <article
+      style={{ opacity: isDrag ? 0.3 : 1 }}
+      className={`mb-8 ${styles.card}`}
+      onClick={() => openModalWithIngredientDetails(ingredient)}
+    >
+      <img
+        src={
+          currentDevice === "mobile"
+            ? ingredient.image_mobile
+            : ingredient.image
+        }
+        alt={ingredient.name}
         ref={dragRef}
-        className={`mb-8 ${styles.card}`}
-        onClick={() => openModalWithIngredientDetails(ingredient)}
-      >
-        <img
-          src={
-            currentDevice === "mobile"
-              ? ingredient.image_mobile
-              : ingredient.image
-          }
-          alt={ingredient.name}
-          // ref={dragRef}
-          className={`mb-1 ${styles.image}`}
-        />
-        <p className={`mb-1 ${styles.price}`}>
-          <span className="mr-2 text text_type_digits-default">
-            {ingredient.price}
-          </span>
-          <CurrencyIcon />
-        </p>
-        <h3 className="mb-5 text text_type_main-small">{ingredient.name}</h3>
-        <Button htmlType="button" type="secondary" size="small">
-          Добавить
-        </Button>
-        <Counter count={getIngredientCount()} />
-      </article>
-    </>
+        className={`mb-1 ${styles.image}`}
+      />
+      <p className={`mb-1 ${styles.price}`}>
+        <span className="mr-2 text text_type_digits-default">
+          {ingredient.price}
+        </span>
+        <CurrencyIcon />
+      </p>
+      <h3 className="mb-5 text text_type_main-small">{ingredient.name}</h3>
+      <Button htmlType="button" type="secondary" size="small">
+        Добавить
+      </Button>
+      <Counter count={getIngredientCount(ingredient._id, ingredient.type)} />
+    </article>
   );
 }
 
@@ -93,5 +90,6 @@ export default BurgerIngredientsCard;
 
 BurgerIngredientsCard.propTypes = {
   ingredient: IngredientType.isRequired,
+  typeDrag: PropTypes.string.isRequired,
   openModalWithIngredientDetails: PropTypes.func.isRequired,
 };
