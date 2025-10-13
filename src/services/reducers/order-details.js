@@ -5,7 +5,7 @@ import {
 } from "../actions/order-details";
 
 const initialState = {
-  orderDetails: {},
+  orderDetails: null,
   orderDetailsRequest: false,
   orderDetailsRequestFailed: false,
 };
@@ -15,22 +15,23 @@ export const orderDetailsReducer = (state = initialState, action) => {
     case CREATE_NEW_ORDER_REQUEST:
       return {
         ...state,
+        orderDetails: null,
         orderDetailsRequest: true,
         orderDetailsRequestFailed: false,
       };
     case CREATE_NEW_ORDER_REQUEST_SUCCESS:
       return {
         ...state,
+        orderDetails: action.orderDetails,
         orderDetailsRequest: false,
         orderDetailsRequestFailed: false,
-        orderDetails: action.orderDetails,
       };
     case CREATE_NEW_ORDER_REQUEST_ERROR:
       return {
         ...state,
+        orderDetails: null,
         orderDetailsRequest: false,
         orderDetailsRequestFailed: true,
-        orderDetails: {},
       };
     default:
       return state;
