@@ -5,28 +5,38 @@ import { useDispatch, useSelector } from "react-redux";
 import { createNewOrder } from "../../services/actions/order-details";
 
 function OrderDetails() {
-  const { burgerConstructor } = useSelector((store) => store.burgerConstructor);
-
   const dispatch = useDispatch();
-
+  const { bun, burgerConstructor } = useSelector(
+    (store) => store.burgerConstructor
+  );
   const { orderDetails, orderDetailsRequest, orderDetailsRequestFailed } =
     useSelector((store) => store.orderDetails);
-
-  console.log("orderDetails", orderDetails);
-
   useEffect(() => {
     dispatch(createNewOrder(getIngredientsIds()));
   }, []);
 
   function getIngredientsIds() {
-    return [...burgerConstructor.filter((ingredient) => ingredient._id)];
+    const arrayIds = [];
+    for (let i = 0; i < burgerConstructor.length; i++) {
+      arrayIds.push(burgerConstructor[i].ingredient._id);
+    }
+    if (bun?.ingredient) {
+      arrayIds.push(bun.ingredient._id);
+      arrayIds.push(bun.ingredient._id);
+    }
+    return arrayIds;
   }
 
   return (
     <>
-      {orderDetailsRequest && <div>Загрузка...</div>}
-      {!orderDetailsRequest && orderDetailsRequestFailed && (
-        <div>Ошибка создания заказа!</div>
+      {orderDetailsRequest && (
+        <div className="text text_type_main-medium">Загрузка...</div>
+      )}
+
+      {orderDetailsRequestFailed && (
+        <div className="text text_type_main-medium">
+          Ошибка создания заказа!
+        </div>
       )}
 
       {!orderDetailsRequest && !orderDetailsRequestFailed && (
