@@ -3,12 +3,21 @@ import styles from "./burger-ingredients-item.module.css";
 import { BUN, MAIN, SAUCE } from "../../utils/consts";
 import PropTypes from "prop-types";
 import { IngredientType } from "../../utils/types";
+import { useSelector } from "react-redux";
 
 function BurgerIngredientsItem({
-  ingridients,
+  // ingridients,
   type,
   openModalWithIngredientDetails,
 }) {
+  const { burgerIngredients } = useSelector((store) => store.burgerIngredients);
+
+  function getIngredientsFromType(typeItem) {
+    return burgerIngredients.filter(
+      (ingredient) => ingredient.type === typeItem
+    );
+  }
+
   function translateTypeToRussianLanguage(type) {
     if (type === BUN) return "Булки";
     else if (type === SAUCE) return "Соусы";
@@ -21,10 +30,11 @@ function BurgerIngredientsItem({
         {translateTypeToRussianLanguage(type)}
       </h2>
       <div className={`pt-6 ${styles.cards}`}>
-        {ingridients.map((ingredient) => {
+        {getIngredientsFromType(type).map((ingredient) => {
           return (
             <BurgerIngredientsCard
               key={ingredient._id}
+              typeDrag={ingredient.type === BUN ? BUN : "ingredient"}
               ingredient={ingredient}
               openModalWithIngredientDetails={openModalWithIngredientDetails}
             />
