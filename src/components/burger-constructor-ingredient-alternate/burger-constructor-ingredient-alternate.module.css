@@ -1,0 +1,26 @@
+.burger-constructor-ingredient-alternate {
+  display: flex;
+  margin-left: 32px;
+  width: 536px;
+  height: 100%;
+  border: 2px dashed #858585;
+  justify-content: center;
+  align-items: center;
+}
+
+.top {
+  composes: burger-constructor-ingredient-alternate;
+  border-top-right-radius: 88px;
+  border-top-left-radius: 88px;
+  border-bottom-right-radius: 40px;
+  border-bottom-left-radius: 40px;
+}
+
+.bottom {
+  composes: burger-constructor-ingredient-alternate;
+  margin-top: 16px;
+  border-top-right-radius: 40px;
+  border-top-left-radius: 40px;
+  border-bottom-right-radius: 88px;
+  border-bottom-left-radius: 88px;
+}
