@@ -4,30 +4,15 @@ import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import { useDispatch, useSelector } from "react-redux";
-
 import { getBurgerIngredients } from "../../services/actions/burger-ingredients";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { BUN } from "../../utils/consts";
-import { ADD_INGREDIENT_TO_CONSTRUCTOR } from "../../services/actions/burger-constructor";
 
 function App() {
-  // const [activeSection, setActiveSection] = useState("BurgerConstructor");
-  // const [isLoading, setIsLoading] = useState(true);
-  // const [error, setError] = useState(null);
-  // const [data, setData] = useState(null);
-
-  const {
-    burgerIngredients,
-    burgerIngredientsRequest,
-    burgerIngredientsRequestFailed,
-  } = useSelector((store) => store.burgerIngredients);
-
-  const { activeSection } = useSelector((store) => store.activeSection);
-  const { burgerConstructor } = useSelector((store) => store.burgerConstructor);
-
+  const [activeSection, setActiveSection] = useState("BurgerConstructor");
+  const { burgerIngredientsRequest, burgerIngredientsRequestFailed } =
+    useSelector((store) => store.burgerIngredients);
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(getBurgerIngredients());
   }, []);
@@ -35,7 +20,7 @@ function App() {
   return (
     <>
       {burgerIngredientsRequest && (
-        <div className="text text_type_main-large">LOADING...</div>
+        <div className="text text_type_main-large">Загрузка данных...</div>
       )}
       {!burgerIngredientsRequest && burgerIngredientsRequestFailed && (
         <div className="text text_type_main-large">
@@ -63,7 +48,11 @@ function App() {
                     : `pl-4 pr-4 ${styles.sectionConstructor}`
                 }
               >
-                <BurgerConstructor />
+                <BurgerConstructor
+                  closeBurgerConstructor={() =>
+                    setActiveSection("BurgerIngredients")
+                  }
+                />
               </section>
             </DndProvider>
           </main>
