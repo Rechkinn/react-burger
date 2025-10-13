@@ -21,17 +21,19 @@ export const createNewOrder = (arrayIngredientsIds) => {
       }),
     })
       .then((response) => {
-        console.log("ЗАКАЗ ---", response);
-        if (response && response.success) {
-          dispatch({
-            type: CREATE_NEW_ORDER_REQUEST_SUCCESS,
-            orderDetails: response.json(),
-          });
+        if (response && response.ok) {
+          return response.json();
         } else {
           dispatch({
             type: CREATE_NEW_ORDER_REQUEST_ERROR,
           });
         }
+      })
+      .then((json) => {
+        dispatch({
+          type: CREATE_NEW_ORDER_REQUEST_SUCCESS,
+          orderDetails: json,
+        });
       })
       .catch(() => {
         dispatch({
