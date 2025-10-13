@@ -12,29 +12,52 @@ import {
 import { useModal } from "../../hooks/useModal";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  ADD_INGREDIENT_DETAILS,
+  REMOVE_INGREDIENT_DETAILS,
+} from "../../services/actions/ingredient-details";
 
-function BurgerIngredients({
-  arrayOfIngredients,
-  objectToOpenSectionBurgerConstructor,
-}) {
+function BurgerIngredients() {
   const [current, setCurrent] = useState("Булки");
   const { isModalOpen, openModal, closeModal } = useModal();
-  const [ingredientDetails, setIngredientDetails] = useState();
+  // const [ingredientDetails, setIngredientDetails] = useState();
 
-  function getIngredientsFromType(type) {
-    return arrayOfIngredients.filter((ingredient) => ingredient.type === type);
-  }
+  // const { burgerIngredients } = useSelector((store) => store.burgerIngredients);
+  const { ingredientDetails } = useSelector((store) => store.ingredientDetails);
+
+  const dispatch = useDispatch();
+
+  // function getIngredientsFromType(type) {
+  //   return burgerIngredients.filter((ingredient) => ingredient.type === type);
+  // }
 
   function openModalWithIngredientDetails(ingredient) {
-    setIngredientDetails(ingredient);
+    dispatch({
+      type: ADD_INGREDIENT_DETAILS,
+      ingredientDetails: ingredient,
+    });
+
+    // setIngredientDetails(ingredient);
     openModal();
+  }
+
+  function closeModalWithIngredientDetails() {
+    dispatch({
+      type: REMOVE_INGREDIENT_DETAILS,
+    });
+
+    closeModal();
   }
 
   return (
     <>
       {isModalOpen && (
-        <Modal functionToClose={closeModal} title={"Детали ингредиента"}>
-          <IngredientDetails ingredient={ingredientDetails} />
+        <Modal
+          functionToClose={closeModalWithIngredientDetails}
+          title={"Детали ингредиента"}
+        >
+          <IngredientDetails />
         </Modal>
       )}
       <div>
@@ -67,17 +90,17 @@ function BurgerIngredients({
       </div>
       <div className={styles.ingredientsItems}>
         <BurgerIngredientsItem
-          ingridients={getIngredientsFromType(BUN)}
+          // ingridients={getIngredientsFromType(BUN)}
           type={BUN}
           openModalWithIngredientDetails={openModalWithIngredientDetails}
         />
         <BurgerIngredientsItem
-          ingridients={getIngredientsFromType(SAUCE)}
+          // ingridients={getIngredientsFromType(SAUCE)}
           type={SAUCE}
           openModalWithIngredientDetails={openModalWithIngredientDetails}
         />
         <BurgerIngredientsItem
-          ingridients={getIngredientsFromType(MAIN)}
+          // ingridients={getIngredientsFromType(MAIN)}
           type={MAIN}
           openModalWithIngredientDetails={openModalWithIngredientDetails}
         />
@@ -88,9 +111,10 @@ function BurgerIngredients({
         size={"small"}
         textButton={"Смотреть заказ"}
         className={styles.confirmOrder}
-        objectToOpenSectionBurgerConstructor={
-          objectToOpenSectionBurgerConstructor
-        }
+        section={"BurgerIngredients"}
+        // objectToOpenSectionBurgerConstructor={
+        //   objectToOpenSectionBurgerConstructor
+        // }
       />
     </>
   );
