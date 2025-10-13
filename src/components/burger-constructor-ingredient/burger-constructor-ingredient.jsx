@@ -7,6 +7,7 @@ import {
 import PropTypes from "prop-types";
 import { IngredientType } from "../../utils/types";
 import { BUN } from "../../utils/consts";
+import { useDrop } from "react-dnd";
 
 function BurgerConstructorIngredient({
   ingredient,
@@ -19,25 +20,30 @@ function BurgerConstructorIngredient({
   }
 
   return (
-    <article className={`${indents} ${styles.ingredient}`}>
-      {!isBun() && <DragIcon />}
-      {isDesctop ? (
-        <ConstructorElement
-          type={props?.typeBun}
-          isLocked={isBun()}
-          text={ingredient.name}
-          price={ingredient.price}
-          thumbnail={ingredient.image_mobile}
-        />
-      ) : (
-        <ConstructorElementCustom
-          isLocked={isBun()}
-          text={ingredient.name}
-          price={ingredient.price}
-          thumbnail={ingredient.image_mobile}
-        />
+    <>
+      {ingredient && (
+        <article className={`${indents} ${styles.ingredient}`}>
+          {/* {console.log("ingredient --- ", ingredient)} */}
+          {!isBun() && <DragIcon />}
+          {isDesctop ? (
+            <ConstructorElement
+              type={props?.typeBun}
+              isLocked={isBun()}
+              text={ingredient.name}
+              price={ingredient.price}
+              thumbnail={ingredient.image_mobile}
+            />
+          ) : (
+            <ConstructorElementCustom
+              isLocked={isBun()}
+              text={ingredient.name}
+              price={ingredient.price}
+              thumbnail={ingredient.image_mobile}
+            />
+          )}
+        </article>
       )}
-    </article>
+    </>
   );
 }
 
