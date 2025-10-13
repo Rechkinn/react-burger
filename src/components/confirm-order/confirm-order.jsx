@@ -8,9 +8,13 @@ import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { ObjectToOpenSectionBurgerConstructorType } from "../../utils/types";
 import { useModal } from "../../hooks/useModal";
+import { useSelector } from "react-redux";
 
-function ConfirmOrder({ ...props }) {
+function ConfirmOrder({ section, ...props }) {
   const { isModalOpen, openModal, closeModal } = useModal();
+
+  const { burgerConstructor } = useSelector((store) => store.burgerConstructor);
+  // const { activeSection } = useSelector((store) => store.activeSection);
 
   return (
     <>
@@ -28,7 +32,7 @@ function ConfirmOrder({ ...props }) {
         {!props.onlyButton && (
           <div className={`mr-10 ${styles.price}`}>
             <span className={`mr-2 text text_type_digits-medium`}>
-              {props.ingredients.reduce((sum, ingredient) => {
+              {burgerConstructor.reduce((sum, ingredient) => {
                 return (sum += ingredient.price);
               }, 0)}
             </span>
@@ -39,12 +43,7 @@ function ConfirmOrder({ ...props }) {
           htmlType="button"
           type="primary"
           size={props.size}
-          onClick={
-            props.objectToOpenSectionBurgerConstructor.currentSection ===
-            "BurgerConstructor"
-              ? openModal
-              : props.objectToOpenSectionBurgerConstructor.func
-          }
+          onClick={section === "BurgerConstructor" ? openModal : null}
         >
           {props.textButton}
         </Button>
