@@ -7,11 +7,42 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
 import { IngredientType } from "../../utils/types";
+import { useDrag } from "react-dnd";
+import { useSelector } from "react-redux";
+import { BUN } from "../../utils/consts";
 
-function BurgerIngredientsCard({ ingredient, openModalWithIngredientDetails }) {
+function BurgerIngredientsCard({
+  ingredient,
+  typeDrag,
+  openModalWithIngredientDetails,
+}) {
+  // console.log(ingredient._id);
+
+  const { _id } = ingredient;
+
+  const [{ isDrag }, dragRef] = useDrag({
+    type: typeDrag,
+
+    item: { ingredient },
+    collect: (monitor) => ({
+      isDrag: monitor.isDragging(),
+    }),
+  });
+
+  const { burgerConstructor } = useSelector((store) => store.burgerConstructor);
+
   const [currentDevice, setCurrentDevice] = useState(
     window.innerWidth > 768 ? "notMobile" : "mobile"
   );
+
+  function getIngredientCount(ingredientId) {
+    // for (let i = 0; i < burgerConstructor.length; i++) {
+    //   if (burgerConstructor[i]._id === ingredientId) {
+    //     return burgerConstructor[i].count;
+    //   }
+    // }
+    return 0;
+  }
 
   function updateImageCard() {
     window.innerWidth > 768
@@ -27,6 +58,8 @@ function BurgerIngredientsCard({ ingredient, openModalWithIngredientDetails }) {
   return (
     <>
       <article
+        style={{ opacity: isDrag ? 0.3 : 1 }}
+        ref={dragRef}
         className={`mb-8 ${styles.card}`}
         onClick={() => openModalWithIngredientDetails(ingredient)}
       >
@@ -37,6 +70,7 @@ function BurgerIngredientsCard({ ingredient, openModalWithIngredientDetails }) {
               : ingredient.image
           }
           alt={ingredient.name}
+          // ref={dragRef}
           className={`mb-1 ${styles.image}`}
         />
         <p className={`mb-1 ${styles.price}`}>
@@ -49,7 +83,7 @@ function BurgerIngredientsCard({ ingredient, openModalWithIngredientDetails }) {
         <Button htmlType="button" type="secondary" size="small">
           Добавить
         </Button>
-        <Counter />
+        <Counter count={getIngredientCount()} />
       </article>
     </>
   );
