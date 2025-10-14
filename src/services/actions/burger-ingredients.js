@@ -1,4 +1,4 @@
-import { BASE_URL } from "../../utils/consts";
+import { doRequest } from "../../utils/doRequest";
 
 export const GET_BURGER_INGREDIENTS_REQUEST = "GET_BURGER_INGREDIENTS";
 export const GET_BURGER_INGREDIENTS_REQUEST_SUCCESS =
@@ -12,16 +12,7 @@ export function getBurgerIngredients() {
       type: GET_BURGER_INGREDIENTS_REQUEST,
     });
 
-    fetch(`${BASE_URL}/ingredients`)
-      .then((response) => {
-        if (response && response.ok) {
-          return response.json();
-        } else {
-          dispatch({
-            type: GET_BURGER_INGREDIENTS_REQUEST_ERROR,
-          });
-        }
-      })
+    doRequest("/ingredients")
       .then((json) => {
         dispatch({
           type: GET_BURGER_INGREDIENTS_REQUEST_SUCCESS,

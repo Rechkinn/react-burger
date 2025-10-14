@@ -1,4 +1,4 @@
-import { BASE_URL } from "../../utils/consts";
+import { doRequest } from "../../utils/doRequest";
 export const CREATE_NEW_ORDER_REQUEST = "CREATE_NEW_ORDER_REQUEST";
 export const CREATE_NEW_ORDER_REQUEST_SUCCESS =
   "CREATE_NEW_ORDER_REQUEST_SUCCESS";
@@ -10,7 +10,7 @@ export const createNewOrder = (arrayIngredientsIds) => {
       type: CREATE_NEW_ORDER_REQUEST,
     });
 
-    fetch(`${BASE_URL}/orders`, {
+    const option = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -18,16 +18,9 @@ export const createNewOrder = (arrayIngredientsIds) => {
       body: JSON.stringify({
         ingredients: arrayIngredientsIds,
       }),
-    })
-      .then((response) => {
-        if (response && response.ok) {
-          return response.json();
-        } else {
-          dispatch({
-            type: CREATE_NEW_ORDER_REQUEST_ERROR,
-          });
-        }
-      })
+    };
+
+    doRequest("/orders", option)
       .then((json) => {
         dispatch({
           type: CREATE_NEW_ORDER_REQUEST_SUCCESS,
