@@ -49,5 +49,3 @@ function IngredientDetails() {
 }
 
 export default IngredientDetails;
-
-IngredientDetails.propTypes = { ingredient: IngredientType.isRequired };
