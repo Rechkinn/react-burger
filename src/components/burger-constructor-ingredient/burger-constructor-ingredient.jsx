@@ -99,7 +99,7 @@ function BurgerConstructorIngredient({
 export default BurgerConstructorIngredient;
 
 BurgerConstructorIngredient.propTypes = {
-  positionList: PropTypes.number.isRequired,
+  positionList: PropTypes.number,
   ingredient: IngredientType.isRequired,
   indents: PropTypes.string.isRequired,
   isDesctop: PropTypes.bool.isRequired,
