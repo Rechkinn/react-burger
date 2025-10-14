@@ -8,7 +8,7 @@ import { BUN } from "../../utils/consts";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrop } from "react-dnd";
 import {
-  ADD_INGREDIENT_TO_CONSTRUCTOR,
+  addIngridient,
   SET_BUN,
 } from "../../services/actions/burger-constructor";
 import BurgerConstructorIngredientAlternate from "../burger-constructor-ingredient-alternate/burger-constructor-ingredient-alternate";
@@ -21,10 +21,7 @@ function BurgerConstructor({ closeBurgerConstructor }) {
       isHoverAllIngredients: monitor.isOver(),
     }),
     drop(ingredient) {
-      dispatch({
-        type: ADD_INGREDIENT_TO_CONSTRUCTOR,
-        ingredient,
-      });
+      dispatch(addIngridient(ingredient));
     },
   });
   const [{ isHoverBun }, dropTargetBun] = useDrop({
@@ -149,7 +146,7 @@ function BurgerConstructor({ closeBurgerConstructor }) {
         {burgerConstructor.map((ingredient, index, array) => {
           return (
             <BurgerConstructorIngredient
-              key={`${ingredient.ingredient._id}${index}`}
+              key={`${ingredient.uniqueId}`}
               positionList={index}
               isDesctop={state.isDesctop}
               ingredient={ingredient.ingredient}
