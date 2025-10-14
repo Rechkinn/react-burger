@@ -1,4 +1,5 @@
 import { doRequest } from "../../utils/doRequest";
+import { CLEAR_CONSTRUCTOR } from "./burger-constructor";
 export const CREATE_NEW_ORDER_REQUEST = "CREATE_NEW_ORDER_REQUEST";
 export const CREATE_NEW_ORDER_REQUEST_SUCCESS =
   "CREATE_NEW_ORDER_REQUEST_SUCCESS";
@@ -25,6 +26,9 @@ export const createNewOrder = (arrayIngredientsIds) => {
         dispatch({
           type: CREATE_NEW_ORDER_REQUEST_SUCCESS,
           orderDetails: json,
+        });
+        dispatch({
+          type: CLEAR_CONSTRUCTOR,
         });
       })
       .catch(() => {
