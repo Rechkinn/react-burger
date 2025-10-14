@@ -23,19 +23,12 @@ export const burderConstructorReducer = (state = initialState, action) => {
         burgerConstructor: [...state.burgerConstructor, action.payload],
       };
     case REMOVE_INGREDIENT_FROM_CONSTRUCTOR:
-      let hasAlreadyRemoved = false;
-
       return {
         ...state,
         burgerConstructor: [
           ...state.burgerConstructor.filter((ingredient) => {
-            if (
-              ingredient.ingredient._id !== action.id ||
-              hasAlreadyRemoved === true
-            ) {
+            if (ingredient.uniqueId !== action.uuid) {
               return ingredient.ingredient;
-            } else {
-              hasAlreadyRemoved = true;
             }
           }),
         ],
