@@ -15,6 +15,7 @@ import {
 } from "../../services/actions/burger-constructor";
 
 function BurgerConstructorIngredient({
+  uniqueId,
   positionList,
   ingredient,
   indents,
@@ -47,10 +48,10 @@ function BurgerConstructorIngredient({
   function isBun() {
     return ingredient.type === BUN;
   }
-  function removeBurgerConstructorIngredient(ingredientId) {
+  function removeBurgerConstructorIngredient(uuid) {
     dispatch({
       type: REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
-      id: ingredientId,
+      uuid: uuid,
     });
   }
 
@@ -77,9 +78,7 @@ function BurgerConstructorIngredient({
                 text={ingredient.name}
                 price={ingredient.price}
                 thumbnail={ingredient.image_mobile}
-                handleClose={() =>
-                  removeBurgerConstructorIngredient(ingredient._id)
-                }
+                handleClose={() => removeBurgerConstructorIngredient(uniqueId)}
               />
             ) : (
               <ConstructorElementCustom
@@ -103,5 +102,6 @@ BurgerConstructorIngredient.propTypes = {
   ingredient: IngredientType.isRequired,
   indents: PropTypes.string.isRequired,
   isDesctop: PropTypes.bool.isRequired,
+  uniqueId: PropTypes.string,
   typeBun: PropTypes.string,
 };
