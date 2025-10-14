@@ -20,7 +20,7 @@ export const burderConstructorReducer = (state = initialState, action) => {
     case ADD_INGREDIENT_TO_CONSTRUCTOR:
       return {
         ...state,
-        burgerConstructor: [...state.burgerConstructor, action.ingredient],
+        burgerConstructor: [...state.burgerConstructor, action.payload],
       };
     case REMOVE_INGREDIENT_FROM_CONSTRUCTOR:
       let hasAlreadyRemoved = false;
