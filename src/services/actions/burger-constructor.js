@@ -6,6 +6,7 @@ export const REMOVE_INGREDIENT_FROM_CONSTRUCTOR =
 export const SET_BUN = "SET_BUN";
 export const CHANGE_SUBSEQUENCE_BURGER_CONSTRUCTOR =
   "CHANGE_SUBSEQUENCE_BURGER_CONSTRUCTOR";
+export const CLEAR_CONSTRUCTOR = "CLEAR_CONSTRUCTOR";
 
 export const addIngridient = (item) => {
   return {
