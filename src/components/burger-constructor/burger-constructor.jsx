@@ -143,18 +143,18 @@ function BurgerConstructor({ closeBurgerConstructor }) {
         style={stylesContainerAllIngredients}
         className={styles.ingredients}
       >
-        {burgerConstructor.map((ingredient, index, array) => {
+        {burgerConstructor.map((item, index, array) => {
           return (
             <BurgerConstructorIngredient
-              key={ingredient.uniqueId}
-              uniqueId={ingredient.uniqueId}
+              key={item.uniqueId}
+              uniqueId={item.uniqueId}
               positionList={index}
               isDesctop={state.isDesctop}
-              ingredient={ingredient.ingredient}
+              ingredient={item.ingredient}
               indents={
                 index !== array.length - 1
                   ? getIndents({
-                      type: ingredient.ingredient.type,
+                      type: item.ingredient.type,
                       place: null,
                     })
                   : ""
