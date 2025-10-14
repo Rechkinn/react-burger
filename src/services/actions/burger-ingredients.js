@@ -1,10 +1,10 @@
+import { BASE_URL } from "../../utils/consts";
+
 export const GET_BURGER_INGREDIENTS_REQUEST = "GET_BURGER_INGREDIENTS";
 export const GET_BURGER_INGREDIENTS_REQUEST_SUCCESS =
   "GET_BURGER_INGREDIENTS_REQUEST_SUCCESS";
 export const GET_BURGER_INGREDIENTS_REQUEST_ERROR =
   "GET_BURGER_INGREDIENTS_REQUEST_FAILED";
-
-const url = `https://norma.nomoreparties.space`;
 
 export function getBurgerIngredients() {
   return function (dispatch) {
@@ -12,7 +12,7 @@ export function getBurgerIngredients() {
       type: GET_BURGER_INGREDIENTS_REQUEST,
     });
 
-    fetch(`${url}/api/ingredients`)
+    fetch(`${BASE_URL}/ingredients`)
       .then((response) => {
         if (response && response.ok) {
           return response.json();
