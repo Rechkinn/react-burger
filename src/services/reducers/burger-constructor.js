@@ -3,6 +3,7 @@ import {
   REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
   SET_BUN,
   CHANGE_SUBSEQUENCE_BURGER_CONSTRUCTOR,
+  CLEAR_CONSTRUCTOR,
 } from "../actions/burger-constructor";
 
 const initialState = {
@@ -12,6 +13,12 @@ const initialState = {
 
 export const burderConstructorReducer = (state = initialState, action) => {
   switch (action.type) {
+    case CLEAR_CONSTRUCTOR:
+      return {
+        ...state,
+        burgerConstructor: [],
+        bun: null,
+      };
     case SET_BUN:
       return {
         ...state,
