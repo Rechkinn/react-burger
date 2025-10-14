@@ -146,7 +146,8 @@ function BurgerConstructor({ closeBurgerConstructor }) {
         {burgerConstructor.map((ingredient, index, array) => {
           return (
             <BurgerConstructorIngredient
-              key={`${ingredient.uniqueId}`}
+              key={ingredient.uniqueId}
+              uniqueId={ingredient.uniqueId}
               positionList={index}
               isDesctop={state.isDesctop}
               ingredient={ingredient.ingredient}
