@@ -1,4 +1,3 @@
-// import { uuid4 } from "uuid";
 import { v4 as uuid } from "uuid";
 
 export const ADD_INGREDIENT_TO_CONSTRUCTOR = "ADD_INGREDIENT_TO_CONSTRUCTOR";
