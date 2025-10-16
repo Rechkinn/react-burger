@@ -6,11 +6,24 @@ import {
 import PropTypes from "prop-types";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { ObjectToOpenSectionBurgerConstructorType } from "../../utils/types";
 import { useModal } from "../../hooks/useModal";
+import { useSelector } from "react-redux";
 
-function ConfirmOrder({ ...props }) {
+function ConfirmOrder({ section, ...props }) {
   const { isModalOpen, openModal, closeModal } = useModal();
+  const { bun, burgerConstructor } = useSelector(
+    (store) => store.burgerConstructor
+  );
+
+  function calculatePrice() {
+    const priceWithoutBuns = burgerConstructor.reduce((sum, ingredient) => {
+      return (sum += ingredient.ingredient.price);
+    }, 0);
+
+    return bun?.ingredient
+      ? bun.ingredient.price * 2 + priceWithoutBuns
+      : priceWithoutBuns;
+  }
 
   return (
     <>
@@ -28,23 +41,17 @@ function ConfirmOrder({ ...props }) {
         {!props.onlyButton && (
           <div className={`mr-10 ${styles.price}`}>
             <span className={`mr-2 text text_type_digits-medium`}>
-              {props.ingredients.reduce((sum, ingredient) => {
-                return (sum += ingredient.price);
-              }, 0)}
+              {calculatePrice()}
             </span>
             <CurrencyIcon />
           </div>
         )}
         <Button
+          disabled={burgerConstructor.length > 0 && bun ? false : true}
           htmlType="button"
           type="primary"
           size={props.size}
-          onClick={
-            props.objectToOpenSectionBurgerConstructor.currentSection ===
-            "BurgerConstructor"
-              ? openModal
-              : props.objectToOpenSectionBurgerConstructor.func
-          }
+          onClick={section === "BurgerConstructor" ? openModal : null}
         >
           {props.textButton}
         </Button>
@@ -56,10 +63,9 @@ function ConfirmOrder({ ...props }) {
 export default ConfirmOrder;
 
 ConfirmOrder.propTypes = {
+  className: PropTypes.string.isRequired,
   onlyButton: PropTypes.bool,
   size: PropTypes.string.isRequired,
   textButton: PropTypes.string.isRequired,
-  className: PropTypes.string.isRequired,
-  objectToOpenSectionBurgerConstructor:
-    ObjectToOpenSectionBurgerConstructorType.isRequired,
+  section: PropTypes.string.isRequired,
 };

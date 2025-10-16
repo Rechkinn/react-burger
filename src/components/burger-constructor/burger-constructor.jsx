@@ -4,16 +4,46 @@ import ConfirmOrder from "../confirm-order/confirm-order";
 import styles from "./burger-constructor.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
-import { IngredientType } from "../../utils/types";
 import { BUN } from "../../utils/consts";
+import { useDispatch, useSelector } from "react-redux";
+import { useDrop } from "react-dnd";
+import {
+  addIngridient,
+  SET_BUN,
+} from "../../services/actions/burger-constructor";
+import BurgerConstructorIngredientAlternate from "../burger-constructor-ingredient-alternate/burger-constructor-ingredient-alternate";
 
-function BurgerConstructor({ arrayOfIngredients, closeBurgerConstructor }) {
+function BurgerConstructor({ closeBurgerConstructor }) {
+  const dispatch = useDispatch();
+  const [{ isHoverAllIngredients }, dropTargetAllIngredients] = useDrop({
+    accept: "ingredient",
+    collect: (monitor) => ({
+      isHoverAllIngredients: monitor.isOver(),
+    }),
+    drop(ingredient) {
+      dispatch(addIngridient(ingredient));
+    },
+  });
+  const [{ isHoverBun }, dropTargetBun] = useDrop({
+    accept: BUN,
+    drop(ingredient) {
+      dispatch({
+        type: SET_BUN,
+        bun: ingredient,
+      });
+    },
+    collect: (monitor) => ({
+      isHoverBun: monitor.isOver(),
+    }),
+  });
   const [state, setState] = useState({
     widthScreen: window.innerWidth,
     isDesctop: isDesctop(),
     heightBlok: window.innerHeight,
   });
-
+  const { bun, burgerConstructor } = useSelector(
+    (store) => store.burgerConstructor
+  );
   useEffect(() => {
     window.addEventListener("resize", updateState);
     return () => window.removeEventListener("resize", updateState);
@@ -34,11 +64,9 @@ function BurgerConstructor({ arrayOfIngredients, closeBurgerConstructor }) {
     }
     return indents;
   }
-
   function isDesctop() {
     return window.innerWidth > 1280 ? true : false;
   }
-
   function updateState() {
     setState({
       widthScreen: window.innerWidth,
@@ -46,7 +74,6 @@ function BurgerConstructor({ arrayOfIngredients, closeBurgerConstructor }) {
       heightBlok: window.innerHeight,
     });
   }
-
   function setMaxHeight() {
     if (state.widthScreen < 1268) {
       if (state.widthScreen > 768) {
@@ -63,6 +90,13 @@ function BurgerConstructor({ arrayOfIngredients, closeBurgerConstructor }) {
     }
   }
 
+  const stylesContainerAllIngredients = {
+    ...setMaxHeight(),
+    border: isHoverAllIngredients
+      ? "2px solid #4c4cff"
+      : "2px solid transparent",
+  };
+
   return (
     <>
       {!state.isDesctop && (
@@ -77,78 +111,86 @@ function BurgerConstructor({ arrayOfIngredients, closeBurgerConstructor }) {
         </header>
       )}
 
-      <BurgerConstructorIngredient
-        isDesctop={state.isDesctop}
-        ingredient={{
-          ...arrayOfIngredients[0],
-          name: `${arrayOfIngredients[0].name} (верх)`,
+      <div
+        ref={dropTargetBun}
+        style={{
+          border: isHoverBun ? "2px solid #4c4cff" : "2px solid transparent",
         }}
-        typeBun="top"
-        indents={getIndents({
-          type: arrayOfIngredients[0].type,
-          place: "top",
-        })}
-      />
-
-      <div style={setMaxHeight()} className={styles.ingredients}>
-        {[...arrayOfIngredients]
-          .filter((ingredient) => {
-            if (ingredient.type !== BUN) return ingredient;
-          })
-          .map((ingredient, index, array) => {
-            return (
-              <BurgerConstructorIngredient
-                isDesctop={state.isDesctop}
-                key={ingredient._id}
-                ingredient={ingredient}
-                indents={
-                  index !== array.length - 1
-                    ? getIndents({
-                        type: ingredient.type,
-                        place: null,
-                      })
-                    : ""
-                }
-              />
-            );
-          })}
+        className={styles.containerToBun}
+      >
+        {bun?.ingredient ? (
+          <BurgerConstructorIngredient
+            isDesctop={state.isDesctop}
+            ingredient={{
+              ...bun?.ingredient,
+              name: `${bun?.ingredient.name} (верх)`,
+            }}
+            typeBun="top"
+            indents={getIndents({
+              type: BUN,
+              place: "top",
+            })}
+          />
+        ) : (
+          <BurgerConstructorIngredientAlternate place={"top"}>
+            Перенесите булку для заказа сюда
+          </BurgerConstructorIngredientAlternate>
+        )}
       </div>
-      <BurgerConstructorIngredient
-        isDesctop={state.isDesctop}
-        ingredient={{
-          ...arrayOfIngredients[0],
-          name: `${arrayOfIngredients[0].name} (низ)`,
-        }}
-        typeBun="bottom"
-        indents={getIndents({
-          type: arrayOfIngredients[0].type,
-          place: "bottom",
-        })}
-      />
 
-      {state.widthScreen > 1280 ? (
-        <ConfirmOrder
-          size={"large"}
-          textButton={"Оформить заказ"}
-          className={styles.confirmOrder}
-          ingredients={arrayOfIngredients}
-          objectToOpenSectionBurgerConstructor={{
-            currentSection: "BurgerConstructor",
-            func: null,
-          }}
-        />
-      ) : (
-        <ConfirmOrder
-          size={"small"}
-          textButton={"Заказать"}
-          className={styles.confirmOrder}
-          ingredients={arrayOfIngredients}
-          objectToOpenSectionBurgerConstructor={{
-            currentSection: "BurgerConstructor",
-            func: null,
-          }}
-        />
-      )}
+      <div
+        ref={dropTargetAllIngredients}
+        style={stylesContainerAllIngredients}
+        className={styles.ingredients}
+      >
+        {burgerConstructor.map((item, index, array) => {
+          return (
+            <BurgerConstructorIngredient
+              key={item.uniqueId}
+              uniqueId={item.uniqueId}
+              positionList={index}
+              isDesctop={state.isDesctop}
+              ingredient={item.ingredient}
+              indents={
+                index !== array.length - 1
+                  ? getIndents({
+                      type: item.ingredient.type,
+                      place: null,
+                    })
+                  : ""
+              }
+            />
+          );
+        })}
+      </div>
+
+      <div className={styles.containerToBun}>
+        {bun?.ingredient ? (
+          <BurgerConstructorIngredient
+            isDesctop={state.isDesctop}
+            ingredient={{
+              ...bun?.ingredient,
+              name: `${bun?.ingredient.name} (низ)`,
+            }}
+            typeBun="bottom"
+            indents={getIndents({
+              type: BUN,
+              place: "bottom",
+            })}
+          />
+        ) : (
+          <BurgerConstructorIngredientAlternate place={"bottom"}>
+            Здесь будет нижняя булка
+          </BurgerConstructorIngredientAlternate>
+        )}
+      </div>
+
+      <ConfirmOrder
+        size={state.isDesctop ? "large" : "small"}
+        textButton={state.isDesctop ? "Оформить заказ" : "Заказать"}
+        className={styles.confirmOrder}
+        section={"BurgerConstructor"}
+      />
     </>
   );
 }
@@ -156,6 +198,5 @@ function BurgerConstructor({ arrayOfIngredients, closeBurgerConstructor }) {
 export default BurgerConstructor;
 
 BurgerConstructor.propTypes = {
-  arrayOfIngredients: PropTypes.arrayOf(IngredientType).isRequired,
   closeBurgerConstructor: PropTypes.func.isRequired,
 };
