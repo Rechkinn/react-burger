@@ -129,6 +129,8 @@ export default function Profile() {
 
   return (
     <>
+      {logoutRequest && <div>Пробуем выйти из профиля...</div>}
+      {logoutRequestError && <div>Ошибка выхода из профиля!</div>}
       {user && (
         <main className={styles.main}>
           <div
