@@ -1,0 +1,36 @@
+.main {
+  margin: auto;
+  max-width: 1200px;
+  margin-top: 120px;
+  display: flex;
+  gap: 60px;
+}
+
+.baseContainer {
+  display: inline-block;
+}
+
+.containerLinks {
+  max-width: 320px;
+  height: 100%;
+}
+
+.link {
+  display: block;
+  height: 64px;
+  text-decoration: none;
+}
+
+.activeLink {
+  composes: link;
+  color: white;
+}
+
+.fakeLink {
+  composes: link;
+  cursor: pointer;
+}
+
+.containerButtons {
+  text-align: end;
+}
