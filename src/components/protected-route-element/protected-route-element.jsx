@@ -1,10 +1,23 @@
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
+import { getCookie } from "../../utils/cookie";
 
 export default function ProtectedRouteElement({ element }) {
   const { user, userDataRequestError, userDataRequest } = useSelector(
     (store) => store.userData
   );
 
-  return user ? element : <Navigate to="/login" replace />;
+  if (getCookie("token")) {
+    if (!user) {
+      return null;
+    }
+  }
+
+  return (
+    <>
+      {userDataRequest && <div>Загрузка данных пользователя...</div>}
+      {userDataRequestError && <div>Ошибка загрузки данных пользователя!</div>}
+      {!user ? <Navigate to="/login" replace /> : element}
+    </>
+  );
 }
