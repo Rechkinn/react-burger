@@ -10,22 +10,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { createNewUser } from "../../services/actions/register";
 
 export default function Register() {
-  const [showPassword, setShowPassword] = useState(false);
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const formRef = useRef();
+  const [showPassword, setShowPassword] = useState(false);
+  const [inputNameValue, setInputNameValue] = useState("");
+  const [inputEmailValue, setInputEmailValue] = useState("");
+  const [inputPasswordValue, setInputPasswordValue] = useState("");
   const { user } = useSelector((store) => store.userData);
   const { registerRequest, registerRequestError } = useSelector(
     (store) => store.register
   );
-
-  const [inputNameValue, setInputNameValue] = useState("");
-  const [inputEmailValue, setInputEmailValue] = useState("");
-  const [inputPasswordValue, setInputPasswordValue] = useState("");
-
-  const formRef = useRef();
-
-  const dispatch = useDispatch();
 
   function register(e) {
     e.preventDefault();

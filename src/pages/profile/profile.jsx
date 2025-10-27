@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useLocation, useNavigate } from "react-router";
+import { Navigate, NavLink, Outlet, useLocation } from "react-router";
 import styles from "./profile.module.css";
 import {
   Button,
@@ -11,19 +11,22 @@ import { updateUserData } from "../../services/actions/user-data";
 import { collectUserData } from "../../utils/collectUserData";
 
 export default function Profile() {
+  const dispatch = useDispatch();
+  const formRef = useRef();
   const [visibleButtonsForChange, setVisibleButtonsForChange] = useState(false);
-
   const { pathname } = useLocation();
-
   const { user, userDataRequest, userDataRequestError } = useSelector(
     (store) => store.userData
   );
   const { logoutRequest, logoutRequestError } = useSelector(
     (store) => store.logout
   );
-
-  const [inputNameValue, setInputNameValue] = useState(user.name);
-  const [inputEmailValue, setInputEmailValue] = useState(user.email);
+  const [inputNameValue, setInputNameValue] = useState(
+    user?.name ? user.name : ""
+  );
+  const [inputEmailValue, setInputEmailValue] = useState(
+    user?.email ? user.email : ""
+  );
   const [inputPasswordValue, setInputPasswordValue] = useState("");
 
   function cancelChangeInput() {
@@ -33,12 +36,8 @@ export default function Profile() {
     setVisibleButtonsForChange(false);
   }
 
-  const dispatch = useDispatch();
-  const formRef = useRef();
-
   function handlerSubmitForm(e) {
     e.preventDefault();
-
     const changedInputs = [];
     const inputs = formRef.current.elements;
 
@@ -117,50 +116,59 @@ export default function Profile() {
     );
   }
 
-  const navigate = useNavigate();
   function logout() {
     dispatch(doLogout());
     if (!logoutRequestError && !logoutRequest) {
-      navigate("/");
+      return <Navigate to="/login" replace />;
     }
   }
 
+  if (!user) {
+    return null;
+  }
+
   return (
-    <main className={styles.main}>
-      <div className={`text text_type_main-medium ${styles.containerLinks}`}>
-        <NavLink
-          to="/profile"
-          end
-          className={({ isActive }) => {
-            return isActive
-              ? `${styles.activeLink}`
-              : `text_color_inactive ${styles.link}`;
-          }}
-        >
-          Профиль
-        </NavLink>
-        <NavLink
-          to="/profile/orders"
-          end
-          className={({ isActive }) => {
-            return isActive
-              ? `${styles.activeLink}`
-              : `text_color_inactive ${styles.link}`;
-          }}
-        >
-          История заказов
-        </NavLink>
-        <p
-          className={`text_color_inactive ${styles.fakeLink}`}
-          onClick={logout}
-        >
-          Выход
-        </p>
-        <p className="mt-20 text_type_main-small text_color_inactive">
-          В этом разделе вы можете изменить свои персональные данные
-        </p>
-      </div>
-      <div>{getContent()}</div>
-    </main>
+    <>
+      {user && (
+        <main className={styles.main}>
+          <div
+            className={`text text_type_main-medium ${styles.containerLinks}`}
+          >
+            <NavLink
+              to="/profile"
+              end
+              className={({ isActive }) => {
+                return isActive
+                  ? `${styles.activeLink}`
+                  : `text_color_inactive ${styles.link}`;
+              }}
+            >
+              Профиль
+            </NavLink>
+            <NavLink
+              to="/profile/orders"
+              end
+              className={({ isActive }) => {
+                return isActive
+                  ? `${styles.activeLink}`
+                  : `text_color_inactive ${styles.link}`;
+              }}
+            >
+              История заказов
+            </NavLink>
+            <p
+              className={`text_color_inactive ${styles.fakeLink}`}
+              onClick={logout}
+            >
+              Выход
+            </p>
+            <p className="mt-20 text_type_main-small text_color_inactive">
+              В этом разделе вы можете изменить свои персональные данные
+            </p>
+          </div>
+          <div>{getContent()}</div>
+        </main>
+      )}
+    </>
   );
 }

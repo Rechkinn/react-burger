@@ -10,22 +10,18 @@ import { doResetPassword } from "../../services/actions/reset-password";
 import { collectUserData } from "../../utils/collectUserData";
 
 export default function ResetPassword() {
-  const [showPassword, setShowPassword] = useState(false);
-
-  const formRef = useRef();
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const formRef = useRef();
+  const [showPassword, setShowPassword] = useState(false);
+  const [inputPasswordValue, setInputPasswordValue] = useState("");
+  const [inputTokenValue, setInputTokenValue] = useState("");
   const { user } = useSelector((store) => store.userData);
   const { resetPasswordRequest, resetPasswordRequestError } = useSelector(
     (store) => store.resetPassword
   );
 
-  const [inputPasswordValue, setInputPasswordValue] = useState("");
-  const [inputTokenValue, setInputTokenValue] = useState("");
-
-  const location = useLocation();
-  const dispatch = useDispatch();
   function resetPassword(e) {
     e.preventDefault();
     dispatch(doResetPassword(collectUserData(formRef.current.elements)));

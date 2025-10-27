@@ -1,6 +1,5 @@
-import { useSelector } from "react-redux";
-import { IngredientType } from "../../utils/types";
 import styles from "./ingredient-details.module.css";
+import { useSelector } from "react-redux";
 
 function IngredientDetails() {
   const { ingredientDetails } = useSelector((store) => store.ingredientDetails);

@@ -1,5 +1,4 @@
 export const getCookie = (name) => {
-  // console.log("cookie", document.cookie);
   const nameEQ = name + "=";
   const ca = document.cookie.split(";");
   for (let i = 0; i < ca.length; i++) {
@@ -14,9 +13,7 @@ export const getCookie = (name) => {
 };
 
 export const deleteCookie = (name, path = "/") => {
-  // console.log("перед удалением cookie", document.cookie);
   document.cookie = name + "=;Max-Age=-1;path=" + path + ";";
-  // console.log("после удалением cookie", document.cookie);
 };
 
 export const setCookie = (name, value, timeToLive, path = "/") => {

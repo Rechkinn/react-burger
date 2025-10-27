@@ -11,15 +11,14 @@ import { collectUserData } from "../../utils/collectUserData";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const formRef = useRef();
+  const [inputEmailValue, setInputEmailValue] = useState("");
   const { user } = useSelector((store) => store.userData);
   const { forgotPasswordRequest, forgotPasswordRequestError } = useSelector(
     (store) => store.forgotPassword
   );
-  const [inputEmailValue, setInputEmailValue] = useState("");
 
-  const formRef = useRef();
-  const dispatch = useDispatch();
   function forgotPassword(e) {
     e.preventDefault();
     if (formRef.current.elements[0].value !== "") {

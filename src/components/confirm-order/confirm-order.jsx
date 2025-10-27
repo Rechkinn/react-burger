@@ -11,13 +11,12 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
 function ConfirmOrder({ section, ...props }) {
+  const navigate = useNavigate();
   const { isModalOpen, openModal, closeModal } = useModal();
+  const { user } = useSelector((store) => store.userData);
   const { bun, burgerConstructor } = useSelector(
     (store) => store.burgerConstructor
   );
-  const { user } = useSelector((store) => store.userData);
-
-  const navigate = useNavigate();
 
   function calculatePrice() {
     const priceWithoutBuns = burgerConstructor.reduce((sum, ingredient) => {

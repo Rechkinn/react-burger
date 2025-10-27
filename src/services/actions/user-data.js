@@ -8,8 +8,6 @@ export const USER_SET_DATA = "USER_SET_DATA";
 export const USER_UPDATE_DATA = "USER_UPDATE_DATA";
 export const USER_REMOVE_DATA = "USER_REMOVE_DATA";
 
-// function doRequestUser()
-
 export const getUserData = () => {
   return function (dispatch) {
     dispatch({

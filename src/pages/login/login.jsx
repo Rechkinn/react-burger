@@ -10,27 +10,21 @@ import { doLogin } from "../../services/actions/login";
 import { collectUserData } from "../../utils/collectUserData";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const formRef = useRef();
+  const [inputEmailValue, setInputEmailValue] = useState("");
+  const [inputPasswordValue, setInputPasswordValue] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
   const { user } = useSelector((store) => store.userData);
   const { loginRequest, loginRequestError } = useSelector(
     (store) => store.login
   );
 
-  const navigate = useNavigate();
-
-  const formRef = useRef();
-
-  const dispatch = useDispatch();
   function login(e) {
     e.preventDefault();
     dispatch(doLogin(collectUserData(formRef.current.elements)));
   }
-
-  const [inputEmailValue, setInputEmailValue] = useState(
-    "al.red197218@gmail.com"
-  );
-  const [inputPasswordValue, setInputPasswordValue] = useState("qwerty");
 
   if (user) {
     return <Navigate to="/" replace />;
