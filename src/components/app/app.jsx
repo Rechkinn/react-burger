@@ -12,6 +12,14 @@ import {
 import Main from "../../pages/main/main";
 import Login from "../../pages/login/login";
 import Register from "../../pages/register/register";
+import ForgotPassword from "../../pages/forgot-password/forgot-password";
+import ResetPassword from "../../pages/reset-password/reset-password";
+import Profile from "../../pages/profile/profile";
+import ProtectedRouteElement from "../protected-route-element/protected-route-element";
+import { getUserData } from "../../services/actions/user-data";
+import { updateTokens } from "../../services/actions/token";
+import { getCookie } from "../../utils/cookie";
+import NotFound from "../../pages/not-found/not-found";
 
 function App() {
   const { burgerIngredientsRequest, burgerIngredientsRequestFailed } =
@@ -19,12 +27,15 @@ function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getBurgerIngredients());
-  }, []);
 
-  // const navigate = useNavigate();
-  // if (true) {
-  //   navigate("/login");
-  // }
+    const tokenCookie = getCookie("token");
+    if (tokenCookie && tokenCookie !== "") {
+      dispatch(getUserData());
+    } else if (localStorage.getItem("refreshToken")) {
+      dispatch(updateTokens());
+      dispatch(getUserData());
+    }
+  }, []);
 
   return (
     <>
@@ -38,18 +49,26 @@ function App() {
       )}
       {!burgerIngredientsRequest && !burgerIngredientsRequestFailed && (
         <>
-          <AppHeader />
           <BrowserRouter>
+            <AppHeader />
             <Routes>
               <Route path="/" element={<Main />} />
+
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route
-                path="*"
-                element={
-                  <div className="text text_type_main-large">NOT FOUND 404</div>
-                }
-              />
+                path="/profile"
+                element={<ProtectedRouteElement element={<Profile />} />}
+              >
+                <Route
+                  path="/profile/orders"
+                  element={<>Скоро здесь будут заказы!</>}
+                />
+              </Route>
+
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
         </>
