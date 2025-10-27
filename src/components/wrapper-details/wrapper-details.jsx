@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import Modal from "../modal/modal";
 import { useDispatch } from "react-redux";
 import { REMOVE_INGREDIENT_DETAILS } from "../../services/actions/ingredient-details";
+import PropTypes from "prop-types";
 
 export default function WrapperDetails({ element }) {
   const dispatch = useDispatch();
@@ -21,3 +22,7 @@ export default function WrapperDetails({ element }) {
     </Modal>
   );
 }
+
+WrapperDetails.propTypes = {
+  element: PropTypes.node.isRequired,
+};

@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
 import { getCookie } from "../../utils/cookie";
+import PropTypes from "prop-types";
 
 export default function ProtectedRouteElement({ element }) {
   const { user, userDataRequestError, userDataRequest } = useSelector(
@@ -21,3 +22,7 @@ export default function ProtectedRouteElement({ element }) {
     </>
   );
 }
+
+ProtectedRouteElement.propTypes = {
+  element: PropTypes.node.isRequired,
+};
