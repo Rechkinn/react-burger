@@ -11,12 +11,22 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./app-header.module.css";
 import AppHeaderLink from "../app-header-link/app-header-link";
+import { useLocation } from "react-router-dom";
 
 function AppHeader() {
   const [state, setState] = useState({
     isOpeningMenu: false,
     isOpeningMenuPersonalAccount: true,
   });
+
+  const location = useLocation();
+
+  function getTypeIcon(path) {
+    let str;
+    if (location.pathname === path) return "primary";
+    str = location.pathname.split("/")[1];
+    return path.includes(str) && str !== "" ? "primary" : "secondary";
+  }
 
   return (
     <header className={styles.header}>
@@ -36,6 +46,7 @@ function AppHeader() {
           <ul className={styles.ul}>
             <li className={styles.li}>
               <AppHeaderLink
+                to="/profile"
                 onClick={() => {
                   setState({
                     ...state,
@@ -44,7 +55,7 @@ function AppHeader() {
                   });
                 }}
               >
-                <ProfileIcon type="secondary" />
+                <ProfileIcon type={getTypeIcon("/profile")} />
                 <span className="pl-2 text text_type_main-small">
                   Личный кабинет
                 </span>
@@ -73,16 +84,16 @@ function AppHeader() {
               )}
             </li>
             <li className={styles.li}>
-              <AppHeaderLink>
-                <ListIcon type="secondary" />
+              <AppHeaderLink to="404">
+                <ListIcon type={getTypeIcon("/404")} />
                 <span className="pl-2 text text_type_main-small">
                   Лента заказов
                 </span>
               </AppHeaderLink>
             </li>
             <li className={styles.li}>
-              <AppHeaderLink>
-                <BurgerIcon type="primary" />
+              <AppHeaderLink to="">
+                <BurgerIcon type={getTypeIcon("/")} />
                 <span className="pl-2 text text_type_main-small">
                   Конструктор
                 </span>
