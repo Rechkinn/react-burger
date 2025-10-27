@@ -2,13 +2,7 @@ import { useEffect } from "react";
 import AppHeader from "../app-header/app-header";
 import { useDispatch, useSelector } from "react-redux";
 import { getBurgerIngredients } from "../../services/actions/burger-ingredients";
-import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router";
+import { Route, Routes, useLocation } from "react-router";
 import Main from "../../pages/main/main";
 import Login from "../../pages/login/login";
 import Register from "../../pages/register/register";
@@ -20,11 +14,16 @@ import { getUserData } from "../../services/actions/user-data";
 import { updateTokens } from "../../services/actions/token";
 import { getCookie } from "../../utils/cookie";
 import NotFound from "../../pages/not-found/not-found";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import WrapperDetails from "../wrapper-details/wrapper-details";
+import IngredientDetailsPage from "../../pages/ingredient-details-page/ingredient-details-page";
 
 function App() {
+  const dispatch = useDispatch();
+  const location = useLocation();
   const { burgerIngredientsRequest, burgerIngredientsRequestFailed } =
     useSelector((store) => store.burgerIngredients);
-  const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getBurgerIngredients());
 
@@ -49,28 +48,35 @@ function App() {
       )}
       {!burgerIngredientsRequest && !burgerIngredientsRequestFailed && (
         <>
-          <BrowserRouter>
-            <AppHeader />
-            <Routes>
-              <Route path="/" element={<Main />} />
-
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route
-                path="/profile"
-                element={<ProtectedRouteElement element={<Profile />} />}
-              >
+          <AppHeader />
+          <Routes>
+            <Route path="/" element={<Main />}>
+              {location?.state?.clickOnIngredient && (
                 <Route
-                  path="/profile/orders"
-                  element={<>Скоро здесь будут заказы!</>}
+                  path="/ingredients/:id"
+                  element={<WrapperDetails element={<IngredientDetails />} />}
                 />
-              </Route>
-
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
+              )}
+            </Route>
+            <Route
+              path="/ingredients/:id"
+              element={<IngredientDetailsPage />}
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route
+              path="/profile"
+              element={<ProtectedRouteElement element={<Profile />} />}
+            >
+              <Route
+                path="/profile/orders"
+                element={<>Скоро здесь будут заказы!</>}
+              />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </>
       )}
     </>
