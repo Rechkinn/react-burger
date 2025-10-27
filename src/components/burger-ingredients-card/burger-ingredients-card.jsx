@@ -5,7 +5,7 @@ import {
   Button,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
+import PropTypes, { func } from "prop-types";
 import { IngredientType } from "../../utils/types";
 import { useDrag } from "react-dnd";
 import { useSelector } from "react-redux";
