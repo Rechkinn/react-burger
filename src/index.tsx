@@ -3,14 +3,10 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import App from "./components/app/app.jsx";
-
-// import { thunk } from "redux-thunk";
 import { rootReducer } from "./services/reducers/index.js";
 import { Provider } from "react-redux";
-
-// import { compose, applyMiddleware } from "redux";
-
 import { configureStore } from "@reduxjs/toolkit";
+import { BrowserRouter } from "react-router";
 
 const store = configureStore({
   reducer: rootReducer,
@@ -24,7 +20,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>
 );
