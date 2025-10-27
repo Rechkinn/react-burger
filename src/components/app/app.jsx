@@ -9,7 +9,7 @@ import Register from "../../pages/register/register";
 import ForgotPassword from "../../pages/forgot-password/forgot-password";
 import ResetPassword from "../../pages/reset-password/reset-password";
 import Profile from "../../pages/profile/profile";
-import ProtectedRouteElement from "../protected-route-element/protected-route-element";
+import ProtectedRoute from "../protected-route/protected-route";
 import { getUserData } from "../../services/actions/user-data";
 import { updateTokens } from "../../services/actions/token";
 import { getCookie } from "../../utils/cookie";
@@ -68,7 +68,7 @@ function App() {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route
               path="/profile"
-              element={<ProtectedRouteElement element={<Profile />} />}
+              element={<ProtectedRoute element={<Profile />} />}
             >
               <Route
                 path="/profile/orders"
