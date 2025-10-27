@@ -3,7 +3,7 @@ import { Navigate } from "react-router";
 import { getCookie } from "../../utils/cookie";
 import PropTypes from "prop-types";
 
-export default function ProtectedRouteElement({ element }) {
+export default function ProtectedRoute({ element }) {
   const { user, userDataRequestError, userDataRequest } = useSelector(
     (store) => store.userData
   );
@@ -23,6 +23,6 @@ export default function ProtectedRouteElement({ element }) {
   );
 }
 
-ProtectedRouteElement.propTypes = {
+ProtectedRoute.propTypes = {
   element: PropTypes.node.isRequired,
 };
