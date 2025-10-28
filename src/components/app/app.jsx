@@ -21,6 +21,7 @@ import IngredientDetailsPage from "../../pages/ingredient-details-page/ingredien
 function App() {
   const dispatch = useDispatch();
   const location = useLocation();
+  const background = location.state?.background;
   const { burgerIngredientsRequest, burgerIngredientsRequestFailed } =
     useSelector((store) => store.burgerIngredients);
 
@@ -49,15 +50,9 @@ function App() {
       {!burgerIngredientsRequest && !burgerIngredientsRequestFailed && (
         <>
           <AppHeader />
-          <Routes>
-            <Route path="/" element={<Main />}>
-              {location?.state?.clickOnIngredient && (
-                <Route
-                  path="/ingredients/:id"
-                  element={<WrapperDetails element={<IngredientDetails />} />}
-                />
-              )}
-            </Route>
+
+          <Routes location={background || location}>
+            <Route path="/" element={<Main />} />
             <Route
               path="/ingredients/:id"
               element={<IngredientDetailsPage />}
@@ -77,6 +72,15 @@ function App() {
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
+
+          {background && (
+            <Routes>
+              <Route
+                path="/ingredients/:id"
+                element={<WrapperDetails element={<IngredientDetails />} />}
+              />
+            </Routes>
+          )}
         </>
       )}
     </>
