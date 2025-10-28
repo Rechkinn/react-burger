@@ -5,17 +5,17 @@ import {
   Button,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes, { func } from "prop-types";
+import PropTypes from "prop-types";
 import { IngredientType } from "../../utils/types";
 import { useDrag } from "react-dnd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BUN } from "../../utils/consts";
+import { Link, useLocation } from "react-router";
+import { ADD_INGREDIENT_DETAILS } from "../../services/actions/ingredient-details";
 
-function BurgerIngredientsCard({
-  ingredient,
-  typeDrag,
-  openModalWithIngredientDetails,
-}) {
+function BurgerIngredientsCard({ ingredient, typeDrag }) {
+  const dispatch = useDispatch();
+  const location = useLocation();
   const [{ isDrag }, dragRef] = useDrag({
     type: typeDrag,
     item: { ingredient },
@@ -55,34 +55,47 @@ function BurgerIngredientsCard({
       : setCurrentDevice("mobile");
   }
 
+  function openModalWithIngredientDetails() {
+    dispatch({
+      type: ADD_INGREDIENT_DETAILS,
+      ingredientDetails: ingredient,
+    });
+  }
+
   return (
-    <article
-      style={{ opacity: isDrag ? 0.3 : 1 }}
-      className={`mb-8 ${styles.card}`}
-      onClick={() => openModalWithIngredientDetails(ingredient)}
+    <Link
+      to={`/ingredients/${ingredient._id}`}
+      state={{ background: location }}
+      className={styles.link}
     >
-      <img
-        src={
-          currentDevice === "mobile"
-            ? ingredient.image_mobile
-            : ingredient.image
-        }
-        alt={ingredient.name}
-        ref={dragRef}
-        className={`mb-1 ${styles.image}`}
-      />
-      <p className={`mb-1 ${styles.price}`}>
-        <span className="mr-2 text text_type_digits-default">
-          {ingredient.price}
-        </span>
-        <CurrencyIcon />
-      </p>
-      <h3 className="mb-5 text text_type_main-small">{ingredient.name}</h3>
-      <Button htmlType="button" type="secondary" size="small">
-        Добавить
-      </Button>
-      <Counter count={getIngredientCount(ingredient._id, ingredient.type)} />
-    </article>
+      <article
+        style={{ opacity: isDrag ? 0.3 : 1 }}
+        className={`mb-8 ${styles.card}`}
+        onClick={() => openModalWithIngredientDetails(ingredient)}
+      >
+        <img
+          src={
+            currentDevice === "mobile"
+              ? ingredient.image_mobile
+              : ingredient.image
+          }
+          alt={ingredient.name}
+          ref={dragRef}
+          className={`mb-1 ${styles.image}`}
+        />
+        <p className={`mb-1 ${styles.price}`}>
+          <span className="mr-2 text text_type_digits-default">
+            {ingredient.price}
+          </span>
+          <CurrencyIcon />
+        </p>
+        <h3 className="mb-5 text text_type_main-small">{ingredient.name}</h3>
+        <Button htmlType="button" type="secondary" size="small">
+          Добавить
+        </Button>
+        <Counter count={getIngredientCount(ingredient._id, ingredient.type)} />
+      </article>
+    </Link>
   );
 }
 
@@ -91,5 +104,4 @@ export default BurgerIngredientsCard;
 BurgerIngredientsCard.propTypes = {
   ingredient: IngredientType.isRequired,
   typeDrag: PropTypes.string.isRequired,
-  openModalWithIngredientDetails: PropTypes.func.isRequired,
 };
