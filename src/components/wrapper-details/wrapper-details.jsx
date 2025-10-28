@@ -11,7 +11,8 @@ export default function WrapperDetails({ element }) {
   return (
     <Modal
       functionToClose={() => {
-        navigate("/");
+        // navigate("/");
+        window.history.back();
         dispatch({
           type: REMOVE_INGREDIENT_DETAILS,
         });
