@@ -3,6 +3,10 @@ p {
   padding: 0;
 }
 
+.link {
+  color: white;
+}
+
 .card {
   position: relative;
   display: inline-block;

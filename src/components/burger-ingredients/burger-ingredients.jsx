@@ -4,19 +4,9 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients-item";
 import ConfirmOrder from "../confirm-order/confirm-order";
 import { BUN, MAIN, SAUCE } from "../../utils/consts";
-import { useModal } from "../../hooks/useModal";
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
-import { useDispatch } from "react-redux";
-import {
-  ADD_INGREDIENT_DETAILS,
-  REMOVE_INGREDIENT_DETAILS,
-} from "../../services/actions/ingredient-details";
 
 function BurgerIngredients() {
-  const dispatch = useDispatch();
   const [current, setCurrent] = useState(BUN);
-  const { isModalOpen, openModal, closeModal } = useModal();
   const burgerIngredientsContainer = useRef();
   const burgerIngredientsItemBun = useRef();
   const burgerIngredientsItemSauce = useRef();
@@ -54,30 +44,8 @@ function BurgerIngredients() {
     };
   }, []);
 
-  function openModalWithIngredientDetails(ingredient) {
-    dispatch({
-      type: ADD_INGREDIENT_DETAILS,
-      ingredientDetails: ingredient,
-    });
-    openModal();
-  }
-  function closeModalWithIngredientDetails() {
-    dispatch({
-      type: REMOVE_INGREDIENT_DETAILS,
-    });
-    closeModal();
-  }
-
   return (
     <>
-      {isModalOpen && (
-        <Modal
-          functionToClose={closeModalWithIngredientDetails}
-          title={"Детали ингредиента"}
-        >
-          <IngredientDetails />
-        </Modal>
-      )}
       <div>
         <h1 className="mb-5 pl-5 pr-5 text text_type_main-large">
           Соберите бургер
@@ -95,21 +63,9 @@ function BurgerIngredients() {
         </div>
       </div>
       <div ref={burgerIngredientsContainer} className={styles.ingredientsItems}>
-        <BurgerIngredientsItem
-          ref={burgerIngredientsItemBun}
-          type={BUN}
-          openModalWithIngredientDetails={openModalWithIngredientDetails}
-        />
-        <BurgerIngredientsItem
-          ref={burgerIngredientsItemSauce}
-          type={SAUCE}
-          openModalWithIngredientDetails={openModalWithIngredientDetails}
-        />
-        <BurgerIngredientsItem
-          ref={burgerIngredientsItemMain}
-          type={MAIN}
-          openModalWithIngredientDetails={openModalWithIngredientDetails}
-        />
+        <BurgerIngredientsItem ref={burgerIngredientsItemBun} type={BUN} />
+        <BurgerIngredientsItem ref={burgerIngredientsItemSauce} type={SAUCE} />
+        <BurgerIngredientsItem ref={burgerIngredientsItemMain} type={MAIN} />
       </div>
 
       <ConfirmOrder

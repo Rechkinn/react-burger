@@ -8,9 +8,12 @@ import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { useModal } from "../../hooks/useModal";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 function ConfirmOrder({ section, ...props }) {
+  const navigate = useNavigate();
   const { isModalOpen, openModal, closeModal } = useModal();
+  const { user } = useSelector((store) => store.userData);
   const { bun, burgerConstructor } = useSelector(
     (store) => store.burgerConstructor
   );
@@ -51,7 +54,15 @@ function ConfirmOrder({ section, ...props }) {
           htmlType="button"
           type="primary"
           size={props.size}
-          onClick={section === "BurgerConstructor" ? openModal : null}
+          onClick={
+            user
+              ? section === "BurgerConstructor"
+                ? openModal
+                : null
+              : () => {
+                  navigate("/login");
+                }
+          }
         >
           {props.textButton}
         </Button>
