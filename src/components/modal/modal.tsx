@@ -2,14 +2,26 @@ import { createPortal } from "react-dom";
 import styles from "./modal.module.css";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useEffect } from "react";
+import { SyntheticEvent, useEffect } from "react";
 import PropTypes from "prop-types";
+import { FC, PropsWithChildren } from "react";
+
+type TModalProps = {
+  functionToClose: () => void;
+  title?: string;
+  indents: string;
+} & PropsWithChildren;
 
 const elementForRenderModal = document.getElementById("react-modals");
 
-function Modal({ functionToClose, children, title, indents = "" }) {
+const Modal: FC<TModalProps> = ({
+  functionToClose,
+  children,
+  title,
+  indents = "",
+}) => {
   useEffect(() => {
-    function handleEscape(e) {
+    function handleEscape(e: KeyboardEvent) {
       if (e.key === "Escape") {
         functionToClose();
       }
@@ -18,6 +30,8 @@ function Modal({ functionToClose, children, title, indents = "" }) {
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
   }, []);
+
+  if (!elementForRenderModal) return null;
 
   return createPortal(
     <ModalOverlay functionToClose={functionToClose}>
@@ -39,7 +53,7 @@ function Modal({ functionToClose, children, title, indents = "" }) {
             className={styles.button}
             onClick={() => functionToClose()}
           >
-            <CloseIcon />
+            <CloseIcon type="primary" />
           </button>
         </header>
         {children}
@@ -47,13 +61,13 @@ function Modal({ functionToClose, children, title, indents = "" }) {
     </ModalOverlay>,
     elementForRenderModal
   );
-}
+};
 
 export default Modal;
 
-Modal.propTypes = {
-  functionToClose: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
-  title: PropTypes.string,
-  indents: PropTypes.string,
-};
+// Modal.propTypes = {
+//   functionToClose: PropTypes.func.isRequired,
+//   children: PropTypes.node.isRequired,
+//   title: PropTypes.string,
+//   indents: PropTypes.string,
+// };
