@@ -1,21 +1,31 @@
 import styles from "./burger-ingredients.module.css";
-import { useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients-item";
 import ConfirmOrder from "../confirm-order/confirm-order";
 import { BUN, MAIN, SAUCE } from "../../utils/consts";
+import { TIngredientType } from "../../utils/types";
 
-function BurgerIngredients() {
-  const [current, setCurrent] = useState(BUN);
-  const burgerIngredientsContainer = useRef();
-  const burgerIngredientsItemBun = useRef();
-  const burgerIngredientsItemSauce = useRef();
-  const burgerIngredientsItemMain = useRef();
+const BurgerIngredients: FC = () => {
+  const [current, setCurrent] = useState<TIngredientType>(BUN);
+  const burgerIngredientsContainer = useRef<HTMLDivElement>(null);
+  const burgerIngredientsItemBun = useRef<HTMLElement>(null);
+  const burgerIngredientsItemSauce = useRef<HTMLElement>(null);
+  const burgerIngredientsItemMain = useRef<HTMLElement>(null);
+
   useEffect(() => {
+    if (burgerIngredientsContainer.current === null) return;
     const container = burgerIngredientsContainer.current;
-    if (!container) return;
 
     function scrollBurgerIngredientsContainer() {
+      if (
+        burgerIngredientsItemBun.current === null ||
+        burgerIngredientsItemSauce.current === null ||
+        burgerIngredientsItemMain.current === null
+      ) {
+        return;
+      }
+
       const bordersContainer = container.getBoundingClientRect();
       const bordersItemBun =
         burgerIngredientsItemBun.current.getBoundingClientRect();
@@ -44,6 +54,10 @@ function BurgerIngredients() {
     };
   }, []);
 
+  function handlerTabClick(value: string) {
+    console.log(value);
+  }
+
   return (
     <>
       <div>
@@ -51,13 +65,21 @@ function BurgerIngredients() {
           Соберите бургер
         </h1>
         <div className={`${styles.ingredientsTabs}`}>
-          <Tab value="Булки" active={current === BUN}>
+          <Tab value="Булки" active={current === BUN} onClick={handlerTabClick}>
             Булки
           </Tab>
-          <Tab value="Соусы" active={current === SAUCE}>
+          <Tab
+            value="Соусы"
+            active={current === SAUCE}
+            onClick={handlerTabClick}
+          >
             Соусы
           </Tab>
-          <Tab value="Начинки" active={current === MAIN}>
+          <Tab
+            value="Начинки"
+            active={current === MAIN}
+            onClick={handlerTabClick}
+          >
             Начинки
           </Tab>
         </div>
@@ -77,6 +99,6 @@ function BurgerIngredients() {
       />
     </>
   );
-}
+};
 
 export default BurgerIngredients;
