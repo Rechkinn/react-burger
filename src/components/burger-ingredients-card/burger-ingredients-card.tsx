@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from "./burger-ingredients-card.module.css";
 import {
   Counter,
@@ -6,14 +6,22 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
-import { IngredientType } from "../../utils/types";
+import { IngredientType, TIngredient } from "../../utils/types";
 import { useDrag } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { BUN } from "../../utils/consts";
 import { Link, useLocation } from "react-router";
 import { ADD_INGREDIENT_DETAILS } from "../../services/actions/ingredient-details";
 
-function BurgerIngredientsCard({ ingredient, typeDrag }) {
+type TBurgerIngredientsCardProps = {
+  ingredient: TIngredient;
+  typeDrag: string;
+};
+
+const BurgerIngredientsCard: FC<TBurgerIngredientsCardProps> = ({
+  ingredient,
+  typeDrag,
+}) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [{ isDrag }, dragRef] = useDrag({
@@ -24,9 +32,9 @@ function BurgerIngredientsCard({ ingredient, typeDrag }) {
     }),
   });
   const { bun, burgerConstructor } = useSelector(
-    (store) => store.burgerConstructor
+    (store: any) => store.burgerConstructor
   );
-  const [currentDevice, setCurrentDevice] = useState(
+  const [currentDevice, setCurrentDevice] = useState<string>(
     window.innerWidth > 768 ? "notMobile" : "mobile"
   );
   useEffect(() => {
@@ -34,7 +42,10 @@ function BurgerIngredientsCard({ ingredient, typeDrag }) {
     return () => window.removeEventListener("resize", updateImageCard);
   }, []);
 
-  function getIngredientCount(ingredientId, ingredientType) {
+  function getIngredientCount(
+    ingredientId: string,
+    ingredientType: string
+  ): number {
     let count = 0;
     if (ingredientType !== BUN) {
       for (let i = 0; i < burgerConstructor.length; i++) {
@@ -49,13 +60,13 @@ function BurgerIngredientsCard({ ingredient, typeDrag }) {
     }
     return count;
   }
-  function updateImageCard() {
+  function updateImageCard(): void {
     window.innerWidth > 768
       ? setCurrentDevice("notMobile")
       : setCurrentDevice("mobile");
   }
 
-  function openModalWithIngredientDetails() {
+  function openModalWithIngredientDetails(ingredient: TIngredient): void {
     dispatch({
       type: ADD_INGREDIENT_DETAILS,
       ingredientDetails: ingredient,
@@ -87,7 +98,7 @@ function BurgerIngredientsCard({ ingredient, typeDrag }) {
           <span className="mr-2 text text_type_digits-default">
             {ingredient.price}
           </span>
-          <CurrencyIcon />
+          <CurrencyIcon type="primary" />
         </p>
         <h3 className="mb-5 text text_type_main-small">{ingredient.name}</h3>
         <Button htmlType="button" type="secondary" size="small">
@@ -97,11 +108,6 @@ function BurgerIngredientsCard({ ingredient, typeDrag }) {
       </article>
     </Link>
   );
-}
+};
 
 export default BurgerIngredientsCard;
-
-BurgerIngredientsCard.propTypes = {
-  ingredient: IngredientType.isRequired,
-  typeDrag: PropTypes.string.isRequired,
-};
