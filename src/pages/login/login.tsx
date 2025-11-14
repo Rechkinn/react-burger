@@ -4,17 +4,19 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./login.module.css";
 import { FC, FormEvent, useRef, useState } from "react";
-import { Navigate, useNavigate } from "react-router";
+import { Navigate, useLocation, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { doLogin } from "../../services/actions/login";
-import { collectUserData } from "../../utils/collectUserData";
+import { useForm } from "../../hooks/useForm";
+import { checkInputValue } from "../../utils/checkInputValue";
+import { TLocation } from "../../utils/types";
 
 const Login: FC = () => {
+  const { values, handleChange } = useForm({});
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const formRef = useRef<HTMLFormElement>(null);
-  const [inputEmailValue, setInputEmailValue] = useState<string>("");
-  const [inputPasswordValue, setInputPasswordValue] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const { user } = useSelector((store: any) => store.userData);
   const { loginRequest, loginRequestError } = useSelector(
@@ -24,11 +26,14 @@ const Login: FC = () => {
   function login(e: FormEvent): void {
     e.preventDefault();
     if (formRef.current === null) return;
-    dispatch(doLogin(collectUserData(formRef.current.elements)));
+    dispatch(doLogin(values));
   }
 
+  const location: TLocation = useLocation();
+  const from = location.state?.from || "/";
+
   if (user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={from} replace />;
   }
 
   return (
@@ -38,19 +43,19 @@ const Login: FC = () => {
       <h1 className="text text_type_main-medium">Вход</h1>
       <form action="" ref={formRef} onSubmit={(e) => login(e)}>
         <Input
-          value={inputEmailValue}
+          value={checkInputValue(values.email)}
           name="email"
           placeholder="E-mail"
           type="text"
           extraClass={`${styles.input}`}
           error={loginRequestError}
           errorText={"Проверьте введённые данные"}
-          onChange={(e) => setInputEmailValue(e.target.value)}
+          onChange={handleChange}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         />
         <Input
-          value={inputPasswordValue}
+          value={checkInputValue(values.password)}
           name="password"
           extraClass={`${styles.input}`}
           placeholder="Пароль"
@@ -59,7 +64,7 @@ const Login: FC = () => {
           onIconClick={() => setShowPassword(!showPassword)}
           error={loginRequestError}
           errorText={"Проверьте введённые данные"}
-          onChange={(e) => setInputPasswordValue(e.target.value)}
+          onChange={handleChange}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         />
