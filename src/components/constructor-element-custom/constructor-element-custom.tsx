@@ -4,28 +4,33 @@ import {
   DeleteIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./constructor-element-custom.module.css";
-import PropTypes from "prop-types";
+import { FC } from "react";
 
-function ConstructorElementCustom({ thumbnail, text, price, isLocked }) {
+type TConstructorElementCustomProps = {
+  thumbnail: string;
+  text: string;
+  price: number;
+  isLocked: boolean;
+};
+
+const ConstructorElementCustom: FC<TConstructorElementCustomProps> = ({
+  thumbnail,
+  text,
+  price,
+  isLocked,
+}) => {
   return (
     <div className={styles.constructorElement}>
       <img src={thumbnail} alt={text} />
       <h3 className="text text_type_main-small">{text}</h3>
       <div className={styles.price}>
         <span className="mr-2 text text_type_digits-default">{price}</span>
-        <CurrencyIcon />
+        <CurrencyIcon type="primary" />
       </div>
 
-      {isLocked ? <LockIcon /> : <DeleteIcon />}
+      {isLocked ? <LockIcon type="primary" /> : <DeleteIcon type="primary" />}
     </div>
   );
-}
+};
 
 export default ConstructorElementCustom;
-
-ConstructorElementCustom.propTypes = {
-  isLocked: PropTypes.bool,
-  text: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  thumbnail: PropTypes.string.isRequired,
-};
