@@ -1,11 +1,9 @@
 import { FC, PropsWithChildren } from "react";
 import styles from "./burger-constructor-ingredient-alternate.module.css";
-import PropTypes from "prop-types";
-
-type TPlace = "top" | "bottom";
+import { TUpOrDown } from "../../utils/types";
 
 type TBurgerConstructorIngredientAlternateProps = {
-  place: TPlace;
+  place: TUpOrDown;
 } & PropsWithChildren;
 
 const BurgerConstructorIngredientAlternate: FC<
