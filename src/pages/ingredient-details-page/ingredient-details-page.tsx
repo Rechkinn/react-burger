@@ -6,13 +6,15 @@ import {
   ADD_INGREDIENT_DETAILS,
   REMOVE_INGREDIENT_DETAILS,
 } from "../../services/actions/ingredient-details";
-import { useEffect } from "react";
+import { FC, useEffect } from "react";
 import NotFound from "../not-found/not-found";
 
-export default function IngredientDetailsPage() {
+const IngredientDetailsPage: FC = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
-  const { burgerIngredients } = useSelector((store) => store.burgerIngredients);
+  const { id } = useParams<string>();
+  const { burgerIngredients } = useSelector(
+    (store: any) => store.burgerIngredients
+  );
 
   useEffect(() => {
     return () => {
@@ -20,9 +22,9 @@ export default function IngredientDetailsPage() {
         type: REMOVE_INGREDIENT_DETAILS,
       });
     };
-  }, []);
+  }, [dispatch]);
 
-  function tryGetIngredient() {
+  function tryGetIngredient(): boolean {
     for (let i = 0; i < burgerIngredients.length; i++) {
       if (burgerIngredients[i]._id === id) {
         dispatch({
@@ -43,4 +45,6 @@ export default function IngredientDetailsPage() {
   ) : (
     <NotFound />
   );
-}
+};
+
+export default IngredientDetailsPage;
