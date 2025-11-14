@@ -1,7 +1,6 @@
 import BurgerIngredientsCard from "../burger-ingredients-card/burger-ingredients-card";
 import styles from "./burger-ingredients-item.module.css";
-import { BUN, MAIN, SAUCE } from "../../utils/consts";
-import PropTypes from "prop-types";
+import { EIngredientType } from "../../utils/consts";
 import { useSelector } from "react-redux";
 import { FC, forwardRef, RefAttributes } from "react";
 import { TIngredient, TIngredientType } from "../../utils/types";
@@ -21,10 +20,13 @@ const BurgerIngredientsItem: FC<TBurgerIngredientsItemProps> = forwardRef(
         (ingredient: TIngredient) => ingredient.type === typeItem
       );
     }
-    function translateTypeToRussianLanguage(type: TIngredientType) {
-      if (type === BUN) return "Булки";
-      else if (type === SAUCE) return "Соусы";
-      else if (type === MAIN) return "Котлеты";
+    function translateTypeToRussianLanguage(
+      type: TIngredientType
+    ): string | null {
+      if (type === EIngredientType.BUN) return "Булки";
+      else if (type === EIngredientType.SAUCE) return "Соусы";
+      else if (type === EIngredientType.MAIN) return "Котлеты";
+      return null;
     }
 
     return (
@@ -37,7 +39,11 @@ const BurgerIngredientsItem: FC<TBurgerIngredientsItemProps> = forwardRef(
             return (
               <BurgerIngredientsCard
                 key={ingredient._id}
-                typeDrag={ingredient.type === BUN ? BUN : "ingredient"}
+                typeDrag={
+                  ingredient.type === EIngredientType.BUN
+                    ? EIngredientType.BUN
+                    : "ingredient"
+                }
                 ingredient={ingredient}
               />
             );
@@ -47,4 +53,5 @@ const BurgerIngredientsItem: FC<TBurgerIngredientsItemProps> = forwardRef(
     );
   }
 );
+
 export default BurgerIngredientsItem;
