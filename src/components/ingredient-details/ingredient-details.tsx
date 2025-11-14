@@ -3,21 +3,19 @@ import NotFound from "../../pages/not-found/not-found";
 import { ADD_INGREDIENT_DETAILS } from "../../services/actions/ingredient-details";
 import styles from "./ingredient-details.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, FC, useCallback } from "react";
 
-function IngredientDetails() {
+const IngredientDetails: FC = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
-  const { ingredientDetails } = useSelector((store) => store.ingredientDetails);
-  const { burgerIngredients } = useSelector((store) => store.burgerIngredients);
+  const { id } = useParams<string>();
+  const { ingredientDetails } = useSelector(
+    (store: any) => store.ingredientDetails
+  );
+  const { burgerIngredients } = useSelector(
+    (store: any) => store.burgerIngredients
+  );
 
-  useEffect(() => {
-    if (!ingredientDetails?._id) {
-      tryGetIngredient();
-    }
-  }, []);
-
-  function tryGetIngredient() {
+  const tryGetIngredient: () => void = useCallback((): void => {
     for (let i = 0; i < burgerIngredients.length; i++) {
       if (burgerIngredients[i]._id === id) {
         dispatch({
@@ -27,7 +25,13 @@ function IngredientDetails() {
         return;
       }
     }
-  }
+  }, [dispatch, burgerIngredients, id]);
+
+  useEffect(() => {
+    if (!ingredientDetails?._id) {
+      tryGetIngredient();
+    }
+  }, [ingredientDetails._id, tryGetIngredient]);
 
   return (
     <>
@@ -76,6 +80,6 @@ function IngredientDetails() {
       )}
     </>
   );
-}
+};
 
 export default IngredientDetails;
