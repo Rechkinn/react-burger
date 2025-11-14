@@ -1,17 +1,15 @@
-import { useNavigate } from "react-router";
 import Modal from "../modal/modal";
 import { useDispatch } from "react-redux";
 import { REMOVE_INGREDIENT_DETAILS } from "../../services/actions/ingredient-details";
-import PropTypes from "prop-types";
+import { FC } from "react";
+import { TPropsWithReactNode } from "../../utils/types";
 
-export default function WrapperDetails({ element }) {
+const WrapperDetails: FC<TPropsWithReactNode> = ({ element }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   return (
     <Modal
       functionToClose={() => {
-        // navigate("/");
         window.history.back();
         dispatch({
           type: REMOVE_INGREDIENT_DETAILS,
@@ -22,8 +20,6 @@ export default function WrapperDetails({ element }) {
       {element}
     </Modal>
   );
-}
-
-WrapperDetails.propTypes = {
-  element: PropTypes.node.isRequired,
 };
+
+export default WrapperDetails;
