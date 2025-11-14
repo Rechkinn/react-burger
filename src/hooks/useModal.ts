@@ -1,23 +1,23 @@
 import { useState, useCallback } from "react";
 
+type TFunction<T> = () => T;
+
 type TResult = {
   isModalOpen: boolean;
-  openModal: () => void;
-  closeModal: () => void;
+  openModal: TFunction<void>;
+  closeModal: TFunction<void>;
 };
 
-type TUseModal = () => TResult;
+type TUseModal = TFunction<TResult>;
 
 export const useModal: TUseModal = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  type TFunction = () => void;
-
-  const openModal: TFunction = useCallback(() => {
+  const openModal: TFunction<void> = useCallback(() => {
     setIsModalOpen(true);
   }, []);
 
-  const closeModal: TFunction = useCallback(() => {
+  const closeModal: TFunction<void> = useCallback(() => {
     setIsModalOpen(false);
   }, []);
 
