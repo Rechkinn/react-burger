@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import BurgerConstructorIngredient from "../burger-constructor-ingredient/burger-constructor-ingredient";
 import ConfirmOrder from "../confirm-order/confirm-order";
 import styles from "./burger-constructor.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
-import { BUN } from "../../utils/consts";
+import { EIngredientType } from "../../utils/consts";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrop } from "react-dnd";
 import {
@@ -12,8 +11,32 @@ import {
   SET_BUN,
 } from "../../services/actions/burger-constructor";
 import BurgerConstructorIngredientAlternate from "../burger-constructor-ingredient-alternate/burger-constructor-ingredient-alternate";
+import {
+  TIngredientType,
+  TIngredientWithUniqueId,
+  TUpOrDown,
+} from "../../utils/types";
 
-function BurgerConstructor({ closeBurgerConstructor }) {
+type TBurgerConstructorProps = {
+  closeBurgerConstructor: () => void;
+};
+
+type TState = {
+  widthScreen: number;
+  isDesctop: boolean;
+  heightBlok: number;
+};
+
+type TMaxHeight = { maxHeight: string };
+
+type TIngredientForIndents = {
+  place: TUpOrDown | null;
+  type: TIngredientType;
+};
+
+const BurgerConstructor: FC<TBurgerConstructorProps> = ({
+  closeBurgerConstructor,
+}) => {
   const dispatch = useDispatch();
   const [{ isHoverAllIngredients }, dropTargetAllIngredients] = useDrop({
     accept: "ingredient",
@@ -25,7 +48,7 @@ function BurgerConstructor({ closeBurgerConstructor }) {
     },
   });
   const [{ isHoverBun }, dropTargetBun] = useDrop({
-    accept: BUN,
+    accept: EIngredientType.BUN,
     drop(ingredient) {
       dispatch({
         type: SET_BUN,
@@ -36,21 +59,28 @@ function BurgerConstructor({ closeBurgerConstructor }) {
       isHoverBun: monitor.isOver(),
     }),
   });
-  const [state, setState] = useState({
+  const [state, setState] = useState<TState>({
     widthScreen: window.innerWidth,
     isDesctop: isDesctop(),
     heightBlok: window.innerHeight,
   });
   const { bun, burgerConstructor } = useSelector(
-    (store) => store.burgerConstructor
+    (store: any) => store.burgerConstructor
   );
   useEffect(() => {
+    function updateState(): void {
+      setState({
+        widthScreen: window.innerWidth,
+        isDesctop: isDesctop(),
+        heightBlok: window.innerHeight,
+      });
+    }
     window.addEventListener("resize", updateState);
     return () => window.removeEventListener("resize", updateState);
   }, []);
 
-  function getIndents(ingredient) {
-    let indents = "";
+  function getIndents(ingredient: TIngredientForIndents): string {
+    let indents: string = "";
 
     if (ingredient.type === "bun") {
       indents = "pl-8 ";
@@ -64,17 +94,12 @@ function BurgerConstructor({ closeBurgerConstructor }) {
     }
     return indents;
   }
-  function isDesctop() {
+
+  function isDesctop(): boolean {
     return window.innerWidth > 1280 ? true : false;
   }
-  function updateState() {
-    setState({
-      widthScreen: window.innerWidth,
-      isDesctop: isDesctop(),
-      heightBlok: window.innerHeight,
-    });
-  }
-  function setMaxHeight() {
+
+  function setMaxHeight(): TMaxHeight {
     if (state.widthScreen < 1268) {
       if (state.widthScreen > 768) {
         return { maxHeight: `${state.heightBlok * 0.6}px` };
@@ -90,7 +115,7 @@ function BurgerConstructor({ closeBurgerConstructor }) {
     }
   }
 
-  const stylesContainerAllIngredients = {
+  const stylesContainerAllIngredients: TMaxHeight & { border: string } = {
     ...setMaxHeight(),
     border: isHoverAllIngredients
       ? "2px solid #4c4cff"
@@ -106,7 +131,7 @@ function BurgerConstructor({ closeBurgerConstructor }) {
             className={styles.headerButtonClose}
             onClick={closeBurgerConstructor}
           >
-            <CloseIcon />
+            <CloseIcon type="primary" />
           </button>
         </header>
       )}
@@ -127,7 +152,7 @@ function BurgerConstructor({ closeBurgerConstructor }) {
             }}
             typeBun="top"
             indents={getIndents({
-              type: BUN,
+              type: EIngredientType.BUN,
               place: "top",
             })}
           />
@@ -143,25 +168,31 @@ function BurgerConstructor({ closeBurgerConstructor }) {
         style={stylesContainerAllIngredients}
         className={styles.ingredients}
       >
-        {burgerConstructor.map((item, index, array) => {
-          return (
-            <BurgerConstructorIngredient
-              key={item.uniqueId}
-              uniqueId={item.uniqueId}
-              positionList={index}
-              isDesctop={state.isDesctop}
-              ingredient={item.ingredient}
-              indents={
-                index !== array.length - 1
-                  ? getIndents({
-                      type: item.ingredient.type,
-                      place: null,
-                    })
-                  : ""
-              }
-            />
-          );
-        })}
+        {burgerConstructor.map(
+          (
+            item: TIngredientWithUniqueId,
+            index: number,
+            array: Array<TIngredientWithUniqueId>
+          ) => {
+            return (
+              <BurgerConstructorIngredient
+                key={item.uniqueId}
+                uniqueId={item.uniqueId}
+                positionList={index}
+                isDesctop={state.isDesctop}
+                ingredient={item.ingredient}
+                indents={
+                  index !== array.length - 1
+                    ? getIndents({
+                        type: item.ingredient.type,
+                        place: null,
+                      })
+                    : ""
+                }
+              />
+            );
+          }
+        )}
       </div>
 
       <div className={styles.containerToBun}>
@@ -174,7 +205,7 @@ function BurgerConstructor({ closeBurgerConstructor }) {
             }}
             typeBun="bottom"
             indents={getIndents({
-              type: BUN,
+              type: EIngredientType.BUN,
               place: "bottom",
             })}
           />
@@ -193,10 +224,6 @@ function BurgerConstructor({ closeBurgerConstructor }) {
       />
     </>
   );
-}
+};
 
 export default BurgerConstructor;
-
-BurgerConstructor.propTypes = {
-  closeBurgerConstructor: PropTypes.func.isRequired,
-};
