@@ -3,27 +3,29 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./reset-password.module.css";
-import { useRef, useState } from "react";
+import { FC, FormEvent, useRef, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { doResetPassword } from "../../services/actions/reset-password";
 import { collectUserData } from "../../utils/collectUserData";
+import { TLocation } from "../../utils/types";
 
-export default function ResetPassword() {
+const ResetPassword: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const formRef = useRef();
-  const [showPassword, setShowPassword] = useState(false);
-  const [inputPasswordValue, setInputPasswordValue] = useState("");
-  const [inputTokenValue, setInputTokenValue] = useState("");
-  const { user } = useSelector((store) => store.userData);
+  const location: TLocation = useLocation();
+  const formRef = useRef<HTMLFormElement>(null);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [inputPasswordValue, setInputPasswordValue] = useState<string>("");
+  const [inputTokenValue, setInputTokenValue] = useState<string>("");
+  const { user } = useSelector((store: any) => store.userData);
   const { resetPasswordRequest, resetPasswordRequestError } = useSelector(
-    (store) => store.resetPassword
+    (store: any) => store.resetPassword
   );
 
-  function resetPassword(e) {
+  function resetPassword(e: FormEvent): void {
     e.preventDefault();
+    if (formRef.current === null) return;
     dispatch(doResetPassword(collectUserData(formRef.current.elements)));
     if (!resetPasswordRequest && !resetPasswordRequestError) {
       navigate("/", { replace: true });
@@ -49,6 +51,8 @@ export default function ResetPassword() {
           icon={!showPassword ? "ShowIcon" : "HideIcon"}
           onIconClick={() => setShowPassword(!showPassword)}
           onChange={(e) => setInputPasswordValue(e.target.value)}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
         />
         <Input
           value={inputTokenValue}
@@ -57,6 +61,8 @@ export default function ResetPassword() {
           type="text"
           extraClass={`${styles.input}`}
           onChange={(e) => setInputTokenValue(e.target.value)}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
         />
 
         <Button
@@ -83,4 +89,6 @@ export default function ResetPassword() {
       </p>
     </main>
   );
-}
+};
+
+export default ResetPassword;
