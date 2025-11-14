@@ -1,22 +1,19 @@
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./order-details.module.css";
-import { useEffect } from "react";
+import { FC, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createNewOrder } from "../../services/actions/order-details";
 
-function OrderDetails() {
+const OrderDetails: FC = () => {
   const dispatch = useDispatch();
   const { bun, burgerConstructor } = useSelector(
-    (store) => store.burgerConstructor
+    (store: any) => store.burgerConstructor
   );
   const { orderDetails, orderDetailsRequest, orderDetailsRequestFailed } =
-    useSelector((store) => store.orderDetails);
-  useEffect(() => {
-    dispatch(createNewOrder(getIngredientsIds()));
-  }, []);
+    useSelector((store: any) => store.orderDetails);
 
-  function getIngredientsIds() {
-    const arrayIds = [];
+  const getIngredientsIds: () => string[] = useCallback((): string[] => {
+    const arrayIds: string[] = [];
     for (let i = 0; i < burgerConstructor.length; i++) {
       arrayIds.push(burgerConstructor[i].ingredient._id);
     }
@@ -25,7 +22,11 @@ function OrderDetails() {
       arrayIds.push(bun.ingredient._id);
     }
     return arrayIds;
-  }
+  }, []);
+
+  useEffect(() => {
+    dispatch(createNewOrder(getIngredientsIds()));
+  }, [dispatch, getIngredientsIds]);
 
   return (
     <>
@@ -49,7 +50,7 @@ function OrderDetails() {
           </p>
 
           <div className={`mb-15 ${styles.backgroundCheckMarkIcon}`}>
-            <CheckMarkIcon />
+            <CheckMarkIcon type="primary" />
           </div>
 
           <p className="text mb-2 text_type_main-small">
@@ -62,6 +63,6 @@ function OrderDetails() {
       )}
     </>
   );
-}
+};
 
 export default OrderDetails;
