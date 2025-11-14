@@ -3,11 +3,11 @@ import { FC, useEffect, useRef, useState } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients-item";
 import ConfirmOrder from "../confirm-order/confirm-order";
-import { BUN, MAIN, SAUCE } from "../../utils/consts";
+import { EIngredientType } from "../../utils/consts";
 import { TIngredientType } from "../../utils/types";
 
 const BurgerIngredients: FC = () => {
-  const [current, setCurrent] = useState<TIngredientType>(BUN);
+  const [current, setCurrent] = useState<TIngredientType>(EIngredientType.BUN);
   const burgerIngredientsContainer = useRef<HTMLDivElement>(null);
   const burgerIngredientsItemBun = useRef<HTMLElement>(null);
   const burgerIngredientsItemSauce = useRef<HTMLElement>(null);
@@ -15,7 +15,7 @@ const BurgerIngredients: FC = () => {
 
   useEffect(() => {
     if (burgerIngredientsContainer.current === null) return;
-    const container = burgerIngredientsContainer.current;
+    const container: HTMLDivElement = burgerIngredientsContainer.current;
 
     function scrollBurgerIngredientsContainer() {
       if (
@@ -26,25 +26,30 @@ const BurgerIngredients: FC = () => {
         return;
       }
 
-      const bordersContainer = container.getBoundingClientRect();
-      const bordersItemBun =
+      const bordersContainer: DOMRect = container.getBoundingClientRect();
+      const bordersItemBun: DOMRect =
         burgerIngredientsItemBun.current.getBoundingClientRect();
-      const bordersItemSauce =
+      const bordersItemSauce: DOMRect =
         burgerIngredientsItemSauce.current.getBoundingClientRect();
-      const bordersItemMain =
+      const bordersItemMain: DOMRect =
         burgerIngredientsItemMain.current.getBoundingClientRect();
-      const positionBun = Math.abs(bordersContainer.top - bordersItemBun.top);
-      const positionSauce = Math.abs(
+
+      const positionBun: number = Math.abs(
+        bordersContainer.top - bordersItemBun.top
+      );
+      const positionSauce: number = Math.abs(
         bordersContainer.top - bordersItemSauce.top
       );
-      const positionMain = Math.abs(bordersContainer.top - bordersItemMain.top);
+      const positionMain: number = Math.abs(
+        bordersContainer.top - bordersItemMain.top
+      );
 
       if (positionBun < positionSauce && positionBun < positionMain) {
-        setCurrent(BUN);
+        setCurrent(EIngredientType.BUN);
       } else if (positionSauce < positionBun && positionSauce < positionMain) {
-        setCurrent(SAUCE);
+        setCurrent(EIngredientType.SAUCE);
       } else {
-        setCurrent(MAIN);
+        setCurrent(EIngredientType.MAIN);
       }
     }
 
@@ -54,8 +59,8 @@ const BurgerIngredients: FC = () => {
     };
   }, []);
 
-  function handlerTabClick(value: string) {
-    console.log(value);
+  function handlerTabClick(value: string): void {
+    console.log();
   }
 
   return (
@@ -65,19 +70,23 @@ const BurgerIngredients: FC = () => {
           Соберите бургер
         </h1>
         <div className={`${styles.ingredientsTabs}`}>
-          <Tab value="Булки" active={current === BUN} onClick={handlerTabClick}>
+          <Tab
+            value="Булки"
+            active={current === EIngredientType.BUN}
+            onClick={handlerTabClick}
+          >
             Булки
           </Tab>
           <Tab
             value="Соусы"
-            active={current === SAUCE}
+            active={current === EIngredientType.SAUCE}
             onClick={handlerTabClick}
           >
             Соусы
           </Tab>
           <Tab
             value="Начинки"
-            active={current === MAIN}
+            active={current === EIngredientType.MAIN}
             onClick={handlerTabClick}
           >
             Начинки
@@ -85,9 +94,18 @@ const BurgerIngredients: FC = () => {
         </div>
       </div>
       <div ref={burgerIngredientsContainer} className={styles.ingredientsItems}>
-        <BurgerIngredientsItem ref={burgerIngredientsItemBun} type={BUN} />
-        <BurgerIngredientsItem ref={burgerIngredientsItemSauce} type={SAUCE} />
-        <BurgerIngredientsItem ref={burgerIngredientsItemMain} type={MAIN} />
+        <BurgerIngredientsItem
+          ref={burgerIngredientsItemBun}
+          type={EIngredientType.BUN}
+        />
+        <BurgerIngredientsItem
+          ref={burgerIngredientsItemSauce}
+          type={EIngredientType.SAUCE}
+        />
+        <BurgerIngredientsItem
+          ref={burgerIngredientsItemMain}
+          type={EIngredientType.MAIN}
+        />
       </div>
 
       <ConfirmOrder
