@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import {
   ListIcon,
   BurgerIcon,
@@ -12,17 +12,23 @@ import {
 import styles from "./app-header.module.css";
 import AppHeaderLink from "../app-header-link/app-header-link";
 import { useLocation } from "react-router-dom";
+import { TIconYandex, TLocation } from "../../utils/types";
 
-function AppHeader() {
-  const [state, setState] = useState({
+type TState = {
+  isOpeningMenu: boolean;
+  isOpeningMenuPersonalAccount: boolean;
+};
+
+const AppHeader: FC = () => {
+  const [state, setState] = useState<TState>({
     isOpeningMenu: false,
     isOpeningMenuPersonalAccount: true,
   });
 
-  const location = useLocation();
+  const location: TLocation = useLocation();
 
-  function getTypeIcon(path) {
-    let str;
+  function getTypeIcon(path: string): TIconYandex {
+    let str: string;
     if (location.pathname === path) return "primary";
     str = location.pathname.split("/")[1];
     return path.includes(str) && str !== "" ? "primary" : "secondary";
@@ -66,7 +72,7 @@ function AppHeader() {
                     (elementMenu) => {
                       return (
                         <li key={elementMenu} className="ml-6">
-                          <AppHeaderLink>
+                          <AppHeaderLink to="404">
                             <span className="pl-2 text text_type_main-small">
                               {elementMenu}
                             </span>
@@ -78,9 +84,9 @@ function AppHeader() {
                 </ul>
               )}
               {state.isOpeningMenuPersonalAccount ? (
-                <ArrowUpIcon />
+                <ArrowUpIcon type="primary" />
               ) : (
-                <ArrowDownIcon />
+                <ArrowDownIcon type="primary" />
               )}
             </li>
             <li className={styles.li}>
@@ -118,11 +124,15 @@ function AppHeader() {
             });
           }}
         >
-          {state.isOpeningMenu ? <CloseIcon /> : <MenuIcon />}
+          {state.isOpeningMenu ? (
+            <CloseIcon type="primary" />
+          ) : (
+            <MenuIcon type="primary" />
+          )}
         </button>
       </div>
     </header>
   );
-}
+};
 
 export default AppHeader;
