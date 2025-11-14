@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { FC, useEffect } from "react";
 import AppHeader from "../app-header/app-header";
 import { useDispatch, useSelector } from "react-redux";
 import { getBurgerIngredients } from "../../services/actions/burger-ingredients";
@@ -17,25 +17,26 @@ import NotFound from "../../pages/not-found/not-found";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import WrapperDetails from "../wrapper-details/wrapper-details";
 import IngredientDetailsPage from "../../pages/ingredient-details-page/ingredient-details-page";
+import { TLocation } from "../../utils/types";
 
-function App() {
+const App: FC = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
-  const background = location.state?.background;
+  const location: TLocation = useLocation();
+  const background: TLocation = location.state?.background;
   const { burgerIngredientsRequest, burgerIngredientsRequestFailed } =
-    useSelector((store) => store.burgerIngredients);
+    useSelector((store: any) => store.burgerIngredients);
 
   useEffect(() => {
     dispatch(getBurgerIngredients());
 
-    const tokenCookie = getCookie("token");
+    const tokenCookie: string | null = getCookie("token");
     if (tokenCookie && tokenCookie !== "") {
       dispatch(getUserData());
     } else if (localStorage.getItem("refreshToken")) {
       dispatch(updateTokens());
       dispatch(getUserData());
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
@@ -85,6 +86,6 @@ function App() {
       )}
     </>
   );
-}
+};
 
 export default App;
