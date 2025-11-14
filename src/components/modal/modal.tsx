@@ -2,17 +2,17 @@ import { createPortal } from "react-dom";
 import styles from "./modal.module.css";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { SyntheticEvent, useEffect } from "react";
-import PropTypes from "prop-types";
+import { useEffect } from "react";
 import { FC, PropsWithChildren } from "react";
 
 type TModalProps = {
   functionToClose: () => void;
   title?: string;
-  indents: string;
+  indents?: string;
 } & PropsWithChildren;
 
-const elementForRenderModal = document.getElementById("react-modals");
+const elementForRenderModal: HTMLElement | null =
+  document.getElementById("react-modals");
 
 const Modal: FC<TModalProps> = ({
   functionToClose,
@@ -21,7 +21,7 @@ const Modal: FC<TModalProps> = ({
   indents = "",
 }) => {
   useEffect(() => {
-    function handleEscape(e: KeyboardEvent) {
+    function handleEscape(e: KeyboardEvent): void {
       if (e.key === "Escape") {
         functionToClose();
       }
@@ -29,7 +29,7 @@ const Modal: FC<TModalProps> = ({
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, []);
+  }, [functionToClose]);
 
   if (!elementForRenderModal) return null;
 
@@ -64,10 +64,3 @@ const Modal: FC<TModalProps> = ({
 };
 
 export default Modal;
-
-// Modal.propTypes = {
-//   functionToClose: PropTypes.func.isRequired,
-//   children: PropTypes.node.isRequired,
-//   title: PropTypes.string,
-//   indents: PropTypes.string,
-// };
