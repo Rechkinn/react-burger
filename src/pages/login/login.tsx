@@ -3,26 +3,27 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./login.module.css";
-import { useRef, useState } from "react";
+import { FC, FormEvent, useRef, useState } from "react";
 import { Navigate, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { doLogin } from "../../services/actions/login";
 import { collectUserData } from "../../utils/collectUserData";
 
-export default function Login() {
+const Login: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const formRef = useRef();
-  const [inputEmailValue, setInputEmailValue] = useState("");
-  const [inputPasswordValue, setInputPasswordValue] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const { user } = useSelector((store) => store.userData);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [inputEmailValue, setInputEmailValue] = useState<string>("");
+  const [inputPasswordValue, setInputPasswordValue] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const { user } = useSelector((store: any) => store.userData);
   const { loginRequest, loginRequestError } = useSelector(
-    (store) => store.login
+    (store: any) => store.login
   );
 
-  function login(e) {
+  function login(e: FormEvent): void {
     e.preventDefault();
+    if (formRef.current === null) return;
     dispatch(doLogin(collectUserData(formRef.current.elements)));
   }
 
@@ -45,6 +46,8 @@ export default function Login() {
           error={loginRequestError}
           errorText={"Проверьте введённые данные"}
           onChange={(e) => setInputEmailValue(e.target.value)}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
         />
         <Input
           value={inputPasswordValue}
@@ -57,6 +60,8 @@ export default function Login() {
           error={loginRequestError}
           errorText={"Проверьте введённые данные"}
           onChange={(e) => setInputPasswordValue(e.target.value)}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
         />
         <Button
           htmlType="submit"
@@ -97,4 +102,6 @@ export default function Login() {
       </p>
     </main>
   );
-}
+};
+
+export default Login;
