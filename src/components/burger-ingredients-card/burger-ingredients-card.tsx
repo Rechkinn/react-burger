@@ -5,11 +5,10 @@ import {
   Button,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
-import { IngredientType, TIngredient } from "../../utils/types";
+import { TIngredient, TLocation } from "../../utils/types";
 import { useDrag } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
-import { BUN } from "../../utils/consts";
+import { EIngredientType } from "../../utils/consts";
 import { Link, useLocation } from "react-router";
 import { ADD_INGREDIENT_DETAILS } from "../../services/actions/ingredient-details";
 
@@ -23,7 +22,7 @@ const BurgerIngredientsCard: FC<TBurgerIngredientsCardProps> = ({
   typeDrag,
 }) => {
   const dispatch = useDispatch();
-  const location = useLocation();
+  const location: TLocation = useLocation();
   const [{ isDrag }, dragRef] = useDrag({
     type: typeDrag,
     item: { ingredient },
@@ -46,8 +45,8 @@ const BurgerIngredientsCard: FC<TBurgerIngredientsCardProps> = ({
     ingredientId: string,
     ingredientType: string
   ): number {
-    let count = 0;
-    if (ingredientType !== BUN) {
+    let count: number = 0;
+    if (ingredientType !== EIngredientType.BUN) {
       for (let i = 0; i < burgerConstructor.length; i++) {
         if (burgerConstructor[i].ingredient._id === ingredientId) {
           count++;
