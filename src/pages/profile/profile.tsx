@@ -6,58 +6,63 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDispatch, useSelector } from "react-redux";
 import { doLogout } from "../../services/actions/logout";
-import { useRef, useState } from "react";
+import { FC, FormEvent, ReactNode, useRef, useState } from "react";
 import { updateUserData } from "../../services/actions/user-data";
 import { collectUserData } from "../../utils/collectUserData";
+import { TLocation } from "../../utils/types";
 
-export default function Profile() {
+const Profile: FC = () => {
   const dispatch = useDispatch();
-  const formRef = useRef();
-  const [visibleButtonsForChange, setVisibleButtonsForChange] = useState(false);
-  const { pathname } = useLocation();
+  const formRef = useRef<HTMLFormElement>(null);
+  const [visibleButtonsForChange, setVisibleButtonsForChange] =
+    useState<boolean>(false);
+  const location: TLocation = useLocation();
   const { user, userDataRequest, userDataRequestError } = useSelector(
-    (store) => store.userData
+    (store: any) => store.userData
   );
   const { logoutRequest, logoutRequestError } = useSelector(
-    (store) => store.logout
+    (store: any) => store.logout
   );
-  const [inputNameValue, setInputNameValue] = useState(
+  const [inputNameValue, setInputNameValue] = useState<string>(
     user?.name ? user.name : ""
   );
-  const [inputEmailValue, setInputEmailValue] = useState(
+  const [inputEmailValue, setInputEmailValue] = useState<string>(
     user?.email ? user.email : ""
   );
-  const [inputPasswordValue, setInputPasswordValue] = useState("");
+  const [inputPasswordValue, setInputPasswordValue] = useState<string>("");
 
-  function cancelChangeInput() {
+  function cancelChangeInput(): void {
     setInputNameValue(user.name);
     setInputEmailValue(user.email);
     setInputPasswordValue("");
     setVisibleButtonsForChange(false);
   }
 
-  function handlerSubmitForm(e) {
+  function handlerSubmitForm(e: FormEvent): void {
     e.preventDefault();
-    const changedInputs = [];
-    const inputs = formRef.current.elements;
+    const changedInputs: HTMLInputElement[] = [];
+    if (formRef.current === null) return;
+    const inputs: HTMLFormControlsCollection = formRef.current.elements;
 
     for (let i = 0; i < inputs.length; i++) {
+      const input: HTMLInputElement = inputs[i] as HTMLInputElement;
+
       if (
-        (inputs[i].value !== user[inputs[i].name] &&
-          user[inputs[i].name] !== undefined) ||
-        (inputs[i].name === "password" && inputs[i].value !== "")
+        (input.value !== user[input.name] && user[input.name] !== undefined) ||
+        (input.name === "password" && input.value !== "")
       ) {
-        changedInputs.push(inputs[i]);
+        changedInputs.push(input);
       }
     }
 
     if (changedInputs.length > 0) {
       dispatch(updateUserData(collectUserData(changedInputs)));
+      setVisibleButtonsForChange(false);
     }
   }
 
-  function getContent() {
-    return pathname === "/profile" ? (
+  function getContent(): ReactNode {
+    return location.pathname === "/profile" ? (
       <>
         {userDataRequest && <div>Пытаемся изменить данные...</div>}
         {userDataRequestError && <div>Ошибка изменения данных!</div>}
@@ -72,6 +77,8 @@ export default function Profile() {
               setInputNameValue(e.target.value);
               setVisibleButtonsForChange(true);
             }}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
           />
           <Input
             name="email"
@@ -84,6 +91,8 @@ export default function Profile() {
               setInputEmailValue(e.target.value);
               setVisibleButtonsForChange(true);
             }}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
           />
           <Input
             name="password"
@@ -96,6 +105,8 @@ export default function Profile() {
               setInputPasswordValue(e.target.value);
               setVisibleButtonsForChange(true);
             }}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
           />
           {visibleButtonsForChange && (
             <div className={`mt-6 ${styles.containerButtons}`}>
@@ -116,7 +127,7 @@ export default function Profile() {
     );
   }
 
-  function logout() {
+  function logout(): ReactNode | void {
     dispatch(doLogout());
     if (!logoutRequestError && !logoutRequest) {
       return <Navigate to="/login" replace />;
@@ -173,4 +184,6 @@ export default function Profile() {
       )}
     </>
   );
-}
+};
+
+export default Profile;
