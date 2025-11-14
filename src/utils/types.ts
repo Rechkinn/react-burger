@@ -1,29 +1,22 @@
-import PropTypes from "prop-types";
+import { ReactNode } from "react";
+import { EIngredientType } from "./consts";
 
-export const IngredientType = PropTypes.shape({
-  _id: PropTypes.string,
-  name: PropTypes.string,
-  type: PropTypes.string,
-  proteins: PropTypes.number,
-  fat: PropTypes.number,
-  carbohydrates: PropTypes.number,
-  calories: PropTypes.number,
-  price: PropTypes.number,
-  image: PropTypes.string,
-  image_mobile: PropTypes.string,
-  image_large: PropTypes.string,
-  __v: PropTypes.number,
-});
+export type TIconYandex =
+  | "secondary"
+  | "primary"
+  | "error"
+  | "success"
+  | "disabled";
 
-export const ObjectToOpenSectionBurgerConstructorType = PropTypes.shape({
-  currentSection: PropTypes.string,
-  func: PropTypes.func,
-});
+export type TIngredientType =
+  | EIngredientType.BUN
+  | EIngredientType.SAUCE
+  | EIngredientType.MAIN;
 
 export type TIngredient = {
   _id: string;
   name: string;
-  type: string;
+  type: TIngredientType;
   proteins: number;
   fat: number;
   carbohydrates: number;
@@ -35,4 +28,21 @@ export type TIngredient = {
   __v: number;
 };
 
-export type TIngredientType = "bun" | "sauce" | "main";
+export type TUpOrDown = "top" | "bottom";
+
+export type TIngredientWithUniqueId = {
+  ingredient: TIngredient;
+  uniqueId: string;
+};
+
+export type TPropsWithReactNode = {
+  element: ReactNode;
+};
+
+export type TLocation = {
+  hash: string;
+  key: string;
+  pathname: string;
+  search: string;
+  state: any;
+};
