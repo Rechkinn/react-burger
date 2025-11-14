@@ -4,24 +4,33 @@ import {
   DragIcon,
   ConstructorElement,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
-import { IngredientType } from "../../utils/types";
-import { BUN } from "../../utils/consts";
+import { TIngredient, TUpOrDown } from "../../utils/types";
+import { EIngredientType } from "../../utils/consts";
 import { useDrag, useDrop } from "react-dnd";
 import { useDispatch } from "react-redux";
 import {
   CHANGE_SUBSEQUENCE_BURGER_CONSTRUCTOR,
   REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
 } from "../../services/actions/burger-constructor";
+import { FC } from "react";
 
-function BurgerConstructorIngredient({
+type TBurgerConstructorIngredientProps = {
+  positionList?: number;
+  ingredient: TIngredient;
+  indents: string;
+  isDesctop: boolean;
+  uniqueId?: string;
+  typeBun?: TUpOrDown;
+};
+
+const BurgerConstructorIngredient: FC<TBurgerConstructorIngredientProps> = ({
   uniqueId,
   positionList,
   ingredient,
   indents,
   isDesctop,
-  ...props
-}) {
+  typeBun,
+}) => {
   const dispatch = useDispatch();
   const [{ isDrag }, dragRef] = useDrag({
     type: "constructorElement",
@@ -45,10 +54,10 @@ function BurgerConstructorIngredient({
     }),
   });
 
-  function isBun() {
-    return ingredient.type === BUN;
+  function isBun(): boolean {
+    return ingredient.type === EIngredientType.BUN;
   }
-  function removeBurgerConstructorIngredient(uuid) {
+  function removeBurgerConstructorIngredient(uuid: string): void {
     dispatch({
       type: REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
       uuid: uuid,
@@ -59,26 +68,30 @@ function BurgerConstructorIngredient({
     <>
       {ingredient && (
         <div
-          ref={ingredient.type !== BUN ? dropTarget : null}
+          ref={ingredient.type !== EIngredientType.BUN ? dropTarget : null}
           style={{
             backgroundColor: isHover ? "#4c4cff" : "transparent",
             borderRadius: "500px",
           }}
         >
           <article
-            ref={ingredient.type !== BUN ? dragRef : null}
+            ref={ingredient.type !== EIngredientType.BUN ? dragRef : null}
             style={{ opacity: isDrag ? 0.3 : 1 }}
             className={`${indents} ${styles.ingredient}`}
           >
-            {!isBun() && <DragIcon />}
+            {!isBun() && <DragIcon type="primary" />}
             {isDesctop ? (
               <ConstructorElement
-                type={props?.typeBun}
+                type={typeBun}
                 isLocked={isBun()}
                 text={ingredient.name}
                 price={ingredient.price}
                 thumbnail={ingredient.image_mobile}
-                handleClose={() => removeBurgerConstructorIngredient(uniqueId)}
+                handleClose={
+                  uniqueId
+                    ? () => removeBurgerConstructorIngredient(uniqueId)
+                    : undefined
+                }
               />
             ) : (
               <ConstructorElementCustom
@@ -93,15 +106,6 @@ function BurgerConstructorIngredient({
       )}
     </>
   );
-}
+};
 
 export default BurgerConstructorIngredient;
-
-BurgerConstructorIngredient.propTypes = {
-  positionList: PropTypes.number,
-  ingredient: IngredientType.isRequired,
-  indents: PropTypes.string.isRequired,
-  isDesctop: PropTypes.bool.isRequired,
-  uniqueId: PropTypes.string,
-  typeBun: PropTypes.string,
-};
