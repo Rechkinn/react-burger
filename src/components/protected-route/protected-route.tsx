@@ -1,11 +1,12 @@
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
 import { getCookie } from "../../utils/cookie";
-import PropTypes from "prop-types";
+import { FC } from "react";
+import { TPropsWithReactNode } from "../../utils/types";
 
-export default function ProtectedRoute({ element }) {
+const ProtectedRoute: FC<TPropsWithReactNode> = ({ element }) => {
   const { user, userDataRequestError, userDataRequest } = useSelector(
-    (store) => store.userData
+    (store: any) => store.userData
   );
 
   if (getCookie("token")) {
@@ -21,8 +22,6 @@ export default function ProtectedRoute({ element }) {
       {!user ? <Navigate to="/login" replace /> : element}
     </>
   );
-}
-
-ProtectedRoute.propTypes = {
-  element: PropTypes.node.isRequired,
 };
+
+export default ProtectedRoute;
