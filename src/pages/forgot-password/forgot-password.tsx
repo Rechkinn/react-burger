@@ -3,17 +3,18 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./forgot-password.module.css";
-import { FC, FormEvent, useRef, useState } from "react";
+import { FC, FormEvent, useRef } from "react";
 import { Navigate, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { doForgotPassword } from "../../services/actions/forgot-password";
-import { collectUserData } from "../../utils/collectUserData";
+import { useForm } from "../../hooks/useForm";
+import { checkInputValue } from "../../utils/checkInputValue";
 
 const ForgotPassword: FC = () => {
+  const { values, handleChange } = useForm({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const formRef = useRef<HTMLFormElement>(null);
-  const [inputEmailValue, setInputEmailValue] = useState<string>("");
   const { user } = useSelector((store: any) => store.userData);
   const { forgotPasswordRequest, forgotPasswordRequestError } = useSelector(
     (store: any) => store.forgotPassword
@@ -27,7 +28,7 @@ const ForgotPassword: FC = () => {
       .elements[0] as HTMLInputElement;
 
     if (inputElement.value !== "") {
-      dispatch(doForgotPassword(collectUserData(formRef.current.elements)));
+      dispatch(doForgotPassword(values));
       if (!forgotPasswordRequest && !forgotPasswordRequestError) {
         navigate("/reset-password", {
           replace: true,
@@ -48,12 +49,12 @@ const ForgotPassword: FC = () => {
       <h1 className="text text_type_main-medium">Восстановление пароля</h1>
       <form action="" ref={formRef} onSubmit={(e) => forgotPassword(e)}>
         <Input
-          value={inputEmailValue}
+          value={checkInputValue(values.password)}
           name="email"
           placeholder="Укажите e-mail"
           type="email"
           extraClass={`${styles.input}`}
-          onChange={(e) => setInputEmailValue(e.target.value)}
+          onChange={handleChange}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         />

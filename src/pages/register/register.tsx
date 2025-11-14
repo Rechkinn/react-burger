@@ -5,18 +5,17 @@ import {
 import styles from "./register.module.css";
 import { FC, FormEvent, useRef, useState } from "react";
 import { Navigate, useNavigate } from "react-router";
-import { collectUserData } from "../../utils/collectUserData";
 import { useDispatch, useSelector } from "react-redux";
 import { createNewUser } from "../../services/actions/register";
+import { useForm } from "../../hooks/useForm";
+import { checkInputValue } from "../../utils/checkInputValue";
 
 const Register: FC = () => {
+  const { values, handleChange } = useForm({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [inputNameValue, setInputNameValue] = useState<string>("");
-  const [inputEmailValue, setInputEmailValue] = useState<string>("");
-  const [inputPasswordValue, setInputPasswordValue] = useState<string>("");
   const { user } = useSelector((store: any) => store.userData);
   const { registerRequest, registerRequestError } = useSelector(
     (store: any) => store.register
@@ -25,7 +24,7 @@ const Register: FC = () => {
   function register(e: FormEvent): void {
     e.preventDefault();
     if (formRef.current === null) return;
-    dispatch(createNewUser(collectUserData(formRef.current.elements)));
+    dispatch(createNewUser(values));
   }
 
   if (user) {
@@ -43,31 +42,31 @@ const Register: FC = () => {
       <h1 className="text text_type_main-medium">Регистрация</h1>
       <form action="" ref={formRef} onSubmit={(e) => register(e)}>
         <Input
-          value={inputNameValue}
+          value={checkInputValue(values.name)}
           name="name"
           placeholder="Имя"
           type="text"
           extraClass={`${styles.input}`}
           error={registerRequestError}
           errorText={"Проверьте введённые данные"}
-          onChange={(e) => setInputNameValue(e.target.value)}
+          onChange={handleChange}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         />
         <Input
-          value={inputEmailValue}
+          value={checkInputValue(values.email)}
           name="email"
           placeholder="E-mail"
           type="text"
           extraClass={`${styles.input}`}
           error={registerRequestError}
           errorText={"Проверьте введённые данные"}
-          onChange={(e) => setInputEmailValue(e.target.value)}
+          onChange={handleChange}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         />
         <Input
-          value={inputPasswordValue}
+          value={checkInputValue(values.password)}
           name="password"
           extraClass={`${styles.input}`}
           placeholder="Пароль"
@@ -76,7 +75,7 @@ const Register: FC = () => {
           error={registerRequestError}
           errorText={"Проверьте введённые данные"}
           onIconClick={() => setShowPassword(!showPassword)}
-          onChange={(e) => setInputPasswordValue(e.target.value)}
+          onChange={handleChange}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         />

@@ -7,17 +7,17 @@ import { FC, FormEvent, useRef, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { doResetPassword } from "../../services/actions/reset-password";
-import { collectUserData } from "../../utils/collectUserData";
 import { TLocation } from "../../utils/types";
+import { useForm } from "../../hooks/useForm";
+import { checkInputValue } from "../../utils/checkInputValue";
 
 const ResetPassword: FC = () => {
+  const { values, handleChange } = useForm({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location: TLocation = useLocation();
   const formRef = useRef<HTMLFormElement>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [inputPasswordValue, setInputPasswordValue] = useState<string>("");
-  const [inputTokenValue, setInputTokenValue] = useState<string>("");
   const { user } = useSelector((store: any) => store.userData);
   const { resetPasswordRequest, resetPasswordRequestError } = useSelector(
     (store: any) => store.resetPassword
@@ -26,7 +26,7 @@ const ResetPassword: FC = () => {
   function resetPassword(e: FormEvent): void {
     e.preventDefault();
     if (formRef.current === null) return;
-    dispatch(doResetPassword(collectUserData(formRef.current.elements)));
+    dispatch(doResetPassword(values));
     if (!resetPasswordRequest && !resetPasswordRequestError) {
       navigate("/", { replace: true });
     }
@@ -43,24 +43,24 @@ const ResetPassword: FC = () => {
       <h1 className="text text_type_main-medium">Восстановление пароля</h1>
       <form action="" ref={formRef} onSubmit={(e) => resetPassword(e)}>
         <Input
-          value={inputPasswordValue}
+          value={checkInputValue(values.password)}
           name="password"
           extraClass={`${styles.input}`}
           placeholder="Введите новый пароль"
           type={!showPassword ? "password" : "text"}
           icon={!showPassword ? "ShowIcon" : "HideIcon"}
           onIconClick={() => setShowPassword(!showPassword)}
-          onChange={(e) => setInputPasswordValue(e.target.value)}
+          onChange={handleChange}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         />
         <Input
-          value={inputTokenValue}
+          value={checkInputValue(values.token)}
           name="token"
           placeholder="Введите код из письма"
           type="text"
           extraClass={`${styles.input}`}
-          onChange={(e) => setInputTokenValue(e.target.value)}
+          onChange={handleChange}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
         />
