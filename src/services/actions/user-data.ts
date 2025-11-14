@@ -1,3 +1,4 @@
+import { EMethod } from "../../utils/consts";
 import { getCookie } from "../../utils/cookie";
 import { doRequest } from "../../utils/doRequest";
 
@@ -8,14 +9,14 @@ export const USER_SET_DATA = "USER_SET_DATA";
 export const USER_UPDATE_DATA = "USER_UPDATE_DATA";
 export const USER_REMOVE_DATA = "USER_REMOVE_DATA";
 
-export const getUserData = () => {
-  return function (dispatch) {
+export const getUserData = (): any => {
+  return function (dispatch: any) {
     dispatch({
       type: USER_DATA_REQUEST,
     });
 
     const option = {
-      method: "GET",
+      method: EMethod.GET,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${getCookie("token")}`,
@@ -40,14 +41,14 @@ export const getUserData = () => {
   };
 };
 
-export const updateUserData = (userData) => {
-  return function (dispatch) {
+export const updateUserData = (userData: any): any => {
+  return function (dispatch: any) {
     dispatch({
       type: USER_DATA_REQUEST,
     });
 
     const option = {
-      method: "PATCH",
+      method: EMethod.PATCH,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${getCookie("token")}`,

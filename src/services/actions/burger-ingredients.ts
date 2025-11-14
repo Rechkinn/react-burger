@@ -6,8 +6,8 @@ export const GET_BURGER_INGREDIENTS_REQUEST_SUCCESS =
 export const GET_BURGER_INGREDIENTS_REQUEST_ERROR =
   "GET_BURGER_INGREDIENTS_REQUEST_ERROR";
 
-export function getBurgerIngredients() {
-  return function (dispatch) {
+export function getBurgerIngredients(): any {
+  return function (dispatch: any) {
     dispatch({
       type: GET_BURGER_INGREDIENTS_REQUEST,
     });

@@ -1,3 +1,4 @@
+import { EMethod } from "../../utils/consts";
 import { doRequest } from "../../utils/doRequest";
 
 export const TOKENS_REQUEST = "TOKENS_REQUEST";
@@ -8,14 +9,14 @@ export const REMOVE_REFRESH_TOKEN = "REMOVE_REFRESH_TOKEN";
 export const SET_ACCESS_TOKEN = "SET_ACCESS_TOKEN";
 export const REMOVE_ACCESS_TOKEN = "REMOVE_ACCESS_TOKEN";
 
-export const updateTokens = () => {
-  return function (dispatch) {
+export const updateTokens = (): any => {
+  return function (dispatch: any) {
     dispatch({
       type: TOKENS_REQUEST,
     });
 
     const option = {
-      method: "POST",
+      method: EMethod.POST,
       headers: {
         "Content-Type": "application/json",
       },

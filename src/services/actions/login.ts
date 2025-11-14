@@ -1,26 +1,27 @@
+import { EMethod } from "../../utils/consts";
 import { doRequest } from "../../utils/doRequest";
 import { SET_ACCESS_TOKEN, SET_REFRESH_TOKEN } from "./token";
 import { USER_SET_DATA } from "./user-data";
 
-export const REGISTER_REQUEST = "REGISTER_REQUEST";
-export const REGISTER_REQUEST_SUCCESS = "REGISTER_REQUEST_SUCCESS";
-export const REGISTER_REQUEST_ERROR = "REGISTER_REQUEST_ERROR";
+export const LOGIN_REQUEST = "LOGIN_REQUEST";
+export const LOGIN_REQUEST_ERROR = "LOGIN_REQUEST_ERROR";
+export const LOGIN_REQUEST_SUCCESS = "LOGIN_REQUEST_SUCCESS";
 
-export function createNewUser(userData) {
-  return function (dispatch) {
+export const doLogin = (userData: any): any => {
+  return function (dispatch: any) {
     dispatch({
-      type: REGISTER_REQUEST,
+      type: LOGIN_REQUEST,
     });
 
     const option = {
-      method: "POST",
+      method: EMethod.POST,
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(userData),
     };
 
-    doRequest("/auth/register", option)
+    doRequest("/auth/login", option)
       .then((json) => {
         dispatch({
           type: USER_SET_DATA,
@@ -35,13 +36,13 @@ export function createNewUser(userData) {
           refreshToken: json.refreshToken,
         });
         dispatch({
-          type: REGISTER_REQUEST_SUCCESS,
+          type: LOGIN_REQUEST_SUCCESS,
         });
       })
       .catch(() => {
         dispatch({
-          type: REGISTER_REQUEST_ERROR,
+          type: LOGIN_REQUEST_ERROR,
         });
       });
   };
-}
+};
