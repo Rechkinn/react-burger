@@ -3,27 +3,28 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./register.module.css";
-import { useRef, useState } from "react";
+import { FC, FormEvent, useRef, useState } from "react";
 import { Navigate, useNavigate } from "react-router";
 import { collectUserData } from "../../utils/collectUserData";
 import { useDispatch, useSelector } from "react-redux";
 import { createNewUser } from "../../services/actions/register";
 
-export default function Register() {
+const Register: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const formRef = useRef();
-  const [showPassword, setShowPassword] = useState(false);
-  const [inputNameValue, setInputNameValue] = useState("");
-  const [inputEmailValue, setInputEmailValue] = useState("");
-  const [inputPasswordValue, setInputPasswordValue] = useState("");
-  const { user } = useSelector((store) => store.userData);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [inputNameValue, setInputNameValue] = useState<string>("");
+  const [inputEmailValue, setInputEmailValue] = useState<string>("");
+  const [inputPasswordValue, setInputPasswordValue] = useState<string>("");
+  const { user } = useSelector((store: any) => store.userData);
   const { registerRequest, registerRequestError } = useSelector(
-    (store) => store.register
+    (store: any) => store.register
   );
 
-  function register(e) {
+  function register(e: FormEvent): void {
     e.preventDefault();
+    if (formRef.current === null) return;
     dispatch(createNewUser(collectUserData(formRef.current.elements)));
   }
 
@@ -50,6 +51,8 @@ export default function Register() {
           error={registerRequestError}
           errorText={"Проверьте введённые данные"}
           onChange={(e) => setInputNameValue(e.target.value)}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
         />
         <Input
           value={inputEmailValue}
@@ -60,6 +63,8 @@ export default function Register() {
           error={registerRequestError}
           errorText={"Проверьте введённые данные"}
           onChange={(e) => setInputEmailValue(e.target.value)}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
         />
         <Input
           value={inputPasswordValue}
@@ -72,6 +77,8 @@ export default function Register() {
           errorText={"Проверьте введённые данные"}
           onIconClick={() => setShowPassword(!showPassword)}
           onChange={(e) => setInputPasswordValue(e.target.value)}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
         />
         <Button
           htmlType="submit"
@@ -99,4 +106,6 @@ export default function Register() {
       </p>
     </main>
   );
-}
+};
+
+export default Register;
