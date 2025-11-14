@@ -3,7 +3,6 @@ import {
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { useModal } from "../../hooks/useModal";
@@ -42,8 +41,6 @@ const ConfirmOrder: FC<TConfirmOrderProps> = ({
         sum: number,
         ingredient: { ingredient: TIngredient; uniqueId: string }
       ) => {
-        console.log("ingredient");
-        console.log(ingredient);
         return (sum += ingredient.ingredient.price);
       },
       0
