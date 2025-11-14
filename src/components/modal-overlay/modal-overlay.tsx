@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import styles from "./modal-overlay.module.css";
 import { FC, PropsWithChildren } from "react";
 
@@ -18,8 +17,3 @@ const ModalOverlay: FC<TModalOverlayProps> = ({
 };
 
 export default ModalOverlay;
-
-// ModalOverlay.propTypes = {
-//   functionToClose: PropTypes.func.isRequired,
-//   children: PropTypes.node.isRequired,
-// };
