@@ -5,7 +5,7 @@ import {
 import styles from "./login.module.css";
 import { FC, FormEvent, useRef, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../utils/additionalStorageTyping";
 import { doLogin } from "../../services/actions/login";
 import { useForm } from "../../hooks/useForm";
 import { checkInputValue } from "../../utils/checkInputValue";
@@ -18,9 +18,9 @@ const Login: FC = () => {
   const dispatch = useDispatch();
   const formRef = useRef<HTMLFormElement>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const { user } = useSelector((store: any) => store.userData);
+  const { user } = useSelector((store) => store.userData);
   const { loginRequest, loginRequestError } = useSelector(
-    (store: any) => store.login
+    (store) => store.login
   );
 
   function login(e: FormEvent): void {

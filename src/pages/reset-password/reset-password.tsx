@@ -5,7 +5,7 @@ import {
 import styles from "./reset-password.module.css";
 import { FC, FormEvent, useRef, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../utils/additionalStorageTyping";
 import { doResetPassword } from "../../services/actions/reset-password";
 import { TLocation } from "../../utils/types";
 import { useForm } from "../../hooks/useForm";
@@ -18,9 +18,9 @@ const ResetPassword: FC = () => {
   const location: TLocation = useLocation();
   const formRef = useRef<HTMLFormElement>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const { user } = useSelector((store: any) => store.userData);
+  const { user } = useSelector((store) => store.userData);
   const { resetPasswordRequest, resetPasswordRequestError } = useSelector(
-    (store: any) => store.resetPassword
+    (store) => store.resetPassword
   );
 
   function resetPassword(e: FormEvent): void {

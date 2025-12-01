@@ -5,7 +5,7 @@ import {
 import styles from "./register.module.css";
 import { FC, FormEvent, useRef, useState } from "react";
 import { Navigate, useNavigate } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../utils/additionalStorageTyping";
 import { createNewUser } from "../../services/actions/register";
 import { useForm } from "../../hooks/useForm";
 import { checkInputValue } from "../../utils/checkInputValue";
@@ -16,9 +16,9 @@ const Register: FC = () => {
   const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const { user } = useSelector((store: any) => store.userData);
+  const { user } = useSelector((store) => store.userData);
   const { registerRequest, registerRequestError } = useSelector(
-    (store: any) => store.register
+    (store) => store.register
   );
 
   function register(e: FormEvent): void {

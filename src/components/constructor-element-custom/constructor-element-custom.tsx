@@ -4,7 +4,7 @@ import {
   DeleteIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./constructor-element-custom.module.css";
-import { FC } from "react";
+import React, { FC } from "react";
 
 type TConstructorElementCustomProps = {
   thumbnail: string;
@@ -13,24 +13,21 @@ type TConstructorElementCustomProps = {
   isLocked: boolean;
 };
 
-const ConstructorElementCustom: FC<TConstructorElementCustomProps> = ({
-  thumbnail,
-  text,
-  price,
-  isLocked,
-}) => {
-  return (
-    <div className={styles.constructorElement}>
-      <img src={thumbnail} alt={text} />
-      <h3 className="text text_type_main-small">{text}</h3>
-      <div className={styles.price}>
-        <span className="mr-2 text text_type_digits-default">{price}</span>
-        <CurrencyIcon type="primary" />
-      </div>
+const ConstructorElementCustom: FC<TConstructorElementCustomProps> = React.memo(
+  ({ thumbnail, text, price, isLocked }) => {
+    return (
+      <div className={styles.constructorElement}>
+        <img src={thumbnail} alt={text} />
+        <h3 className="text text_type_main-small">{text}</h3>
+        <div className={styles.price}>
+          <span className="mr-2 text text_type_digits-default">{price}</span>
+          <CurrencyIcon type="primary" />
+        </div>
 
-      {isLocked ? <LockIcon type="primary" /> : <DeleteIcon type="primary" />}
-    </div>
-  );
-};
+        {isLocked ? <LockIcon type="primary" /> : <DeleteIcon type="primary" />}
+      </div>
+    );
+  }
+);
 
 export default ConstructorElementCustom;
