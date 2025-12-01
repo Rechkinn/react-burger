@@ -10,6 +10,7 @@ import { loginReducer } from "./login";
 import { logoutReducer } from "./logout";
 import { forgotPasswordReducer } from "./forgot-password";
 import { resetPasswordReducer } from "./reset-password";
+import { wsReducer } from "./web-socket";
 
 export const rootReducer = combineReducers({
   burgerIngredients: burgerIngredientsReducer,
@@ -23,4 +24,5 @@ export const rootReducer = combineReducers({
   logout: logoutReducer,
   forgotPassword: forgotPasswordReducer,
   resetPassword: resetPasswordReducer,
+  ws: wsReducer,
 });
