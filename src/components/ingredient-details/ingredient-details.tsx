@@ -1,19 +1,18 @@
 import { useParams } from "react-router";
 import NotFound from "../../pages/not-found/not-found";
-import { ADD_INGREDIENT_DETAILS } from "../../services/actions/ingredient-details";
+import {
+  ADD_INGREDIENT_DETAILS,
+  REMOVE_INGREDIENT_DETAILS,
+} from "../../services/actions/ingredient-details";
 import styles from "./ingredient-details.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, FC, useCallback } from "react";
+import React, { useEffect, FC, useCallback } from "react";
+import { useDispatch, useSelector } from "../../utils/additionalStorageTyping";
 
-const IngredientDetails: FC = () => {
+const IngredientDetails: FC = React.memo(() => {
   const dispatch = useDispatch();
   const { id } = useParams<string>();
-  const { ingredientDetails } = useSelector(
-    (store: any) => store.ingredientDetails
-  );
-  const { burgerIngredients } = useSelector(
-    (store: any) => store.burgerIngredients
-  );
+  const { ingredientDetails } = useSelector((store) => store.ingredientDetails);
+  const { burgerIngredients } = useSelector((store) => store.burgerIngredients);
 
   const tryGetIngredient: () => void = useCallback((): void => {
     for (let i = 0; i < burgerIngredients.length; i++) {
@@ -31,7 +30,15 @@ const IngredientDetails: FC = () => {
     if (!ingredientDetails?._id) {
       tryGetIngredient();
     }
-  }, [ingredientDetails._id, tryGetIngredient]);
+  }, [ingredientDetails?._id, tryGetIngredient]);
+
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: REMOVE_INGREDIENT_DETAILS,
+      });
+    };
+  }, [dispatch]);
 
   return (
     <>
@@ -80,6 +87,6 @@ const IngredientDetails: FC = () => {
       )}
     </>
   );
-};
+});
 
 export default IngredientDetails;
