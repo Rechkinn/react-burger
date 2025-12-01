@@ -3,14 +3,16 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import App from "./components/app/app";
-import { rootReducer } from "./services/reducers/index.js";
+import { rootReducer } from "./services/reducers/index";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { BrowserRouter } from "react-router";
+import { socketMiddleware } from "./utils/socketMiddleware";
 
-const store = configureStore({
+export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(socketMiddleware()),
   devTools: process.env.NODE_ENV !== "production", // включено по-умолчанию
 });
 
