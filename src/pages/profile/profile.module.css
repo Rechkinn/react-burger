@@ -1,7 +1,6 @@
 .main {
   margin: auto;
   max-width: 1200px;
-  margin-top: 120px;
   display: flex;
   gap: 60px;
 }
@@ -11,6 +10,7 @@
 }
 
 .containerLinks {
+  margin-top: 120px;
   max-width: 320px;
   height: 100%;
 }
