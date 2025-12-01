@@ -1,14 +1,32 @@
+import { AppDispatch, AppThunk } from "../../utils/additionalStorageTyping";
 import { EMethod } from "../../utils/consts";
 import { doRequest } from "../../utils/doRequest";
 import { SET_ACCESS_TOKEN, SET_REFRESH_TOKEN } from "./token";
 import { USER_SET_DATA } from "./user-data";
 
-export const REGISTER_REQUEST = "REGISTER_REQUEST";
-export const REGISTER_REQUEST_SUCCESS = "REGISTER_REQUEST_SUCCESS";
-export const REGISTER_REQUEST_ERROR = "REGISTER_REQUEST_ERROR";
+export const REGISTER_REQUEST: "REGISTER_REQUEST" = "REGISTER_REQUEST";
+export const REGISTER_REQUEST_SUCCESS: "REGISTER_REQUEST_SUCCESS" =
+  "REGISTER_REQUEST_SUCCESS";
+export const REGISTER_REQUEST_ERROR: "REGISTER_REQUEST_ERROR" =
+  "REGISTER_REQUEST_ERROR";
 
-export function createNewUser(userData: any): any {
-  return function (dispatch: any) {
+export interface IRegisterRequestAction {
+  readonly type: typeof REGISTER_REQUEST;
+}
+export interface IRegisterRequestErrorAction {
+  readonly type: typeof REGISTER_REQUEST_ERROR;
+}
+export interface IRegisterRequestSuccessAction {
+  readonly type: typeof REGISTER_REQUEST_SUCCESS;
+}
+
+export type TRegisterActions =
+  | IRegisterRequestAction
+  | IRegisterRequestErrorAction
+  | IRegisterRequestSuccessAction;
+
+export const createNewUser: AppThunk = (userData) => {
+  return function (dispatch: AppDispatch) {
     dispatch({
       type: REGISTER_REQUEST,
     });
@@ -45,4 +63,4 @@ export function createNewUser(userData: any): any {
         });
       });
   };
-}
+};
