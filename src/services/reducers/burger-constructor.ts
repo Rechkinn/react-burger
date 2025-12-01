@@ -1,17 +1,27 @@
+import { TIngredient, TIngredientWithUniqueId } from "../../utils/types";
 import {
   ADD_INGREDIENT_TO_CONSTRUCTOR,
   REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
   SET_BUN,
   CHANGE_SUBSEQUENCE_BURGER_CONSTRUCTOR,
   CLEAR_CONSTRUCTOR,
+  TBurgerConstructorActions,
 } from "../actions/burger-constructor";
 
-const initialState = {
+type TBurgerConstructorState = {
+  burgerConstructor: TIngredientWithUniqueId[];
+  bun: { ingredient: TIngredient } | null;
+};
+
+const initialState: TBurgerConstructorState = {
   burgerConstructor: [],
   bun: null,
 };
 
-export const burderConstructorReducer = (state = initialState, action) => {
+export const burderConstructorReducer = (
+  state = initialState,
+  action: TBurgerConstructorActions
+): TBurgerConstructorState => {
   switch (action.type) {
     case CLEAR_CONSTRUCTOR:
       return {
@@ -33,11 +43,13 @@ export const burderConstructorReducer = (state = initialState, action) => {
       return {
         ...state,
         burgerConstructor: [
-          ...state.burgerConstructor.filter((ingredient) => {
-            if (ingredient.uniqueId !== action.uuid) {
-              return ingredient.ingredient;
+          ...state.burgerConstructor.filter(
+            (ingredient: TIngredientWithUniqueId) => {
+              if (ingredient.uniqueId !== action.uuid) {
+                return ingredient.ingredient;
+              }
             }
-          }),
+          ),
         ],
       };
     case CHANGE_SUBSEQUENCE_BURGER_CONSTRUCTOR:
