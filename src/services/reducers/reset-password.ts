@@ -2,14 +2,23 @@ import {
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_REQUEST_ERROR,
   RESET_PASSWORD_REQUEST_SUCCESS,
+  TResetPasswordActions,
 } from "../actions/reset-password";
 
-const initialState = {
+type TResetPasswordState = {
+  resetPasswordRequest: boolean;
+  resetPasswordRequestError: boolean;
+};
+
+const initialState: TResetPasswordState = {
   resetPasswordRequest: false,
   resetPasswordRequestError: false,
 };
 
-export const resetPasswordReducer = (state = initialState, action) => {
+export const resetPasswordReducer = (
+  state = initialState,
+  action: TResetPasswordActions
+): TResetPasswordState => {
   switch (action.type) {
     case RESET_PASSWORD_REQUEST:
       return {
