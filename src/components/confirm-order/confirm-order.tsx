@@ -4,12 +4,13 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
-import OrderDetails from "../order-details/order-details";
 import { useModal } from "../../hooks/useModal";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { FC, ReactNode } from "react";
+import React, { FC, ReactNode, useCallback } from "react";
 import { TIngredient } from "../../utils/types";
+import { useDispatch, useSelector } from "../../utils/additionalStorageTyping";
+import OrderDetails from "../order-details/order-details";
+import { createNewOrder } from "../../services/actions/order-details";
 
 type TSize = "small" | "medium" | "large" | undefined;
 
@@ -21,73 +22,90 @@ type TConfirmOrderProps = {
   textButton: string;
 };
 
-const ConfirmOrder: FC<TConfirmOrderProps> = ({
-  section,
-  className,
-  onlyButton,
-  size,
-  textButton,
-}) => {
-  const navigate = useNavigate();
-  const { isModalOpen, openModal, closeModal } = useModal();
-  const { user } = useSelector((store: any) => store.userData);
-  const { bun, burgerConstructor } = useSelector(
-    (store: any) => store.burgerConstructor
-  );
-
-  function calculatePrice(): ReactNode {
-    const priceWithoutBuns = burgerConstructor.reduce(
-      (
-        sum: number,
-        ingredient: { ingredient: TIngredient; uniqueId: string }
-      ) => {
-        return (sum += ingredient.ingredient.price);
-      },
-      0
+const ConfirmOrder: FC<TConfirmOrderProps> = React.memo(
+  ({ section, className, onlyButton, size, textButton }) => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { isModalOpen, openModal, closeModal } = useModal();
+    const { user } = useSelector((store) => store.userData);
+    const { bun, burgerConstructor } = useSelector(
+      (store) => store.burgerConstructor
     );
 
-    return bun?.ingredient
-      ? bun.ingredient.price * 2 + priceWithoutBuns
-      : priceWithoutBuns;
-  }
+    function calculatePrice(): ReactNode {
+      const priceWithoutBuns = burgerConstructor.reduce(
+        (
+          sum: number,
+          ingredient: { ingredient: TIngredient; uniqueId: string }
+        ) => {
+          return (sum += ingredient.ingredient.price);
+        },
+        0
+      );
 
-  return (
-    <>
-      {isModalOpen && (
-        <Modal functionToClose={closeModal} indents={"mt-5 mb-4"}>
-          <OrderDetails />
-        </Modal>
-      )}
+      return bun?.ingredient
+        ? bun.ingredient.price * 2 + priceWithoutBuns
+        : priceWithoutBuns;
+    }
 
-      <div className={`mt-10 ${styles.confirmOrder} ${className}`}>
-        {!onlyButton && (
-          <div className={`mr-10 ${styles.price}`}>
-            <span className={`mr-2 text text_type_digits-medium`}>
-              {calculatePrice()}
-            </span>
-            <CurrencyIcon type="primary" />
-          </div>
+    const getIngredientsIds: () => string[] = useCallback((): string[] => {
+      const arrayIds: string[] = [];
+      if (bun?.ingredient) {
+        arrayIds.push(bun.ingredient._id);
+      }
+      for (let i = 0; i < burgerConstructor.length; i++) {
+        arrayIds.push(burgerConstructor[i].ingredient._id);
+      }
+      if (bun?.ingredient) {
+        arrayIds.push(bun.ingredient._id);
+      }
+
+      return arrayIds;
+    }, [burgerConstructor]);
+
+    function handlerClick() {
+      dispatch(createNewOrder(getIngredientsIds()));
+      openModal();
+    }
+
+    return (
+      <>
+        {isModalOpen && (
+          <Modal functionToClose={closeModal} indents={"mt-5 mb-4"}>
+            <OrderDetails />
+          </Modal>
         )}
-        <Button
-          disabled={burgerConstructor.length > 0 && bun ? false : true}
-          htmlType="button"
-          type="primary"
-          size={size}
-          onClick={
-            user
-              ? section === "BurgerConstructor"
-                ? openModal
-                : undefined
-              : () => {
-                  navigate("/login");
-                }
-          }
-        >
-          {textButton}
-        </Button>
-      </div>
-    </>
-  );
-};
+
+        <div className={`mt-10 ${styles.confirmOrder} ${className}`}>
+          {!onlyButton && (
+            <div className={`mr-10 ${styles.price}`}>
+              <span className={`mr-2 text text_type_digits-medium`}>
+                {calculatePrice()}
+              </span>
+              <CurrencyIcon type="primary" />
+            </div>
+          )}
+          <Button
+            disabled={burgerConstructor.length > 0 && bun ? false : true}
+            htmlType="button"
+            type="primary"
+            size={size}
+            onClick={
+              user
+                ? section === "BurgerConstructor"
+                  ? handlerClick
+                  : undefined
+                : () => {
+                    navigate("/login");
+                  }
+            }
+          >
+            {textButton}
+          </Button>
+        </div>
+      </>
+    );
+  }
+);
 
 export default ConfirmOrder;
