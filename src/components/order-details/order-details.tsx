@@ -1,32 +1,11 @@
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./order-details.module.css";
-import { FC, useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { createNewOrder } from "../../services/actions/order-details";
+import React, { FC } from "react";
+import { useSelector } from "../../utils/additionalStorageTyping";
 
-const OrderDetails: FC = () => {
-  const dispatch = useDispatch();
-  const { bun, burgerConstructor } = useSelector(
-    (store: any) => store.burgerConstructor
-  );
+const OrderDetails: FC = React.memo(() => {
   const { orderDetails, orderDetailsRequest, orderDetailsRequestFailed } =
-    useSelector((store: any) => store.orderDetails);
-
-  const getIngredientsIds: () => string[] = useCallback((): string[] => {
-    const arrayIds: string[] = [];
-    for (let i = 0; i < burgerConstructor.length; i++) {
-      arrayIds.push(burgerConstructor[i].ingredient._id);
-    }
-    if (bun?.ingredient) {
-      arrayIds.push(bun.ingredient._id);
-      arrayIds.push(bun.ingredient._id);
-    }
-    return arrayIds;
-  }, []);
-
-  useEffect(() => {
-    dispatch(createNewOrder(getIngredientsIds()));
-  }, [dispatch, getIngredientsIds]);
+    useSelector((store) => store.orderDetails);
 
   return (
     <>
@@ -63,6 +42,6 @@ const OrderDetails: FC = () => {
       )}
     </>
   );
-};
+});
 
 export default OrderDetails;
