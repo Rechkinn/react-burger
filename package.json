@@ -26,7 +26,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "jest": {
     "transformIgnorePatterns": [
@@ -39,6 +41,7 @@
       "react-app/jest"
     ]
   },
+  "homepage": "/react-burger",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -62,6 +65,7 @@
     "cypress-real-events": "^1.15.0",
     "eslint-plugin-cypress": "^5.2.0",
     "fetch-mock": "^12.6.0",
+    "gh-pages": "^6.3.0",
     "redux-mock-store": "^1.5.5",
     "typescript": "^5.9.3"
   }
