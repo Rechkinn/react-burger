@@ -46,7 +46,7 @@ const Modal: FC<TModalProps> = React.memo(
 
             <button
               type="button"
-              className={styles.button}
+              className={`closeModalIcon ${styles.button}`}
               onClick={() => functionToClose()}
             >
               <CloseIcon type="primary" />

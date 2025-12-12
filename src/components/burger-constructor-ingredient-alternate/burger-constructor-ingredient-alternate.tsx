@@ -9,7 +9,13 @@ type TBurgerConstructorIngredientAlternateProps = {
 const BurgerConstructorIngredientAlternate: FC<TBurgerConstructorIngredientAlternateProps> =
   React.memo(({ place, children }) => {
     return (
-      <div className={place === "top" ? styles.top : styles.bottom}>
+      <div
+        className={
+          place === "top"
+            ? `bun-drop ${styles.top}`
+            : `bun-drop ${styles.bottom}`
+        }
+      >
         <span className="text text_type_main-default">{children}</span>
       </div>
     );

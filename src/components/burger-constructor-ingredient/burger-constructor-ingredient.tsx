@@ -68,6 +68,7 @@ const BurgerConstructorIngredient: FC<TBurgerConstructorIngredientProps> =
                 backgroundColor: isHover ? "#4c4cff" : "transparent",
                 borderRadius: "500px",
               }}
+              className="bun-drop"
             >
               <article
                 ref={ingredient.type !== EIngredientType.BUN ? dragRef : null}

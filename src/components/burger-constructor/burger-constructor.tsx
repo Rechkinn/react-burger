@@ -165,7 +165,7 @@ const BurgerConstructor: FC<TBurgerConstructorProps> = React.memo(
         <div
           ref={dropTargetAllIngredients}
           style={stylesContainerAllIngredients}
-          className={styles.ingredients}
+          className={`drop ${styles.ingredients}`}
         >
           {burgerConstructor.map(
             (
