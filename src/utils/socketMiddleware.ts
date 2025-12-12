@@ -46,10 +46,11 @@ export const socketMiddleware = (): Middleware => {
           const { data } = event;
           const parsedData: any = JSON.parse(data);
           const { success, ...restParsedData } = parsedData;
-
+          console.log("restParsedData");
+          console.log(restParsedData);
           dispatch({
             type: WS_GET_MESSAGE,
-            payload: { ...restParsedData },
+            payload: { ...parsedData },
           });
         };
 
