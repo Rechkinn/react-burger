@@ -1,14 +1,31 @@
+import { AppDispatch, AppThunk } from "../../utils/additionalStorageTyping";
 import { EMethod } from "../../utils/consts";
 import { doRequest } from "../../utils/doRequest";
 import { SET_ACCESS_TOKEN, SET_REFRESH_TOKEN } from "./token";
 import { USER_SET_DATA } from "./user-data";
 
-export const LOGIN_REQUEST = "LOGIN_REQUEST";
-export const LOGIN_REQUEST_ERROR = "LOGIN_REQUEST_ERROR";
-export const LOGIN_REQUEST_SUCCESS = "LOGIN_REQUEST_SUCCESS";
+export const LOGIN_REQUEST: "LOGIN_REQUEST" = "LOGIN_REQUEST";
+export const LOGIN_REQUEST_ERROR: "LOGIN_REQUEST_ERROR" = "LOGIN_REQUEST_ERROR";
+export const LOGIN_REQUEST_SUCCESS: "LOGIN_REQUEST_SUCCESS" =
+  "LOGIN_REQUEST_SUCCESS";
 
-export const doLogin = (userData: any): any => {
-  return function (dispatch: any) {
+export interface ILoginRequestAction {
+  readonly type: typeof LOGIN_REQUEST;
+}
+export interface ILoginRequestErrorAction {
+  readonly type: typeof LOGIN_REQUEST_ERROR;
+}
+export interface ILoginRequestSuccessAction {
+  readonly type: typeof LOGIN_REQUEST_SUCCESS;
+}
+
+export type TLoginActions =
+  | ILoginRequestAction
+  | ILoginRequestErrorAction
+  | ILoginRequestSuccessAction;
+
+export const doLogin: AppThunk = (userData) => {
+  return function (dispatch: AppDispatch) {
     dispatch({
       type: LOGIN_REQUEST,
     });

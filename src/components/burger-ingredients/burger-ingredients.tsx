@@ -1,12 +1,12 @@
 import styles from "./burger-ingredients.module.css";
-import { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients-item";
 import ConfirmOrder from "../confirm-order/confirm-order";
 import { EIngredientType } from "../../utils/consts";
 import { TIngredientType } from "../../utils/types";
 
-const BurgerIngredients: FC = () => {
+const BurgerIngredients: FC = React.memo(() => {
   const [current, setCurrent] = useState<TIngredientType>(EIngredientType.BUN);
   const burgerIngredientsContainer = useRef<HTMLDivElement>(null);
   const burgerIngredientsItemBun = useRef<HTMLElement>(null);
@@ -117,6 +117,6 @@ const BurgerIngredients: FC = () => {
       />
     </>
   );
-};
+});
 
 export default BurgerIngredients;

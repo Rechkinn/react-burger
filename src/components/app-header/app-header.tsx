@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import React, { FC, useState } from "react";
 import {
   ListIcon,
   BurgerIcon,
@@ -19,7 +19,7 @@ type TState = {
   isOpeningMenuPersonalAccount: boolean;
 };
 
-const AppHeader: FC = () => {
+const AppHeader: FC = React.memo(() => {
   const [state, setState] = useState<TState>({
     isOpeningMenu: false,
     isOpeningMenuPersonalAccount: true,
@@ -90,8 +90,8 @@ const AppHeader: FC = () => {
               )}
             </li>
             <li className={styles.li}>
-              <AppHeaderLink to="404">
-                <ListIcon type={getTypeIcon("/404")} />
+              <AppHeaderLink to="/feed">
+                <ListIcon type={getTypeIcon("/feed")} />
                 <span className="pl-2 text text_type_main-small">
                   Лента заказов
                 </span>
@@ -133,6 +133,6 @@ const AppHeader: FC = () => {
       </div>
     </header>
   );
-};
+});
 
 export default AppHeader;

@@ -1,0 +1,39 @@
+.article {
+  margin: auto;
+  width: 640px;
+}
+
+.status {
+  color: red;
+}
+
+.done {
+  color: #00cccc;
+}
+
+.created,
+.pending {
+  color: white;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price {
+  display: flex;
+}
+
+.ingredients {
+  max-height: 312px;
+  overflow-y: auto;
+}
+
+.ingredients > :nth-child(n) {
+  margin-right: 24px;
+}
+.ingredients > :nth-child(n):not(:last-child) {
+  margin-bottom: 16px;
+}

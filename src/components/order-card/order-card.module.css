@@ -1,0 +1,44 @@
+.resetLinkStyles {
+  color: white;
+  text-decoration: none;
+  display: block;
+}
+
+.resetLinkStyles:nth-child(n):not(:last-child) {
+  margin-bottom: 24px;
+}
+
+.card {
+  padding: 24px;
+  background-color: #1c1c21;
+  border-radius: 40px;
+}
+
+.header,
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ingredientsImages {
+  position: relative;
+  display: flex;
+}
+
+.price {
+  display: flex;
+}
+
+.done {
+  color: #00cccc;
+}
+
+.created,
+.pending {
+  color: white;
+}
+
+.cancelled {
+  color: red;
+}

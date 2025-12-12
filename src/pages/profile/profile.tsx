@@ -4,12 +4,12 @@ import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../utils/additionalStorageTyping";
 import { doLogout } from "../../services/actions/logout";
 import { FC, FormEvent, ReactNode, useRef, useState } from "react";
 import { updateUserData } from "../../services/actions/user-data";
 import { collectUserData } from "../../utils/collectUserData";
-import { TLocation } from "../../utils/types";
+import { TLocation, TUserData } from "../../utils/types";
 
 const Profile: FC = () => {
   const dispatch = useDispatch();
@@ -18,10 +18,10 @@ const Profile: FC = () => {
     useState<boolean>(false);
   const location: TLocation = useLocation();
   const { user, userDataRequest, userDataRequestError } = useSelector(
-    (store: any) => store.userData
+    (store) => store.userData
   );
   const { logoutRequest, logoutRequestError } = useSelector(
-    (store: any) => store.logout
+    (store) => store.logout
   );
   const [inputNameValue, setInputNameValue] = useState<string>(
     user?.name ? user.name : ""
@@ -32,8 +32,8 @@ const Profile: FC = () => {
   const [inputPasswordValue, setInputPasswordValue] = useState<string>("");
 
   function cancelChangeInput(): void {
-    setInputNameValue(user.name);
-    setInputEmailValue(user.email);
+    setInputNameValue(user?.name ?? "");
+    setInputEmailValue(user?.email ?? "");
     setInputPasswordValue("");
     setVisibleButtonsForChange(false);
   }
@@ -41,11 +41,24 @@ const Profile: FC = () => {
   function handlerSubmitForm(e: FormEvent): void {
     e.preventDefault();
     const changedInputs: HTMLInputElement[] = [];
-    if (formRef.current === null) return;
+    if (!formRef.current || !user) return;
     const inputs: HTMLFormControlsCollection = formRef.current.elements;
 
     for (let i = 0; i < inputs.length; i++) {
       const input: HTMLInputElement = inputs[i] as HTMLInputElement;
+
+      const isUserDataKey = (key: string): key is keyof TUserData => {
+        return (
+          key in
+          {
+            name: "",
+            email: "",
+            password: "",
+          }
+        );
+      };
+
+      if (!isUserDataKey(input.name)) return;
 
       if (
         (input.value !== user[input.name] && user[input.name] !== undefined) ||
@@ -63,7 +76,7 @@ const Profile: FC = () => {
 
   function getContent(): ReactNode {
     return location.pathname === "/profile" ? (
-      <>
+      <div style={{ marginTop: "120px" }}>
         {userDataRequest && <div>Пытаемся изменить данные...</div>}
         {userDataRequestError && <div>Ошибка изменения данных!</div>}
         <form action="" ref={formRef} onSubmit={(e) => handlerSubmitForm(e)}>
@@ -121,7 +134,7 @@ const Profile: FC = () => {
             </div>
           )}
         </form>
-      </>
+      </div>
     ) : (
       <Outlet />
     );
@@ -179,7 +192,7 @@ const Profile: FC = () => {
               В этом разделе вы можете изменить свои персональные данные
             </p>
           </div>
-          <div>{getContent()}</div>
+          <div style={{ width: "100%" }}>{getContent()}</div>
         </main>
       )}
     </>

@@ -1,4 +1,6 @@
+import { TUserData } from "../../utils/types";
 import {
+  TUserDataActions,
   USER_DATA_REQUEST,
   USER_DATA_REQUEST_ERROR,
   USER_DATA_REQUEST_SUCCESS,
@@ -7,13 +9,22 @@ import {
   USER_UPDATE_DATA,
 } from "../actions/user-data";
 
-const initialState = {
+type TUserDataState = {
+  user: TUserData | null;
+  userDataRequest: boolean;
+  userDataRequestError: boolean;
+};
+
+const initialState: TUserDataState = {
   user: null,
   userDataRequest: false,
   userDataRequestError: false,
 };
 
-export const userDataReducer = (state = initialState, action) => {
+export const userDataReducer = (
+  state = initialState,
+  action: TUserDataActions
+): TUserDataState => {
   switch (action.type) {
     case USER_SET_DATA:
       return {

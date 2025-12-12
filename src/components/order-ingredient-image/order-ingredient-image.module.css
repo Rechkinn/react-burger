@@ -1,0 +1,28 @@
+.ingredientBackground {
+  position: relative;
+  /* transform: translate(10px); */
+  padding: 2px;
+  display: flex;
+  background: #801ab2;
+  background: linear-gradient(45deg, #801ab2, #4d4dff);
+  border-radius: 50%;
+  width: 67px;
+}
+
+.ingredientImage {
+  object-fit: cover;
+  background-color: black;
+  width: 67px;
+  height: 67px;
+  border-radius: 50%;
+}
+
+.remainder {
+  composes: ingredientImage;
+  background-color: #1c1c2199;
+  position: absolute;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,5 +1,5 @@
-// export const BASE_URL = "https://norma.nomoreparties.space/api";
 export const BASE_URL: string = "https://norma.education-services.ru/api";
+export const WSS_URL: string = "wss://norma.education-services.ru/orders";
 
 export enum EIngredientType {
   BUN = "bun",

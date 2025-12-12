@@ -7,14 +7,23 @@ import {
   TOKENS_REQUEST,
   TOKENS_REQUEST_ERROR,
   TOKENS_REQUEST_SUCCESS,
+  TTokenActions,
 } from "../actions/token";
 
-const initialState = {
+type TTokenState = {
+  refreshTokenRequest: boolean;
+  refreshTokenRequestError: boolean;
+};
+
+const initialState: TTokenState = {
   refreshTokenRequest: false,
   refreshTokenRequestError: false,
 };
 
-export const tokenReducer = (state = initialState, action) => {
+export const tokenReducer = (
+  state = initialState,
+  action: TTokenActions
+): TTokenState => {
   switch (action.type) {
     case SET_ACCESS_TOKEN:
       setCookie("token", action.accessToken, 1200);

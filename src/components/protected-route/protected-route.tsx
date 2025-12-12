@@ -1,10 +1,10 @@
-import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router";
 import { getCookie } from "../../utils/cookie";
-import { FC } from "react";
+import React, { FC } from "react";
 import { TLocation, TPropsWithReactNode } from "../../utils/types";
+import { useSelector } from "../../utils/additionalStorageTyping";
 
-const ProtectedRoute: FC<TPropsWithReactNode> = ({ element }) => {
+const ProtectedRoute: FC<TPropsWithReactNode> = React.memo(({ element }) => {
   const { user, userDataRequestError, userDataRequest } = useSelector(
     (store: any) => store.userData
   );
@@ -24,6 +24,6 @@ const ProtectedRoute: FC<TPropsWithReactNode> = ({ element }) => {
       {!user ? <Navigate to="/login" state={{ from: location }} /> : element}
     </>
   );
-};
+});
 
 export default ProtectedRoute;

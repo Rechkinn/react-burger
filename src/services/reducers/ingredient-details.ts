@@ -1,17 +1,25 @@
+import { TIngredient } from "../../utils/types";
 import {
   ADD_INGREDIENT_DETAILS,
   REMOVE_INGREDIENT_DETAILS,
+  TIngredientDetailsActions,
 } from "../actions/ingredient-details";
 
-const initialState = {
-  ingredientDetails: {},
+type TIngredientDetailsState = {
+  ingredientDetails: TIngredient | null;
 };
 
-export const ingredientDetailsReducer = (state = initialState, action) => {
+const initialState: TIngredientDetailsState = {
+  ingredientDetails: null,
+};
+
+export const ingredientDetailsReducer = (
+  state = initialState,
+  action: TIngredientDetailsActions
+): TIngredientDetailsState => {
   switch (action.type) {
     case ADD_INGREDIENT_DETAILS:
       localStorage.setItem("ingredientDetails", action.ingredientDetails._id);
-      // localStorage.setItem("ingredientDetails", "fwef");
       return {
         ...state,
         ingredientDetails: action.ingredientDetails,
@@ -20,7 +28,7 @@ export const ingredientDetailsReducer = (state = initialState, action) => {
       localStorage.removeItem("ingredientDetails");
       return {
         ...state,
-        ingredientDetails: {},
+        ingredientDetails: null,
       };
     default:
       return state;

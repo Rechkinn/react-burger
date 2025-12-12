@@ -1,25 +1,26 @@
 import Modal from "../modal/modal";
-import { useDispatch } from "react-redux";
-import { REMOVE_INGREDIENT_DETAILS } from "../../services/actions/ingredient-details";
-import { FC } from "react";
+import React, { FC } from "react";
 import { TPropsWithReactNode } from "../../utils/types";
 
-const WrapperDetails: FC<TPropsWithReactNode> = ({ element }) => {
-  const dispatch = useDispatch();
+type TWrapperDetailsProps = {
+  title?: string;
+  additionalFunction?: () => void;
+} & TPropsWithReactNode;
 
-  return (
-    <Modal
-      functionToClose={() => {
-        window.history.back();
-        dispatch({
-          type: REMOVE_INGREDIENT_DETAILS,
-        });
-      }}
-      title={"Детали ингредиента"}
-    >
-      {element}
-    </Modal>
-  );
-};
+const WrapperDetails: FC<TWrapperDetailsProps> = React.memo(
+  ({ element, title, additionalFunction }) => {
+    return (
+      <Modal
+        functionToClose={() => {
+          window.history.back();
+          if (additionalFunction) additionalFunction();
+        }}
+        title={title}
+      >
+        {element}
+      </Modal>
+    );
+  }
+);
 
 export default WrapperDetails;

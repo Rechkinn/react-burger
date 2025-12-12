@@ -1,9 +1,9 @@
 import BurgerIngredientsCard from "../burger-ingredients-card/burger-ingredients-card";
 import styles from "./burger-ingredients-item.module.css";
 import { EIngredientType } from "../../utils/consts";
-import { useSelector } from "react-redux";
 import { FC, forwardRef, RefAttributes } from "react";
 import { TIngredient, TIngredientType } from "../../utils/types";
+import { useSelector } from "../../utils/additionalStorageTyping";
 
 type TBurgerIngredientsItemProps = {
   type: TIngredientType;
@@ -12,7 +12,7 @@ type TBurgerIngredientsItemProps = {
 const BurgerIngredientsItem: FC<TBurgerIngredientsItemProps> = forwardRef(
   ({ type }, ref) => {
     const { burgerIngredients } = useSelector(
-      (store: any) => store.burgerIngredients
+      (store) => store.burgerIngredients
     );
 
     function getIngredientsFromType(typeItem: TIngredientType): TIngredient[] {

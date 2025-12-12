@@ -46,3 +46,27 @@ export type TLocation = {
   search: string;
   state: any;
 };
+
+export type TOrderDetails = {
+  name: string;
+  order: {
+    number: number;
+  };
+  success: boolean;
+};
+
+export type TUserData = {
+  email: string;
+  name: string;
+  password: string;
+};
+
+export type TOrder = {
+  ingredients: string[];
+  _id: string;
+  status: string;
+  number: number;
+  createdAt: string;
+  updatedAt: string;
+  name: string;
+};

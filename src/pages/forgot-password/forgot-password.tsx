@@ -5,7 +5,7 @@ import {
 import styles from "./forgot-password.module.css";
 import { FC, FormEvent, useRef } from "react";
 import { Navigate, useNavigate } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../utils/additionalStorageTyping";
 import { doForgotPassword } from "../../services/actions/forgot-password";
 import { useForm } from "../../hooks/useForm";
 import { checkInputValue } from "../../utils/checkInputValue";
@@ -15,9 +15,9 @@ const ForgotPassword: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const formRef = useRef<HTMLFormElement>(null);
-  const { user } = useSelector((store: any) => store.userData);
+  const { user } = useSelector((store) => store.userData);
   const { forgotPasswordRequest, forgotPasswordRequestError } = useSelector(
-    (store: any) => store.forgotPassword
+    (store) => store.forgotPassword
   );
 
   function forgotPassword(e: FormEvent): void {

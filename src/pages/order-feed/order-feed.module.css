@@ -1,0 +1,47 @@
+.main {
+  margin: auto;
+  margin-top: 40px;
+  max-width: 1240px;
+}
+
+.title {
+  margin-bottom: 20px;
+}
+
+.contentWrapper {
+  display: flex;
+  gap: 52px;
+}
+
+.orders {
+  max-width: 608px;
+  max-height: 800px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.numbers {
+  max-width: 580px;
+  width: 100%;
+}
+
+.statuses {
+  display: flex;
+  column-gap: 36px;
+}
+
+.numbersOrders {
+  width: 272px;
+  max-height: 333px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  row-gap: 8px;
+  column-gap: 24px;
+}
+
+.orderCompleted {
+  color: #00cccc;
+}
