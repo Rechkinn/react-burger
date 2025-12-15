@@ -21,10 +21,13 @@ const OrderDetails: FC = React.memo(() => {
 
       {!orderDetailsRequest && !orderDetailsRequestFailed && (
         <div className={`pb-20 ${styles.orderDetails}`}>
-          <h1 className={`text text_type_digits-large mb-8 ${styles.id}`}>
+          <h1
+            data-cy="orderNumber"
+            className={`text text_type_digits-large mb-8 ${styles.id}`}
+          >
             {orderDetails?.order?.number}
           </h1>
-          <p className="text text_type_main-medium mb-15">
+          <p data-cy="textOrderId" className="text text_type_main-medium mb-15">
             идентификатор заказа
           </p>
 

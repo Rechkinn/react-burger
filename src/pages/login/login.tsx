@@ -53,6 +53,7 @@ const Login: FC = () => {
           onChange={handleChange}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
+          data-cy="email"
         />
         <Input
           value={checkInputValue(values.password)}
@@ -67,12 +68,14 @@ const Login: FC = () => {
           onChange={handleChange}
           onPointerEnterCapture={undefined}
           onPointerLeaveCapture={undefined}
+          data-cy="password"
         />
         <Button
           htmlType="submit"
           type="primary"
           size="medium"
           extraClass="mt-6"
+          data-cy="submitLogin"
         >
           Войти
         </Button>

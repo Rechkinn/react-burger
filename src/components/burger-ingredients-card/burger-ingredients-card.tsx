@@ -88,6 +88,7 @@ const BurgerIngredientsCard: FC<TBurgerIngredientsCardProps> = React.memo(
                 : ingredient.image
             }
             alt={ingredient.name}
+            data-cy={ingredient.name}
             ref={dragRef}
             className={`mb-1 ${styles.image}`}
           />

@@ -10,11 +10,8 @@ const BurgerConstructorIngredientAlternate: FC<TBurgerConstructorIngredientAlter
   React.memo(({ place, children }) => {
     return (
       <div
-        className={
-          place === "top"
-            ? `bun-drop ${styles.top}`
-            : `bun-drop ${styles.bottom}`
-        }
+        data-cy="bunDrop"
+        className={place === "top" ? `${styles.top}` : `${styles.bottom}`}
       >
         <span className="text text_type_main-default">{children}</span>
       </div>
