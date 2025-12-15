@@ -21,7 +21,7 @@ type TOrderDetailsState = {
   getOrderByIdRequestError: boolean;
 };
 
-const initialState: TOrderDetailsState = {
+export const initialState: TOrderDetailsState = {
   orderDetails: null,
   orderDetailsRequest: false,
   orderDetailsRequestFailed: false,

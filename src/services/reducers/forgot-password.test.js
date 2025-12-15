@@ -3,45 +3,36 @@ import {
   FORGOT_PASSWORD_REQUEST_ERROR,
   FORGOT_PASSWORD_REQUEST_SUCCESS,
 } from "../actions/forgot-password";
-import { forgotPasswordReducer } from "./forgot-password";
+import { forgotPasswordReducer, initialState } from "./forgot-password";
 
 describe("forgotPasswordReducer tests", () => {
   it("should return the initial state", () => {
-    expect(forgotPasswordReducer(undefined, {})).toEqual({
-      forgotPasswordRequest: false,
-      forgotPasswordRequestError: false,
-    });
+    expect(forgotPasswordReducer(undefined, {})).toEqual(initialState);
   });
 
   it("should handle FORGOT_PASSWORD_REQUEST", () => {
     expect(
-      forgotPasswordReducer(
-        {
-          forgotPasswordRequest: false,
-          forgotPasswordRequestError: false,
-        },
-        {
-          type: FORGOT_PASSWORD_REQUEST,
-        }
-      )
+      forgotPasswordReducer(initialState, {
+        type: FORGOT_PASSWORD_REQUEST,
+      })
     ).toEqual({
+      ...initialState,
       forgotPasswordRequest: true,
-      forgotPasswordRequestError: false,
     });
   });
   it("should handle FORGOT_PASSWORD_REQUEST_ERROR", () => {
     expect(
       forgotPasswordReducer(
         {
+          ...initialState,
           forgotPasswordRequest: true,
-          forgotPasswordRequestError: false,
         },
         {
           type: FORGOT_PASSWORD_REQUEST_ERROR,
         }
       )
     ).toEqual({
-      forgotPasswordRequest: false,
+      ...initialState,
       forgotPasswordRequestError: true,
     });
   });
@@ -49,16 +40,13 @@ describe("forgotPasswordReducer tests", () => {
     expect(
       forgotPasswordReducer(
         {
+          ...initialState,
           forgotPasswordRequest: true,
-          forgotPasswordRequestError: false,
         },
         {
           type: FORGOT_PASSWORD_REQUEST_SUCCESS,
         }
       )
-    ).toEqual({
-      forgotPasswordRequest: false,
-      forgotPasswordRequestError: false,
-    });
+    ).toEqual(initialState);
   });
 });

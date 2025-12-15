@@ -15,7 +15,7 @@ type TUserDataState = {
   userDataRequestError: boolean;
 };
 
-const initialState: TUserDataState = {
+export const initialState: TUserDataState = {
   user: null,
   userDataRequest: false,
   userDataRequestError: false,

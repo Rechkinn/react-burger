@@ -1,4 +1,4 @@
-import { burderConstructorReducer } from "./burger-constructor";
+import { burderConstructorReducer, initialState } from "./burger-constructor";
 import {
   ADD_INGREDIENT_TO_CONSTRUCTOR,
   REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
@@ -7,148 +7,100 @@ import {
   CLEAR_CONSTRUCTOR,
 } from "../actions/burger-constructor";
 
+const burderConstructorIngredient = {
+  ingredient: {
+    _id: "1",
+    name: "Котлета",
+    type: "main",
+    proteins: 122,
+    fat: 71,
+    carbohydrates: 55,
+    calories: 90,
+    price: 2500,
+    image: "url",
+    image_mobile: "url",
+    image_large: "url",
+    __v: 1,
+  },
+  uniqueId: "123-uuid",
+};
+const burderConstructorIngredient2 = {
+  ingredient: {
+    _id: "2",
+    name: "Кольца луковые",
+    type: "main",
+    proteins: 12,
+    fat: 44,
+    carbohydrates: 22,
+    calories: 11,
+    price: 500,
+    image: "url",
+    image_mobile: "url",
+    image_large: "url",
+    __v: 2,
+  },
+  uniqueId: "456-uu-324-id",
+};
+const bun = {
+  ingredient: {
+    _id: "1",
+    name: "Булка",
+    type: "bun",
+    proteins: 2,
+    fat: 32,
+    carbohydrates: 44,
+    calories: 21,
+    price: 1500,
+    image: "url",
+    image_mobile: "url",
+    image_large: "url",
+    __v: 1,
+  },
+};
+
+const actionAdd = {
+  type: ADD_INGREDIENT_TO_CONSTRUCTOR,
+  payload: burderConstructorIngredient,
+};
+const actionRemove = {
+  type: REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
+  uuid: "123-uuid",
+};
+
+const actionSetBun = {
+  type: SET_BUN,
+  bun: bun,
+};
+
+const burgerConstructorWithTwoIngredients = [
+  burderConstructorIngredient2,
+  burderConstructorIngredient,
+];
+const burgerConstructorWithFirstIngredient = [burderConstructorIngredient];
+const burgerConstructorWithSecondIngredient = [burderConstructorIngredient2];
+
 describe("burderConstructorReducer tests", () => {
   it("should return the initial state", () => {
-    expect(burderConstructorReducer(undefined, {})).toEqual({
-      burgerConstructor: [],
-      bun: null,
-    });
+    expect(burderConstructorReducer(undefined, {})).toEqual(initialState);
   });
 
   it("should handle ADD_INGREDIENT_TO_CONSTRUCTOR", () => {
-    expect(
-      burderConstructorReducer(
-        {
-          burgerConstructor: [],
-          bun: null,
-        },
-        {
-          type: ADD_INGREDIENT_TO_CONSTRUCTOR,
-          payload: {
-            ingredient: {
-              _id: "1",
-              name: "Котлета",
-              type: "main",
-              proteins: 122,
-              fat: 71,
-              carbohydrates: 55,
-              calories: 90,
-              price: 2500,
-              image: "url",
-              image_mobile: "url",
-              image_large: "url",
-              __v: 1,
-            },
-            uniqueId: "123-uuid",
-          },
-        }
-      )
-    ).toEqual({
-      burgerConstructor: [
-        {
-          ingredient: {
-            _id: "1",
-            name: "Котлета",
-            type: "main",
-            proteins: 122,
-            fat: 71,
-            carbohydrates: 55,
-            calories: 90,
-            price: 2500,
-            image: "url",
-            image_mobile: "url",
-            image_large: "url",
-            __v: 1,
-          },
-          uniqueId: "123-uuid",
-        },
-      ],
-      bun: null,
+    expect(burderConstructorReducer(initialState, actionAdd)).toEqual({
+      ...initialState,
+      burgerConstructor: burgerConstructorWithFirstIngredient,
     });
 
     expect(
       burderConstructorReducer(
         {
-          burgerConstructor: [
-            {
-              ingredient: {
-                _id: "2",
-                name: "Кольца луковые",
-                type: "main",
-                proteins: 12,
-                fat: 44,
-                carbohydrates: 22,
-                calories: 11,
-                price: 500,
-                image: "url",
-                image_mobile: "url",
-                image_large: "url",
-                __v: 2,
-              },
-              uniqueId: "456-uu-324-id",
-            },
-          ],
-          bun: null,
+          ...initialState,
+          burgerConstructor: burgerConstructorWithSecondIngredient,
         },
-        {
-          type: ADD_INGREDIENT_TO_CONSTRUCTOR,
-          payload: {
-            ingredient: {
-              _id: "1",
-              name: "Котлета",
-              type: "main",
-              proteins: 122,
-              fat: 71,
-              carbohydrates: 55,
-              calories: 90,
-              price: 2500,
-              image: "url",
-              image_mobile: "url",
-              image_large: "url",
-              __v: 1,
-            },
-            uniqueId: "123-uuid",
-          },
-        }
+        actionAdd
       )
     ).toEqual({
-      burgerConstructor: [
-        {
-          ingredient: {
-            _id: "2",
-            name: "Кольца луковые",
-            type: "main",
-            proteins: 12,
-            fat: 44,
-            carbohydrates: 22,
-            calories: 11,
-            price: 500,
-            image: "url",
-            image_mobile: "url",
-            image_large: "url",
-            __v: 2,
-          },
-          uniqueId: "456-uu-324-id",
-        },
-        {
-          ingredient: {
-            _id: "1",
-            name: "Котлета",
-            type: "main",
-            proteins: 122,
-            fat: 71,
-            carbohydrates: 55,
-            calories: 90,
-            price: 2500,
-            image: "url",
-            image_mobile: "url",
-            image_large: "url",
-            __v: 1,
-          },
-          uniqueId: "123-uuid",
-        },
-      ],
-      bun: null,
+      ...initialState,
+      burgerConstructor: burgerConstructorWithTwoIngredients,
     });
   });
 
@@ -156,119 +108,40 @@ describe("burderConstructorReducer tests", () => {
     expect(
       burderConstructorReducer(
         {
-          burgerConstructor: [
-            {
-              ingredient: {
-                _id: "1",
-                name: "Котлета",
-                type: "main",
-                proteins: 122,
-                fat: 71,
-                carbohydrates: 55,
-                calories: 90,
-                price: 2500,
-                image: "url",
-                image_mobile: "url",
-                image_large: "url",
-                __v: 1,
-              },
-              uniqueId: "123-uuid",
-            },
-          ],
-          bun: null,
+          ...initialState,
+          burgerConstructor: burgerConstructorWithFirstIngredient,
         },
-        {
-          type: REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
-          uuid: "123-uuid",
-        }
+        actionRemove
       )
-    ).toEqual({
-      burgerConstructor: [],
-      bun: null,
-    });
+    ).toEqual(initialState);
 
     expect(
       burderConstructorReducer(
         {
-          burgerConstructor: [
-            {
-              ingredient: {
-                _id: "2",
-                name: "Кольца луковые",
-                type: "main",
-                proteins: 12,
-                fat: 44,
-                carbohydrates: 22,
-                calories: 11,
-                price: 500,
-                image: "url",
-                image_mobile: "url",
-                image_large: "url",
-                __v: 2,
-              },
-              uniqueId: "456-uu-324-id",
-            },
-            {
-              ingredient: {
-                _id: "1",
-                name: "Котлета",
-                type: "main",
-                proteins: 122,
-                fat: 71,
-                carbohydrates: 55,
-                calories: 90,
-                price: 2500,
-                image: "url",
-                image_mobile: "url",
-                image_large: "url",
-                __v: 1,
-              },
-              uniqueId: "123-uuid",
-            },
-          ],
-          bun: null,
+          ...initialState,
+          burgerConstructor: burgerConstructorWithTwoIngredients,
         },
-        {
-          type: REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
-          uuid: "123-uuid",
-        }
+        actionRemove
       )
     ).toEqual({
-      burgerConstructor: [
-        {
-          ingredient: {
-            _id: "2",
-            name: "Кольца луковые",
-            type: "main",
-            proteins: 12,
-            fat: 44,
-            carbohydrates: 22,
-            calories: 11,
-            price: 500,
-            image: "url",
-            image_mobile: "url",
-            image_large: "url",
-            __v: 2,
-          },
-          uniqueId: "456-uu-324-id",
-        },
-      ],
-      bun: null,
+      ...initialState,
+      burgerConstructor: burgerConstructorWithSecondIngredient,
     });
   });
 
   it("should handle SET_BUN", () => {
+    expect(burderConstructorReducer(initialState, actionSetBun)).toEqual({
+      ...initialState,
+      bun: bun,
+    });
+
     expect(
       burderConstructorReducer(
         {
-          burgerConstructor: [],
-          bun: null,
-        },
-        {
-          type: SET_BUN,
+          ...initialState,
           bun: {
             ingredient: {
-              _id: "1",
+              _id: "2",
               name: "Булка",
               type: "bun",
               proteins: 2,
@@ -276,48 +149,6 @@ describe("burderConstructorReducer tests", () => {
               carbohydrates: 44,
               calories: 21,
               price: 1500,
-              image: "url",
-              image_mobile: "url",
-              image_large: "url",
-              __v: 1,
-            },
-          },
-        }
-      )
-    ).toEqual({
-      burgerConstructor: [],
-      bun: {
-        ingredient: {
-          _id: "1",
-          name: "Булка",
-          type: "bun",
-          proteins: 2,
-          fat: 32,
-          carbohydrates: 44,
-          calories: 21,
-          price: 1500,
-          image: "url",
-          image_mobile: "url",
-          image_large: "url",
-          __v: 1,
-        },
-      },
-    });
-
-    expect(
-      burderConstructorReducer(
-        {
-          burgerConstructor: [],
-          bun: {
-            ingredient: {
-              _id: "2",
-              name: "Булка прокаченная",
-              type: "bun",
-              proteins: 2,
-              fat: 32,
-              carbohydrates: 44,
-              calories: 21,
-              price: 1200,
               image: "url",
               image_mobile: "url",
               image_large: "url",
@@ -325,44 +156,11 @@ describe("burderConstructorReducer tests", () => {
             },
           },
         },
-        {
-          type: SET_BUN,
-          bun: {
-            ingredient: {
-              _id: "1",
-              name: "Булка",
-              type: "bun",
-              proteins: 2,
-              fat: 32,
-              carbohydrates: 44,
-              calories: 21,
-              price: 1500,
-              image: "url",
-              image_mobile: "url",
-              image_large: "url",
-              __v: 1,
-            },
-          },
-        }
+        actionSetBun
       )
     ).toEqual({
-      burgerConstructor: [],
-      bun: {
-        ingredient: {
-          _id: "1",
-          name: "Булка",
-          type: "bun",
-          proteins: 2,
-          fat: 32,
-          carbohydrates: 44,
-          calories: 21,
-          price: 1500,
-          image: "url",
-          image_mobile: "url",
-          image_large: "url",
-          __v: 1,
-        },
-      },
+      ...initialState,
+      bun: bun,
     });
   });
 
@@ -370,77 +168,25 @@ describe("burderConstructorReducer tests", () => {
     expect(
       burderConstructorReducer(
         {
+          ...initialState,
           burgerConstructor: [
             {
-              ingredient: {
-                _id: "1",
-                name: "Котлета 1",
-                type: "main",
-                proteins: 122,
-                fat: 71,
-                carbohydrates: 55,
-                calories: 90,
-                price: 2500,
-                image: "url",
-                image_mobile: "url",
-                image_large: "url",
-                __v: 1,
-              },
+              ...burderConstructorIngredient2,
               uniqueId: "123-uuid",
             },
             {
-              ingredient: {
-                _id: "2",
-                name: "Котлета 2",
-                type: "main",
-                proteins: 12,
-                fat: 71,
-                carbohydrates: 55,
-                calories: 90,
-                price: 2210,
-                image: "url",
-                image_mobile: "url",
-                image_large: "url",
-                __v: 2,
-              },
+              ...burderConstructorIngredient2,
               uniqueId: "12-23-3-uuid",
             },
             {
-              ingredient: {
-                _id: "3",
-                name: "Котлета 3",
-                type: "main",
-                proteins: 12,
-                fat: 71,
-                carbohydrates: 55,
-                calories: 90,
-                price: 1210,
-                image: "url",
-                image_mobile: "url",
-                image_large: "url",
-                __v: 3,
-              },
+              ...burderConstructorIngredient2,
               uniqueId: "12-qwe-3-uuid",
             },
             {
-              ingredient: {
-                _id: "4",
-                name: "Котлета 4",
-                type: "main",
-                proteins: 12,
-                fat: 71,
-                carbohydrates: 55,
-                calories: 90,
-                price: 4210,
-                image: "url",
-                image_mobile: "url",
-                image_large: "url",
-                __v: 4,
-              },
+              ...burderConstructorIngredient,
               uniqueId: "12-123-qwe-3-uuid",
             },
           ],
-          bun: null,
         },
         {
           type: CHANGE_SUBSEQUENCE_BURGER_CONSTRUCTOR,
@@ -449,77 +195,25 @@ describe("burderConstructorReducer tests", () => {
         }
       )
     ).toEqual({
+      ...initialState,
       burgerConstructor: [
         {
-          ingredient: {
-            _id: "4",
-            name: "Котлета 4",
-            type: "main",
-            proteins: 12,
-            fat: 71,
-            carbohydrates: 55,
-            calories: 90,
-            price: 4210,
-            image: "url",
-            image_mobile: "url",
-            image_large: "url",
-            __v: 4,
-          },
+          ...burderConstructorIngredient,
           uniqueId: "12-123-qwe-3-uuid",
         },
         {
-          ingredient: {
-            _id: "1",
-            name: "Котлета 1",
-            type: "main",
-            proteins: 122,
-            fat: 71,
-            carbohydrates: 55,
-            calories: 90,
-            price: 2500,
-            image: "url",
-            image_mobile: "url",
-            image_large: "url",
-            __v: 1,
-          },
+          ...burderConstructorIngredient2,
           uniqueId: "123-uuid",
         },
         {
-          ingredient: {
-            _id: "2",
-            name: "Котлета 2",
-            type: "main",
-            proteins: 12,
-            fat: 71,
-            carbohydrates: 55,
-            calories: 90,
-            price: 2210,
-            image: "url",
-            image_mobile: "url",
-            image_large: "url",
-            __v: 2,
-          },
+          ...burderConstructorIngredient2,
           uniqueId: "12-23-3-uuid",
         },
         {
-          ingredient: {
-            _id: "3",
-            name: "Котлета 3",
-            type: "main",
-            proteins: 12,
-            fat: 71,
-            carbohydrates: 55,
-            calories: 90,
-            price: 1210,
-            image: "url",
-            image_mobile: "url",
-            image_large: "url",
-            __v: 3,
-          },
+          ...burderConstructorIngredient2,
           uniqueId: "12-qwe-3-uuid",
         },
       ],
-      bun: null,
     });
   });
 
@@ -527,66 +221,13 @@ describe("burderConstructorReducer tests", () => {
     expect(
       burderConstructorReducer(
         {
-          burgerConstructor: [
-            {
-              ingredient: {
-                _id: "1",
-                name: "Котлета",
-                type: "main",
-                proteins: 122,
-                fat: 71,
-                carbohydrates: 55,
-                calories: 90,
-                price: 2500,
-                image: "url",
-                image_mobile: "url",
-                image_large: "url",
-                __v: 1,
-              },
-              uniqueId: "123-uuid",
-            },
-            {
-              ingredient: {
-                _id: "2",
-                name: "Острый соус",
-                type: "main",
-                proteins: 12,
-                fat: 11,
-                carbohydrates: 54,
-                calories: 20,
-                price: 1500,
-                image: "url",
-                image_mobile: "url",
-                image_large: "url",
-                __v: 2,
-              },
-              uniqueId: "1123-432-dsf-23-uuid",
-            },
-          ],
-          bun: {
-            ingredient: {
-              _id: "2",
-              name: "Булка прокаченная",
-              type: "bun",
-              proteins: 2,
-              fat: 32,
-              carbohydrates: 44,
-              calories: 21,
-              price: 1200,
-              image: "url",
-              image_mobile: "url",
-              image_large: "url",
-              __v: 2,
-            },
-          },
+          burgerConstructor: burgerConstructorWithTwoIngredients,
+          bun: bun,
         },
         {
           type: CLEAR_CONSTRUCTOR,
         }
       )
-    ).toEqual({
-      burgerConstructor: [],
-      bun: null,
-    });
+    ).toEqual(initialState);
   });
 });

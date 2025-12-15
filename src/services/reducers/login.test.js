@@ -3,45 +3,36 @@ import {
   LOGIN_REQUEST_ERROR,
   LOGIN_REQUEST_SUCCESS,
 } from "../actions/login";
-import { loginReducer } from "./login";
+import { loginReducer, initialState } from "./login";
 
 describe("loginReducer tests", () => {
   it("should return the initial state", () => {
-    expect(loginReducer(undefined, {})).toEqual({
-      loginRequest: false,
-      loginRequestError: false,
-    });
+    expect(loginReducer(undefined, {})).toEqual(initialState);
   });
 
   it("should handle LOGIN_REQUEST", () => {
     expect(
-      loginReducer(
-        {
-          loginRequest: false,
-          loginRequestError: false,
-        },
-        {
-          type: LOGIN_REQUEST,
-        }
-      )
+      loginReducer(initialState, {
+        type: LOGIN_REQUEST,
+      })
     ).toEqual({
+      ...initialState,
       loginRequest: true,
-      loginRequestError: false,
     });
   });
   it("should handle LOGIN_REQUEST_ERROR", () => {
     expect(
       loginReducer(
         {
+          ...initialState,
           loginRequest: true,
-          loginRequestError: false,
         },
         {
           type: LOGIN_REQUEST_ERROR,
         }
       )
     ).toEqual({
-      loginRequest: false,
+      ...initialState,
       loginRequestError: true,
     });
   });
@@ -49,16 +40,13 @@ describe("loginReducer tests", () => {
     expect(
       loginReducer(
         {
+          ...initialState,
           loginRequest: true,
-          loginRequestError: false,
         },
         {
           type: LOGIN_REQUEST_SUCCESS,
         }
       )
-    ).toEqual({
-      loginRequest: false,
-      loginRequestError: false,
-    });
+    ).toEqual(initialState);
   });
 });

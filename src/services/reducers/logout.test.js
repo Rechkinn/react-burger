@@ -3,45 +3,36 @@ import {
   LOGOUT_REQUEST_ERROR,
   LOGOUT_REQUEST_SUCCESS,
 } from "../actions/logout";
-import { logoutReducer } from "./logout";
+import { logoutReducer, initialState } from "./logout";
 
 describe("logoutReducer tests", () => {
   it("should return the initial state", () => {
-    expect(logoutReducer(undefined, {})).toEqual({
-      logoutRequest: false,
-      logoutRequestError: false,
-    });
+    expect(logoutReducer(undefined, {})).toEqual(initialState);
   });
 
   it("should handle LOGOUT_REQUEST", () => {
     expect(
-      logoutReducer(
-        {
-          logoutRequest: false,
-          logoutRequestError: false,
-        },
-        {
-          type: LOGOUT_REQUEST,
-        }
-      )
+      logoutReducer(initialState, {
+        type: LOGOUT_REQUEST,
+      })
     ).toEqual({
+      ...initialState,
       logoutRequest: true,
-      logoutRequestError: false,
     });
   });
   it("should handle LOGOUT_REQUEST_ERROR", () => {
     expect(
       logoutReducer(
         {
+          ...initialState,
           logoutRequest: true,
-          logoutRequestError: false,
         },
         {
           type: LOGOUT_REQUEST_ERROR,
         }
       )
     ).toEqual({
-      logoutRequest: false,
+      ...initialState,
       logoutRequestError: true,
     });
   });
@@ -49,16 +40,13 @@ describe("logoutReducer tests", () => {
     expect(
       logoutReducer(
         {
+          ...initialState,
           logoutRequest: true,
-          logoutRequestError: false,
         },
         {
           type: LOGOUT_REQUEST_SUCCESS,
         }
       )
-    ).toEqual({
-      logoutRequest: false,
-      logoutRequestError: false,
-    });
+    ).toEqual(initialState);
   });
 });

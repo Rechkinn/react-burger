@@ -6,50 +6,46 @@ import {
   USER_SET_DATA,
   USER_UPDATE_DATA,
 } from "../actions/user-data";
-import { userDataReducer } from "./user-data";
+import { userDataReducer, initialState } from "./user-data";
+
+const userData = {
+  email: "user@mail.ru",
+  name: "Алексей",
+  password: "",
+};
+const newUserData = {
+  ...userData,
+  name: "Иван",
+};
 
 describe("userDataReducer tests", () => {
   it("should return the initial state", () => {
-    expect(userDataReducer(undefined, {})).toEqual({
-      user: null,
-      userDataRequest: false,
-      userDataRequestError: false,
-    });
+    expect(userDataReducer(undefined, {})).toEqual(initialState);
   });
 
   it("should handle USER_DATA_REQUEST", () => {
     expect(
-      userDataReducer(
-        {
-          user: null,
-          userDataRequest: false,
-          userDataRequestError: false,
-        },
-        {
-          type: USER_DATA_REQUEST,
-        }
-      )
+      userDataReducer(initialState, {
+        type: USER_DATA_REQUEST,
+      })
     ).toEqual({
-      user: null,
+      ...initialState,
       userDataRequest: true,
-      userDataRequestError: false,
     });
   });
   it("should handle USER_DATA_REQUEST_ERROR", () => {
     expect(
       userDataReducer(
         {
-          user: null,
+          ...initialState,
           userDataRequest: true,
-          userDataRequestError: false,
         },
         {
           type: USER_DATA_REQUEST_ERROR,
         }
       )
     ).toEqual({
-      user: null,
-      userDataRequest: false,
+      ...initialState,
       userDataRequestError: true,
     });
   });
@@ -57,98 +53,54 @@ describe("userDataReducer tests", () => {
     expect(
       userDataReducer(
         {
-          user: null,
+          ...initialState,
           userDataRequest: true,
-          userDataRequestError: false,
         },
         {
           type: USER_DATA_REQUEST_SUCCESS,
         }
       )
-    ).toEqual({
-      user: null,
-      userDataRequest: false,
-      userDataRequestError: false,
-    });
+    ).toEqual(initialState);
   });
   it("should handle USER_SET_DATA", () => {
     expect(
-      userDataReducer(
-        {
-          user: null,
-          userDataRequest: false,
-          userDataRequestError: false,
-        },
-        {
-          type: USER_SET_DATA,
-          newUserData: {
-            email: "user@mail.ru",
-            name: "Алексей",
-            password: "",
-          },
-        }
-      )
+      userDataReducer(initialState, {
+        type: USER_SET_DATA,
+        newUserData: userData,
+      })
     ).toEqual({
-      user: {
-        email: "user@mail.ru",
-        name: "Алексей",
-        password: "",
-      },
-      userDataRequest: false,
-      userDataRequestError: false,
+      ...initialState,
+      user: userData,
     });
   });
   it("should handle USER_UPDATE_DATA", () => {
     expect(
       userDataReducer(
         {
-          user: {
-            email: "user@mail.ru",
-            name: "Алексей",
-            password: "",
-          },
-          userDataRequest: false,
-          userDataRequestError: false,
+          ...initialState,
+          user: userData,
         },
         {
           type: USER_UPDATE_DATA,
-          newUserData: {
-            email: "user@mail.ru",
-            name: "Иван",
-            password: "",
-          },
+          newUserData: newUserData,
         }
       )
     ).toEqual({
-      user: {
-        email: "user@mail.ru",
-        name: "Иван",
-        password: "",
-      },
-      userDataRequest: false,
-      userDataRequestError: false,
+      ...initialState,
+      user: newUserData,
     });
   });
   it("should handle USER_REMOVE_DATA", () => {
     expect(
       userDataReducer(
         {
-          user: {
-            email: "user@mail.ru",
-            name: "Алексей",
-            password: "",
-          },
-          userDataRequest: false,
-          userDataRequestError: false,
+          ...initialState,
+          user: userData,
         },
         {
           type: USER_REMOVE_DATA,
         }
       )
-    ).toEqual({
-      user: null,
-      userDataRequest: false,
-      userDataRequestError: false,
-    });
+    ).toEqual(initialState);
   });
 });

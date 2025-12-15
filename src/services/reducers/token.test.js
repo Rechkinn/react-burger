@@ -7,45 +7,36 @@ import {
   TOKENS_REQUEST_ERROR,
   TOKENS_REQUEST_SUCCESS,
 } from "../actions/token";
-import { tokenReducer } from "./token";
+import { tokenReducer, initialState } from "./token";
 
 describe("tokenReducer tests", () => {
   it("should return the initial state", () => {
-    expect(tokenReducer(undefined, {})).toEqual({
-      refreshTokenRequest: false,
-      refreshTokenRequestError: false,
-    });
+    expect(tokenReducer(undefined, {})).toEqual(initialState);
   });
 
   it("should handle TOKENS_REQUEST", () => {
     expect(
-      tokenReducer(
-        {
-          refreshTokenRequest: false,
-          refreshTokenRequestError: false,
-        },
-        {
-          type: TOKENS_REQUEST,
-        }
-      )
+      tokenReducer(initialState, {
+        type: TOKENS_REQUEST,
+      })
     ).toEqual({
+      ...initialState,
       refreshTokenRequest: true,
-      refreshTokenRequestError: false,
     });
   });
   it("should handle TOKENS_REQUEST_ERROR", () => {
     expect(
       tokenReducer(
         {
+          ...initialState,
           refreshTokenRequest: true,
-          refreshTokenRequestError: false,
         },
         {
           type: TOKENS_REQUEST_ERROR,
         }
       )
     ).toEqual({
-      refreshTokenRequest: false,
+      ...initialState,
       refreshTokenRequestError: true,
     });
   });
@@ -53,80 +44,41 @@ describe("tokenReducer tests", () => {
     expect(
       tokenReducer(
         {
+          ...initialState,
           refreshTokenRequest: true,
-          refreshTokenRequestError: false,
         },
         {
           type: TOKENS_REQUEST_SUCCESS,
         }
       )
-    ).toEqual({
-      refreshTokenRequest: false,
-      refreshTokenRequestError: false,
-    });
+    ).toEqual(initialState);
   });
   it("should handle REMOVE_REFRESH_TOKEN", () => {
     expect(
-      tokenReducer(
-        {
-          refreshTokenRequest: false,
-          refreshTokenRequestError: false,
-        },
-        {
-          type: REMOVE_REFRESH_TOKEN,
-        }
-      )
-    ).toEqual({
-      refreshTokenRequest: false,
-      refreshTokenRequestError: false,
-    });
+      tokenReducer(initialState, {
+        type: REMOVE_REFRESH_TOKEN,
+      })
+    ).toEqual(initialState);
   });
   it("should handle REMOVE_ACCESS_TOKEN", () => {
     expect(
-      tokenReducer(
-        {
-          refreshTokenRequest: false,
-          refreshTokenRequestError: false,
-        },
-        {
-          type: REMOVE_ACCESS_TOKEN,
-        }
-      )
-    ).toEqual({
-      refreshTokenRequest: false,
-      refreshTokenRequestError: false,
-    });
+      tokenReducer(initialState, {
+        type: REMOVE_ACCESS_TOKEN,
+      })
+    ).toEqual(initialState);
   });
   it("should handle SET_REFRESH_TOKEN", () => {
     expect(
-      tokenReducer(
-        {
-          refreshTokenRequest: false,
-          refreshTokenRequestError: false,
-        },
-        {
-          type: SET_REFRESH_TOKEN,
-        }
-      )
-    ).toEqual({
-      refreshTokenRequest: false,
-      refreshTokenRequestError: false,
-    });
+      tokenReducer(initialState, {
+        type: SET_REFRESH_TOKEN,
+      })
+    ).toEqual(initialState);
   });
   it("should handle SET_ACCESS_TOKEN", () => {
     expect(
-      tokenReducer(
-        {
-          refreshTokenRequest: false,
-          refreshTokenRequestError: false,
-        },
-        {
-          type: SET_ACCESS_TOKEN,
-        }
-      )
-    ).toEqual({
-      refreshTokenRequest: false,
-      refreshTokenRequestError: false,
-    });
+      tokenReducer(initialState, {
+        type: SET_ACCESS_TOKEN,
+      })
+    ).toEqual(initialState);
   });
 });

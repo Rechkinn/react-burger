@@ -10,7 +10,7 @@ type TRegisterState = {
   registerRequestError: boolean;
 };
 
-const initialState: TRegisterState = {
+export const initialState: TRegisterState = {
   registerRequest: false,
   registerRequestError: false,
 };
