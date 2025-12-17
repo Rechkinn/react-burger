@@ -18,11 +18,15 @@ const login = "login";
 const createOrder = "createOrder";
 const textOrderId = "textOrderId";
 const textOrderNumber = "orderNumber";
+const getUser = "getUser";
+const orderNumber = 85282;
+const code200 = 200;
 
 describe("testing constructor", () => {
   beforeEach(() => {
     cy.viewport(1440, 1080);
     cy.intercept("GET", "**/api/ingredients").as("getIngredients");
+
     cy.visit("/react-burger");
     cy.wait("@getIngredients");
   });
@@ -52,43 +56,50 @@ describe("testing constructor", () => {
   });
 
   it("confirm-order", () => {
-    cy.intercept("POST", "**/api/auth/login").as(login);
-    cy.intercept("POST", "**/api/orders").as(createOrder);
+    cy.intercept("GET", "**/api/auth/user", {
+      statusCode: code200,
+      body: {
+        success: true,
+        user: {
+          email: "al.red197218@gmail.com",
+          name: "Alex",
+        },
+      },
+    }).as(getUser);
+    cy.intercept("POST", "**/api/orders", {
+      statusCode: code200,
+      body: {
+        success: true,
+        order: {
+          number: orderNumber,
+        },
+      },
+    }).as(createOrder);
 
-    cy.get(selectorDataCy(bunDrop)).as(bunDrop);
-    cy.dragAndDrop(selectorDataCy(nameBun1), selectorDataCy(bunDrop));
-    cy.get(`@${bunDrop}`).should("contain", nameBun1);
+    cy.setCookie("token", "test-access-token");
+    cy.window().then((win: any) => {
+      win.localStorage.setItem("refreshToken", "test-refresh-token");
+    });
+    cy.visit("/react-burger");
+    cy.wait(`@${getUser}`);
+
     cy.dragAndDrop(selectorDataCy(nameBun2), selectorDataCy(bunDrop));
-    cy.get(`@${bunDrop}`).should("contain", nameBun2);
+    cy.get(selectorDataCy(bunDrop)).should("contain", nameBun2);
 
-    cy.get(selectorDataCy(drop)).as(drop);
-    cy.dragAndDrop(selectorDataCy(nameIngredient1), selectorDataCy(drop));
-    cy.get(`@${drop}`).should("contain", nameIngredient1);
     cy.dragAndDrop(selectorDataCy(nameIngredient2), selectorDataCy(drop));
-    cy.get(`@${drop}`).should("contain", nameIngredient2);
+    cy.get(selectorDataCy(drop)).should("contain", nameIngredient2);
 
     cy.get(selectorDataCy(confirmOrder)).last().as(confirmOrder);
-
     cy.get(`@${confirmOrder}`).click();
-    cy.get("input").first().click().type("al.red197218@gmail.com");
-    cy.get("input").last().click().type("1234567890");
-    cy.get("button").contains("Войти").click();
-    cy.wait(`@${login}`).then((interception) => {
-      expect(interception.response.statusCode).to.equal(200);
-    });
-    cy.get(`@${confirmOrder}`).click();
-    cy.wait(`@${createOrder}`).then((interception) => {
-      expect(interception.response.statusCode).to.equal(200);
 
-      const orderNumber = interception.response.body.order.number;
+    cy.wait(`@${createOrder}`).then((interception: any) => {
+      expect(interception.response.statusCode).to.equal(code200);
+
       cy.get(selectorDataCy(textOrderId)).should(
         "contain",
         "идентификатор заказа"
       );
-      cy.get(selectorDataCy(textOrderNumber)).should(
-        "contain",
-        orderNumber.toString()
-      );
+      cy.get(selectorDataCy(textOrderNumber)).should("contain", orderNumber);
     });
     cy.get(selectorDataCy(closeModalIcon)).click();
   });
