@@ -49,7 +49,7 @@ const ForgotPassword: FC = () => {
       <h1 className="text text_type_main-medium">Восстановление пароля</h1>
       <form action="" ref={formRef} onSubmit={(e) => forgotPassword(e)}>
         <Input
-          value={checkInputValue(values.password)}
+          value={checkInputValue(values.email)}
           name="email"
           placeholder="Укажите e-mail"
           type="email"
