@@ -10,7 +10,7 @@ type TLoginState = {
   loginRequestError: boolean;
 };
 
-const initialState: TLoginState = {
+export const initialState: TLoginState = {
   loginRequest: false,
   loginRequestError: false,
 };

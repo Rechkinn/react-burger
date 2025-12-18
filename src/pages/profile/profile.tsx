@@ -39,6 +39,7 @@ const Profile: FC = () => {
   }
 
   function handlerSubmitForm(e: FormEvent): void {
+    console.log("отправка формы...");
     e.preventDefault();
     const changedInputs: HTMLInputElement[] = [];
     if (!formRef.current || !user) return;
@@ -58,8 +59,7 @@ const Profile: FC = () => {
         );
       };
 
-      if (!isUserDataKey(input.name)) return;
-
+      if (!isUserDataKey(input.name)) continue;
       if (
         (input.value !== user[input.name] && user[input.name] !== undefined) ||
         (input.name === "password" && input.value !== "")

@@ -86,6 +86,7 @@ const ConfirmOrder: FC<TConfirmOrderProps> = React.memo(
             </div>
           )}
           <Button
+            data-cy="confirmOrder"
             disabled={burgerConstructor.length > 0 && bun ? false : true}
             htmlType="button"
             type="primary"

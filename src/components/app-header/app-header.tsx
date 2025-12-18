@@ -11,7 +11,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./app-header.module.css";
 import AppHeaderLink from "../app-header-link/app-header-link";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { TIconYandex, TLocation } from "../../utils/types";
 
 type TState = {
@@ -109,7 +109,9 @@ const AppHeader: FC = React.memo(() => {
         </nav>
 
         <div className={styles.logo}>
-          <Logo />
+          <Link to="/" style={{ display: "flex", alignItems: "center" }}>
+            <Logo />
+          </Link>
         </div>
         <button
           className={

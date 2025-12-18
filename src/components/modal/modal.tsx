@@ -48,6 +48,7 @@ const Modal: FC<TModalProps> = React.memo(
               type="button"
               className={styles.button}
               onClick={() => functionToClose()}
+              data-cy="closeModalIcon"
             >
               <CloseIcon type="primary" />
             </button>

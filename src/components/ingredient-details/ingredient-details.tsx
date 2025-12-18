@@ -50,7 +50,10 @@ const IngredientDetails: FC = React.memo(() => {
             className={`mb-4 ${styles.image}`}
           />
 
-          <h2 className="mb-8 text text_type_main-medium">
+          <h2
+            className="mb-8 text text_type_main-medium"
+            data-cy="nameIngredient"
+          >
             {ingredientDetails.name}
           </h2>
           <div
@@ -58,25 +61,37 @@ const IngredientDetails: FC = React.memo(() => {
           >
             <div>
               <p>Калории,ккал</p>
-              <p className="text_type_digits-default text_color_inactive">
+              <p
+                className="text_type_digits-default text_color_inactive"
+                data-cy="calories"
+              >
                 {ingredientDetails.calories}
               </p>
             </div>
             <div>
               <p>Белки, г</p>
-              <p className="text_type_digits-default text_color_inactive">
+              <p
+                className="text_type_digits-default text_color_inactive"
+                data-cy="proteins"
+              >
                 {ingredientDetails.proteins}
               </p>
             </div>
             <div>
               <p>Жиры, г</p>
-              <p className="text_type_digits-default text_color_inactive">
+              <p
+                className="text_type_digits-default text_color_inactive"
+                data-cy="fat"
+              >
                 {ingredientDetails.fat}
               </p>
             </div>
             <div>
               <p>Углеводы, г</p>
-              <p className="text_type_digits-default text_color_inactive">
+              <p
+                className="text_type_digits-default text_color_inactive"
+                data-cy="carbohydrates"
+              >
                 {ingredientDetails.carbohydrates}
               </p>
             </div>

@@ -13,7 +13,7 @@ type TBurgerConstructorState = {
   bun: { ingredient: TIngredient } | null;
 };
 
-const initialState: TBurgerConstructorState = {
+export const initialState: TBurgerConstructorState = {
   burgerConstructor: [],
   bun: null,
 };

@@ -74,11 +74,11 @@ const BurgerIngredientsCard: FC<TBurgerIngredientsCardProps> = React.memo(
       <Link
         to={`/ingredients/${ingredient._id}`}
         state={{ background: location }}
-        className={styles.link}
+        className={`${styles.link}`}
       >
         <article
           style={{ opacity: isDrag ? 0.3 : 1 }}
-          className={`mb-8 ${styles.card}`}
+          className={`draggable-item mb-8 ${styles.card}`}
           onClick={() => openModalWithIngredientDetails(ingredient)}
         >
           <img
@@ -88,6 +88,7 @@ const BurgerIngredientsCard: FC<TBurgerIngredientsCardProps> = React.memo(
                 : ingredient.image
             }
             alt={ingredient.name}
+            data-cy={ingredient.name}
             ref={dragRef}
             className={`mb-1 ${styles.image}`}
           />

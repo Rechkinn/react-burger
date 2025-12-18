@@ -32,5 +32,6 @@
 }
 
 .containerButtons {
+  max-width: 480px;
   text-align: end;
 }
